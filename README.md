@@ -1,5 +1,5 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+This project aims to create a diagnostic interface for all future trainers. This interface will be able to read trouble codes from trainers, reset trouble codes on trainers, and read live data from trainers. 
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
