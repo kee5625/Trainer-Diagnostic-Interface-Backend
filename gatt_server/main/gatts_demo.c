@@ -856,16 +856,16 @@ void app_main(void)
         ESP_LOGE(GATTS_TAG, "gap register error, error code = %x", ret);
         return;
     }
-    ret = esp_ble_gatts_app_register(PROFILE_A_APP_ID);
-    if (ret){
-        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-        return;
-    }
-    ret = esp_ble_gatts_app_register(PROFILE_B_APP_ID);
-    if (ret){
-        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-        return;
-    }
+    // ret = esp_ble_gatts_app_register(PROFILE_A_APP_ID);
+    // if (ret){
+    //     ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+    //     return;
+    // }
+    // ret = esp_ble_gatts_app_register(PROFILE_B_APP_ID);
+    // if (ret){
+    //     ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+    //     return;
+    // }
     ret = esp_ble_gatts_app_register(PROFILE_MY_APP_ID);
     if (ret){
         ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
