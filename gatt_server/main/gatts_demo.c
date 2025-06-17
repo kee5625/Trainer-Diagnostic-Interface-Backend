@@ -25,7 +25,7 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_bt.h"
-
+#include "esp_mac.h"
 #include "esp_gap_ble_api.h"
 #include "esp_gatts_api.h"
 #include "esp_bt_defs.h"
@@ -34,12 +34,19 @@
 #include "esp_gatt_common_api.h"
 
 #include "sdkconfig.h"
+#include "driver/gpio.h"       // add near the other #includes
 
+#define GLED_GPIO 15
+#define RLED_GPIO 14
 #define GATTS_TAG "GATTS_DEMO"
 
 ///Declare the static function
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+static void gatts_profile_my_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
+
+static uint16_t gled_val_handle  = 0;
+static uint16_t rled_val_handle  = 0;
 
 #define GATTS_SERVICE_UUID_TEST_A   0x00FF
 #define GATTS_CHAR_UUID_TEST_A      0xFF01
@@ -51,7 +58,12 @@ static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
 #define GATTS_DESCR_UUID_TEST_B     0x2222
 #define GATTS_NUM_HANDLE_TEST_B     4
 
-static char test_device_name[ESP_BLE_ADV_NAME_LEN_MAX] = "ESP_GATTS_DEMO";
+#define MY_SERVICE_UUID          0xABCD      // Primary Service
+#define MY_CHAR_UUID_GLED       0xAB01      // First Characteristic
+#define MY_CHAR_UUID_RLED      0xAB02      // Second Characteristic
+#define MY_NUM_HANDLES           6           // svc + 2×(char + CCCD)
+
+static char test_device_name[] = "ESP_GATTS_DEMO";
 
 #define TEST_MANUFACTURER_DATA_LEN  17
 
@@ -146,9 +158,10 @@ static esp_ble_adv_params_t adv_params = {
     .adv_filter_policy = ADV_FILTER_ALLOW_SCAN_ANY_CON_ANY,
 };
 
-#define PROFILE_NUM 2
+#define PROFILE_NUM 3
 #define PROFILE_A_APP_ID 0
 #define PROFILE_B_APP_ID 1
+#define PROFILE_MY_APP_ID 2 
 
 struct gatts_profile_inst {
     esp_gatts_cb_t gatts_cb;
@@ -165,6 +178,24 @@ struct gatts_profile_inst {
     esp_bt_uuid_t descr_uuid;
 };
 
+static esp_gatt_char_prop_t greenLED_char_property = 0;
+static esp_gatt_char_prop_t redLED_char_property = 0;
+
+static uint8_t gled_init_val[]  = { 0x00 };           // default value
+static uint8_t rled_init_val[] = { 0x00 };
+
+static esp_attr_value_t gled_char_val = {
+    .attr_max_len = 1,
+    .attr_len     = sizeof(gled_init_val),
+    .attr_value   = gled_init_val,
+};
+
+static esp_attr_value_t rled_char_val = {
+    .attr_max_len = 1,
+    .attr_len     = sizeof(rled_init_val),
+    .attr_value   = rled_init_val,
+};
+
 /* One gatt-based profile one app_id and one gatts_if, this array will store the gatts_if returned by ESP_GATTS_REG_EVT */
 static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
     [PROFILE_A_APP_ID] = {
@@ -174,6 +205,10 @@ static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
     [PROFILE_B_APP_ID] = {
         .gatts_cb = gatts_profile_b_event_handler,                   /* This demo does not implement, similar as profile A */
         .gatts_if = ESP_GATT_IF_NONE,       /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
+    },
+    [PROFILE_MY_APP_ID] = {
+        .gatts_cb = gatts_profile_my_event_handler,
+        .gatts_if = ESP_GATT_IF_NONE,
     },
 };
 
@@ -655,6 +690,93 @@ static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
     }
 }
 
+static void gatts_profile_my_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param) {
+    switch(event){
+        /* -------- REGISTRATION -------- */
+        case ESP_GATTS_REG_EVT: {
+            gl_profile_tab[PROFILE_MY_APP_ID].service_id.is_primary = true;
+            gl_profile_tab[PROFILE_MY_APP_ID].service_id.id.inst_id = 0x00;
+            gl_profile_tab[PROFILE_MY_APP_ID].service_id.id.uuid.len = ESP_UUID_LEN_16;
+            gl_profile_tab[PROFILE_MY_APP_ID].service_id.id.uuid.uuid.uuid16 = MY_SERVICE_UUID;
+
+            esp_ble_gatts_create_service(gatts_if, &gl_profile_tab[PROFILE_MY_APP_ID].service_id, MY_NUM_HANDLES);
+
+            break;
+        }
+
+        /* -------- SERVICE CREATED -------- */
+        case ESP_GATTS_CREATE_EVT: {
+            gl_profile_tab[PROFILE_MY_APP_ID].service_handle = param->create.service_handle;
+
+            /*Characteristic 1 (Green LED)*/
+            gl_profile_tab[PROFILE_MY_APP_ID].char_uuid.len = ESP_UUID_LEN_16;
+            gl_profile_tab[PROFILE_MY_APP_ID].char_uuid.uuid.uuid16 = MY_CHAR_UUID_GLED;
+            greenLED_char_property = ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE;
+            esp_ble_gatts_start_service(gl_profile_tab[PROFILE_MY_APP_ID].service_handle);
+            esp_ble_gatts_add_char(gl_profile_tab[PROFILE_MY_APP_ID].service_handle, &gl_profile_tab[PROFILE_MY_APP_ID].char_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
+                                    greenLED_char_property, &gled_char_val, NULL);
+
+            /* Characteristic 2 (Humidity) – identical pattern */
+            esp_bt_uuid_t rled_uuid = {
+                .len = ESP_UUID_LEN_16,
+                .uuid.uuid16 = MY_CHAR_UUID_RLED
+            };
+            redLED_char_property = ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE;
+            esp_ble_gatts_add_char(gl_profile_tab[PROFILE_MY_APP_ID].service_handle,
+                                &rled_uuid,
+                                ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
+                                redLED_char_property,
+                                &rled_char_val,
+                                NULL);
+            break;
+        }
+
+        case ESP_GATTS_ADD_CHAR_EVT:
+            if(param->add_char.char_uuid.uuid.uuid16 == MY_CHAR_UUID_GLED){
+                gled_val_handle = param->add_char.attr_handle;
+            }else if(param->add_char.char_uuid.uuid.uuid16 == MY_CHAR_UUID_RLED){
+                rled_val_handle = param->add_char.attr_handle;
+            }
+            break;
+
+        /* -------- READ / WRITE / CONFIG CCCD -------- */
+        case ESP_GATTS_READ_EVT: { 
+            esp_gatt_rsp_t rsp= {0};
+            rsp.attr_value.handle = param->read.handle;
+            rsp.attr_value.len = 1;
+            if(param->read.handle == gled_val_handle){
+                rsp.attr_value.value[0] = gpio_get_level(GLED_GPIO);
+            }
+            else if(param->read.handle == rled_val_handle){
+                rsp.attr_value.value[0] = gpio_get_level(RLED_GPIO);
+            }
+
+            esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
+            break;
+        }
+        case ESP_GATTS_WRITE_EVT:
+            /* respond immediately if the client requested it */
+            if(param->write.need_rsp)esp_ble_gatts_send_response(gatts_if, param->write.conn_id,param->write.trans_id, ESP_GATT_OK, NULL);
+
+            /* single-byte payload: 0 = off, anything else = on */
+            if(!param->write.is_prep && param->write.len){
+                uint8_t level = param->write.value[0] ? 1 : 0;
+
+                if(param->write.handle == gled_val_handle){
+                    gpio_set_level(GLED_GPIO, level);
+                    ESP_LOGI(GATTS_TAG, "Green led = %d", level);
+                }else if(param->write.handle == rled_val_handle){
+                    gpio_set_level(RLED_GPIO, level);
+                    ESP_LOGI(GATTS_TAG, "Red led = %d", level);
+                }
+            }
+
+            break;
+        default:
+            break;
+    }
+}
+
 static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
     /* If event is register event, store the gatts_if for each profile */
@@ -695,6 +817,20 @@ void app_main(void)
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK( ret );
+
+
+    //Configure LED Pins
+    gpio_config_t io_conf = {
+        .intr_type = GPIO_INTR_DISABLE,
+        .mode = GPIO_MODE_OUTPUT,
+        .pin_bit_mask = (1ULL << GLED_GPIO) | (1ULL << RLED_GPIO),
+        .pull_down_en = 0,
+        .pull_up_en = 0,
+    };
+    gpio_config(&io_conf);
+    gpio_set_level(GLED_GPIO, 0);
+    gpio_set_level(RLED_GPIO, 0);
+    
 
     #if CONFIG_EXAMPLE_CI_PIPELINE_ID
     memcpy(test_device_name, esp_bluedroid_get_example_name(), ESP_BLE_ADV_NAME_LEN_MAX);
@@ -742,6 +878,11 @@ void app_main(void)
         return;
     }
     ret = esp_ble_gatts_app_register(PROFILE_B_APP_ID);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }
+    ret = esp_ble_gatts_app_register(PROFILE_MY_APP_ID);
     if (ret){
         ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
         return;
