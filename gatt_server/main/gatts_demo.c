@@ -1,19 +1,3 @@
-/*
- * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Unlicense OR CC0-1.0
- */
-
-/****************************************************************************
-*
-* This demo showcases BLE GATT server. It can send adv data, be connected by client.
-* Run the gatt_client demo, the client demo will automatically connect to the gatt_server demo.
-* Client demo will enable gatt_server's notify after connection. The two devices will then exchange
-* data.
-*
-****************************************************************************/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,11 +18,11 @@
 #include "esp_gatt_common_api.h"
 
 #include "sdkconfig.h"
-#include "driver/gpio.h"       // add near the other #includes
+#include "driver/gpio.h"   
 
 #define GLED_GPIO 15
 #define RLED_GPIO 14
-#define GATTS_TAG "GATTS_DEMO"
+#define GATTS_TAG "TEST_BLE"
 
 ///Declare the static function
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -63,7 +47,7 @@ static uint16_t rled_val_handle  = 0;
 #define MY_CHAR_UUID_RLED      0xAB02      // Second Characteristic
 #define MY_NUM_HANDLES           6           // svc + 2×(char + CCCD)
 
-static char test_device_name[] = "ESP_GATTS_DEMO";
+static char test_device_name[] = "TestBLE";
 
 #define TEST_MANUFACTURER_DATA_LEN  17
 
