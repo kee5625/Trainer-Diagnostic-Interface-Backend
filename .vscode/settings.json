@@ -1,0 +1,20 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.espIdfPathWin": "c:\\ESP-IDF\\v5.4.1\\esp-idf",
+  "idf.toolsPathWin": "c:\\ESP-IDF\\ESP-IDF_tools",
+  "idf.pythonInstallPath": "c:\\ESP-IDF\\ESP-IDF_tools\\tools\\idf-python\\3.11.2\\python.exe",
+  "idf.portWin": "COM6",
+  "idf.flashType": "UART",
+  "files.associations": {
+    "*.inc": "cpp",
+    "cstdint": "c",
+    "nvs_flash.h": "c",
+    "queue.h": "c",
+    "twia_fc.h": "c",
+    "bt_spp_fc.h": "c",
+    "esp_bt_main.h": "c",
+    "uart.h": "c",
+    "trouble_code_setup.h": "c",
+    "bt_spp_tc.h": "c"
+  }
+}
