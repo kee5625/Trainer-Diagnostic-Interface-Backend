@@ -1,0 +1,2 @@
+source C:/ESP-IDF/Gateway_Slave/build/bootloader/gdbinit/symbols
+source C:/ESP-IDF/Gateway_Slave/build/bootloader/gdbinit/connect
