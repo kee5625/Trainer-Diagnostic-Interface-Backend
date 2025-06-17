@@ -1,20 +1,24 @@
 # Introduction 
-This project aims to create a diagnostic interface for all future trainers. This interface will be able to read trouble codes from trainers, reset trouble codes on trainers, and read live data from trainers. 
+This project aims to create a diagnostic interface for all future trainers. This interface will be able to read trouble codes from trainers, clear trouble codes on trainers, and read live data from trainers. 
+
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+To properly setup the development in your system, follow these steps:
+1. If using VS Code, install the "ESP-IDF" Extension.
+2. Clone the repository into a local folder.
+3. The "ESP-IDF Welcome" page will be automatically prompted by ESP-IDF (If not, type ">ESP-IDF: Configure ESP-IDF Extension" onto the search bar).
+4. Select "Configure extension".
+5. Choose the "Express" mode (unless a configuration already exists; then select "Use Existing Setup") and follow the steps to configure the extension.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# Build and Flash
+(NOTE: Make sure you open the sub-folder with the main.c file in vs code BEFORE building. Trying to build the entire repo will NOT work.)
+1. Re-configure ESP-IDF Extension after opening the sub-folder.
+2. Type ">ESP-IDF: Build your project" into search bar or press "Ctrl + E, B".
+2. To monitor/flash: type ">ESP-IDF: Build, flash, and start a monitor on your device" into the search bar or press "Ctrl + E, D"
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+# Post Flash
+If the board does not automatically leave bootloader mode:
+1. Set IO0 pin to HIGH or remove from GND
+2. Press RESET/RST (EN) button. If button not present, manually connect the "EN" pin to GND and disconnect.
