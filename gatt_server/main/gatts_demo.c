@@ -22,7 +22,7 @@
 
 #define GLED_GPIO 15
 #define RLED_GPIO 14
-#define GATTS_TAG "TEST_BLE"
+#define GATTS_TAG "GATTS_DEMO"
 
 ///Declare the static function
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -856,16 +856,16 @@ void app_main(void)
         ESP_LOGE(GATTS_TAG, "gap register error, error code = %x", ret);
         return;
     }
-    // ret = esp_ble_gatts_app_register(PROFILE_A_APP_ID);
-    // if (ret){
-    //     ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-    //     return;
-    // }
-    // ret = esp_ble_gatts_app_register(PROFILE_B_APP_ID);
-    // if (ret){
-    //     ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-    //     return;
-    // }
+    ret = esp_ble_gatts_app_register(PROFILE_A_APP_ID);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }
+    ret = esp_ble_gatts_app_register(PROFILE_B_APP_ID);
+    if (ret){
+        ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
+        return;
+    }
     ret = esp_ble_gatts_app_register(PROFILE_MY_APP_ID);
     if (ret){
         ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
