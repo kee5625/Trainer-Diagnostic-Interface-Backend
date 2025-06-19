@@ -23,7 +23,7 @@
 #include "nvs_flash.h"
 #include "time.h"
 #include "sys/time.h"
-#include "C:\ESP-IDF\Gateway_Slave\main\trouble_codes.c"
+#include "C:\Users\krachamolla\Trainer Diagnostic interface\Gateway_Slave\main\trouble_codes.c"
 #include "BT_SPP_TC.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
