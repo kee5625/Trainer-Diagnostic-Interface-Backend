@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "bt_spp_tc.h": "c",
+        "C_Cpp.default.configurationProvider": "espressif.esp-idf-extension",
+        "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+        "C_Cpp.default.compilerPath": "C:/Espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc.exe"
+    }
+}

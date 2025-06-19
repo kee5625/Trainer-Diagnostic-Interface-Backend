@@ -27,6 +27,7 @@
 #include "BT_SPP_TC.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
+#include "ble.c"
 /* --------------------- Definitions and static variables ------------------ */
 #define TC_size 22  //trouble code size
 char trouble_code_buff[TC_size];
@@ -43,5 +44,7 @@ void app_main(void)
     //start and running UART to send trouble code over uart
     uart_start();
 
+    ble_connect();
+    
     
 }
