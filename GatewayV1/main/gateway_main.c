@@ -35,16 +35,17 @@ char trouble_code_buff[TC_size];
 
 void app_main(void)
 {
+    ble_connect();
     //grabbing trouble code from twia network and putting in trouble_code_buff
-    twai_TC_Get();
+    //twai_TC_Get();
 
     //running bt to send trouble code to serial port
     //bt_spp_setup();
 
     //start and running UART to send trouble code over uart
-    uart_start();
+    //uart_start();
 
-    ble_connect();
     
+
     
 }
