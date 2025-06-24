@@ -32,12 +32,21 @@
 #define TC_size 22  //trouble code size
 char trouble_code_buff[TC_size];
 
+/*  One-byte queue: every UI “Read DTC” click pushes a byte here  */
+QueueHandle_t req_q;
+
+/* ---------- TWAI driver configuration (same as in TWIA_TC.c) ---------- */
+static const twai_general_config_t g_config =
+TWAI_GENERAL_CONFIG_DEFAULT(21, 22, TWAI_MODE_NORMAL);
+static const twai_timing_config_t  t_config = TWAI_TIMING_CONFIG_25KBITS();
+static const twai_filter_config_t  f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+
 
 void app_main(void)
 {
     //ble_connect();
     //grabbing trouble code from twia network and putting in trouble_code_buff
-    twai_TC_Get();
+    //twai_TC_Get();
 
     //running bt to send trouble code to serial port
     //bt_spp_setup();
@@ -45,26 +54,13 @@ void app_main(void)
     //start and running UART to send trouble code over uart
     //uart_start();
 
-    // twai_general_config_t g = TWAI_GENERAL_CONFIG_DEFAULT(21, 22, TWAI_MODE_NORMAL);
-    // twai_timing_config_t  t = TWAI_TIMING_CONFIG_25KBITS();
-    // twai_filter_config_t  f = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+    /* -------- initialise CAN driver once and keep it running ---------- */
+    ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
+    ESP_ERROR_CHECK(twai_start());
 
-    // twai_driver_install(&g,&t,&f);
-    // twai_start();
-
-    // twai_message_t ping = {
-    //     .identifier = 0x0A2,
-    //     .data_length_code = 0,
-    //     .self = 1
-    // };
-
-    // while (1) {
-    //     twai_transmit(&ping, portMAX_DELAY);              // send
-    //     twai_message_t rx;
-    //     esp_err_t res = twai_receive(&rx, pdMS_TO_TICKS(10));   // expect own frame back
-    //     printf("Loopback result: %s\n", res == ESP_OK ? "OK" : "FAIL");
-    //     vTaskDelay(pdMS_TO_TICKS(500));
-    // }
-    
+    /*  queue and tasks */
+    req_q = xQueueCreate(4, sizeof(uint8_t));
+    xTaskCreatePinnedToCore(can_request_task, "CAN_req", 4096, NULL, 9, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(ui_task,         "UI",      4096, NULL, 8, NULL, tskNO_AFFINITY);
 
 }

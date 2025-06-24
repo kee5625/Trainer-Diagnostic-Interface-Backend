@@ -22,3 +22,7 @@ To properly setup the development in your system, follow these steps:
 If the board does not automatically leave bootloader mode:
 1. Set IO0 pin to HIGH or remove from GND
 2. Press RESET/RST (EN) button. If button not present, manually connect the "EN" pin to GND and disconnect.
+
+
+# CAN Setup
+To get the setup working. Open the Master and Slave folders separately, configure Extension (idf.py reconfigure if needed). Match the COM Port Settings as needed and flash onto each board. 

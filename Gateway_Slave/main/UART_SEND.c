@@ -30,7 +30,7 @@
  */
 
 #define ECHO_TEST_TXD (17)
-#define ECHO_TEST_RXD (5)
+#define ECHO_TEST_RXD (16)
 #define ECHO_TEST_RTS (UART_PIN_NO_CHANGE)
 #define ECHO_TEST_CTS (UART_PIN_NO_CHANGE)
 
@@ -63,6 +63,8 @@ static void echo_task(void *arg)
     ESP_ERROR_CHECK(uart_driver_install(ECHO_UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 10, &uart_queue, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(ECHO_UART_PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(ECHO_UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
+
+    ESP_LOGI(TAG, "UART set: TX=%d  RX=%d", ECHO_TEST_TXD, ECHO_TEST_RXD);
 
     // Configure a temporary buffer for the incoming data
     uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
