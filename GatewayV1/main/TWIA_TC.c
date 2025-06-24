@@ -1,7 +1,7 @@
 /**
  * Coder: Noah Batcher
  * Last updated: 6/11/2025
- * Project: Trainer Fault Code Diagnostic Gatway
+ * Project: Trainer trouble Code Diagnostic Gatway
  * Note: Code designed to recieve trouble code from TWAI slave on TWAI bus.
  * 
  */
@@ -22,94 +22,7 @@
 #include "time.h"
 #include "sys/time.h"
 
-
-
-//TWAI
-#define PING_PERIOD_MS          250
-#define NO_OF_DATA_MSGS         1
-#define NO_OF_ITERS             2
-#define ITER_DELAY_MS           1000
-#define RX_TASK_PRIO            8
-#define TX_TASK_PRIO            9
-#define FAULT_CODE_TSK_PRIO     10
-#define TX_GPIO_NUM             14
-#define RX_GPIO_NUM             15
-#define EXAMPLE_TAG             "TWAI Master"
-
-#define ID_MASTER_STOP_CMD      0x0A0
-#define ID_MASTER_START_CMD     0x0A1
-#define ID_MASTER_PING          0x0A2
-#define ID_SLAVE_STOP_RESP      0x0B0
-#define ID_SLAVE_DATA           0x0B1
-#define ID_SLAVE_PING_RESP      0x0B2
-
-extern char trouble_code_buff[22];
-
-//TWAI
-typedef enum {
-    TX_SEND_PINGS,
-    TX_SEND_START_CMD,
-    TX_SEND_STOP_CMD,
-    TX_TASK_EXIT,
-} tx_task_action_t;
-
-typedef enum {
-    RX_RECEIVE_PING_RESP,
-    RX_RECEIVE_DATA,
-    RX_RECEIVE_STOP_RESP,
-    RX_TASK_EXIT,
-} rx_task_action_t;
-
-
-static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_25KBITS();
-static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
-static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
-
-static const twai_message_t ping_message = {
-    // Message type and format settings
-    .extd = 0,              // Standard Format message (11-bit ID)
-    .rtr = 0,               // Send a data frame
-    .ss = 1,                // Is single shot (won't retry on error or NACK)
-    .self = 0,              // Not a self reception request
-    .dlc_non_comp = 0,      // DLC is less than 8
-    // Message ID and payload
-    .identifier = ID_MASTER_PING,
-    .data_length_code = 0,
-    .data = {0},
-};
-
-static const twai_message_t start_message = {
-    // Message type and format settings
-    .extd = 0,              // Standard Format message (11-bit ID)
-    .rtr = 0,               // Send a data frame
-    .ss = 0,                // Not single shot
-    .self = 0,              // Not a self reception request
-    .dlc_non_comp = 0,      // DLC is less than 8
-    // Message ID and payload
-    .identifier = ID_MASTER_START_CMD,
-    .data_length_code = 0,
-    .data = {0},
-};
-
-static const twai_message_t stop_message = {
-    // Message type and format settings
-    .extd = 0,              // Standard Format message (11-bit ID)
-    .rtr = 0,               // Send a data frame
-    .ss = 0,                // Not single shot
-    .self = 0,              // Not a self reception request
-    .dlc_non_comp = 0,      // DLC is less than 8
-    // Message ID and payload
-    .identifier = ID_MASTER_STOP_CMD,
-    .data_length_code = 0,
-    .data = {0},
-};
-
-static QueueHandle_t tx_task_queue;
-static QueueHandle_t rx_task_queue;
-static SemaphoreHandle_t stop_ping_sem;
-//static SemaphoreHandle_t ctrl_task_sem;
-static SemaphoreHandle_t fault_code_task_sem;
-static SemaphoreHandle_t done_sem;
+#include "TWIA_TC.h"
 
 /* --------------------------- Tasks and Functions TWAI-------------------------- */
 
@@ -126,7 +39,7 @@ static void twai_receive_task(void *arg)
                 twai_receive(&rx_msg, portMAX_DELAY);
                 if (rx_msg.identifier == ID_SLAVE_PING_RESP) {
                     xSemaphoreGive(stop_ping_sem);
-                    xSemaphoreGive(fault_code_task_sem);
+                    xSemaphoreGive(Trouble_Code_Task_Sem);
                     break;
                 }
             }
@@ -144,23 +57,23 @@ static void twai_receive_task(void *arg)
                     ESP_LOGI(EXAMPLE_TAG, "Received data value %"PRIu32, data);
 
                     if (strcmp(trouble_code_buff,"") == 0){
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff) - 4,"Fault code: %c",(char)data);
+                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%c",(char)data);
                     }else{
-                        char temp[18];
-                        memcpy(temp,trouble_code_buff,sizeof(temp));
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%s%04li",temp,data);
+                        char temp;
+                        temp = trouble_code_buff[0];
+                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%c%04li",temp,data);
                     }
                     data_msgs_rec ++;
                 }
             }
-            xSemaphoreGive(fault_code_task_sem);
+            xSemaphoreGive(Trouble_Code_Task_Sem);
         } else if (action == RX_RECEIVE_STOP_RESP) { 
             //Listen for stop response from slave
             while (1) {
                 twai_message_t rx_msg;
                 twai_receive(&rx_msg, portMAX_DELAY);
                 if (rx_msg.identifier == ID_SLAVE_STOP_RESP) {
-                    xSemaphoreGive(fault_code_task_sem);
+                    xSemaphoreGive(Trouble_Code_Task_Sem);
                     break;
                 }
             }
@@ -199,14 +112,14 @@ static void twai_transmit_task(void *arg)
     vTaskDelete(NULL);
 }
 
-//used to grab fault code from TWAI network
+//used to grab trouble code from TWAI network
 static void trouble_code_buff_task(void *arg)
 {
-    xSemaphoreTake(fault_code_task_sem, portMAX_DELAY);
+    xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
     tx_task_action_t tx_action;
     rx_task_action_t rx_action;
     
-    //runs twice to first get the fault code letter then number
+    //runs twice to first get the trouble code letter then number
     for (int i = 0; i < NO_OF_ITERS; i ++){
         ESP_ERROR_CHECK(twai_start());
         ESP_LOGI(EXAMPLE_TAG, "Driver started");
@@ -220,20 +133,20 @@ static void trouble_code_buff_task(void *arg)
         //Send Start command to slave, and receive data messages
         ESP_LOGI(EXAMPLE_TAG, "Ping received");
 
-        xSemaphoreTake(fault_code_task_sem, portMAX_DELAY);
+        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
         tx_action = TX_SEND_START_CMD;
         rx_action = RX_RECEIVE_DATA;
         xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
         xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
 
         //Send Stop command to slave when enough data messages have been received. Wait for stop response
-        xSemaphoreTake(fault_code_task_sem, portMAX_DELAY);
+        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
         tx_action = TX_SEND_STOP_CMD;
         rx_action = RX_RECEIVE_STOP_RESP;
         xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
         xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
 
-        xSemaphoreTake(fault_code_task_sem, portMAX_DELAY);
+        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
         ESP_ERROR_CHECK(twai_stop());
         ESP_LOGI(EXAMPLE_TAG, "Driver stopped");
         vTaskDelay(pdMS_TO_TICKS(ITER_DELAY_MS));
@@ -245,7 +158,7 @@ static void trouble_code_buff_task(void *arg)
         xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
         xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
 
-    //Delete fault code task
+    //give trouble_code_buff_task done
     xSemaphoreGive(done_sem);
     vTaskDelete(NULL);
 }
@@ -255,17 +168,17 @@ void twai_TC_Get(){
     //Create tasks, queues, and semaphores
     rx_task_queue = xQueueCreate(1, sizeof(rx_task_action_t));
     tx_task_queue = xQueueCreate(1, sizeof(tx_task_action_t));
-    fault_code_task_sem = xSemaphoreCreateBinary();
+    Trouble_Code_Task_Sem = xSemaphoreCreateBinary();
     stop_ping_sem = xSemaphoreCreateBinary();
     done_sem = xSemaphoreCreateBinary();
     xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(trouble_code_buff_task, "Fault_Code", 4096, NULL, FAULT_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(trouble_code_buff_task, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
     //Install TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(EXAMPLE_TAG, "Driver installed");
-    xSemaphoreGive(fault_code_task_sem);              //start fault code reading task
+    xSemaphoreGive(Trouble_Code_Task_Sem);              //start trouble code reading task
     xSemaphoreTake(done_sem, portMAX_DELAY);    //Wait for completion
 
     //Uninstall TWAI driver
@@ -275,7 +188,9 @@ void twai_TC_Get(){
     //Cleanup
     vQueueDelete(rx_task_queue);
     vQueueDelete(tx_task_queue);
-    vSemaphoreDelete(fault_code_task_sem);
+    vSemaphoreDelete(Trouble_Code_Task_Sem);
     vSemaphoreDelete(stop_ping_sem);
     vSemaphoreDelete(done_sem);
+
+    xSemaphoreGive(TC_Recieved_sem);
 }

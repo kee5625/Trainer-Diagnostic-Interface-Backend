@@ -11,7 +11,7 @@
     "app_elf":            "Gateway_Slave.elf",
     "app_bin":            "Gateway_Slave.bin",
     "build_type":         "flash_app",
-    "git_revision":       "v5.4.1-dirty",
+    "git_revision":       "v5.4.1-1-g25d17ce9f",
     "target":             "esp32",
     "rev":                "0",
     "min_rev":            "0",

@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "gatewayv1",
-    "project_version":    "1",
+    "project_version":    "ee7d3ce-dirty",
     "project_path":       "C:/ESP-IDF/GatewayV1",
     "idf_path":           "C:/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "C:/ESP-IDF/GatewayV1/build",
@@ -11,7 +11,7 @@
     "app_elf":            "gatewayv1.elf",
     "app_bin":            "gatewayv1.bin",
     "build_type":         "flash_app",
-    "git_revision":       "v5.4.1-dirty",
+    "git_revision":       "v5.4.1-1-g25d17ce9f",
     "target":             "esp32",
     "rev":                "0",
     "min_rev":            "0",

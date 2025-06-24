@@ -1577,7 +1577,7 @@ Discarded input sections
  .text.esp_get_minimum_free_heap_size
                 0x00000000       0x10 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .rodata.esp_get_idf_version.str1.4
-                0x00000000        0xd esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
+                0x00000000       0x14 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .text.esp_get_idf_version
                 0x00000000        0x8 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)
  .xt.lit        0x00000000       0x30 esp-idf/esp_system/libesp_system.a(esp_system_chip.c.obj)

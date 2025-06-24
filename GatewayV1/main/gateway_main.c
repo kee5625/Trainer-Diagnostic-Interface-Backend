@@ -1,8 +1,8 @@
 /**
  * Coder: Noah Batcher
  * Last updated: 6/11/2025
- * Project: Trainer Fault Code Diagnostic Gatway.
- * Note: 
+ * Project: Trainer Fault Code Diagnostic Gatway
+ * 
  * 
  */
 
@@ -23,25 +23,29 @@
 #include "nvs_flash.h"
 #include "time.h"
 #include "sys/time.h"
+
 #include "C:\ESP-IDF\Gateway_Slave\main\trouble_codes.c"
 #include "BT_SPP_TC.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
 /* --------------------- Definitions and static variables ------------------ */
-#define TC_size 22  //trouble code size
+#define TC_size 6  //trouble code size was 22
 char trouble_code_buff[TC_size];
-
+SemaphoreHandle_t TC_Recieved_sem;
 
 void app_main(void)
-{
+{  
+    TC_Recieved_sem = xSemaphoreCreateBinary();
     //grabbing trouble code from twia network and putting in trouble_code_buff
     twai_TC_Get();
 
     //running bt to send trouble code to serial port
     //bt_spp_setup();
-
+    xSemaphoreTake(TC_Recieved_sem, portMAX_DELAY);
     //start and running UART to send trouble code over uart
     uart_start();
+
+
 
     
 }
