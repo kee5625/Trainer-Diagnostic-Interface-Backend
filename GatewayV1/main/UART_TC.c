@@ -53,6 +53,7 @@ static void uart_send_tc(){
     ESP_ERROR_CHECK(uart_driver_install(UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 10, &uart_queue, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(UART_PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
+    ESP_LOGI(TAG, "UART set: TX=%d  RX=%d", ECHO_TEST_TXD, ECHO_TEST_RXD);
 
     uart_event_t event;
     // Configure a temporary trouble_code_buff for the incoming data

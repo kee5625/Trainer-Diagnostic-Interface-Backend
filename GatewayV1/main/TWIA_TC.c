@@ -1,7 +1,7 @@
 /**
  * Coder: Noah Batcher
  * Last updated: 6/11/2025
- * Project: Trainer Fault Code Diagnostic Gatway
+ * Project: Trainer Fault Code Diagnostic Gateway
  * Note: Code designed to recieve trouble code from TWAI slave on TWAI bus.
  * 
  */
@@ -32,8 +32,8 @@
 #define RX_TASK_PRIO            8
 #define TX_TASK_PRIO            9
 #define FAULT_CODE_TSK_PRIO     10
-#define TX_GPIO_NUM             14
-#define RX_GPIO_NUM             15
+#define TX_GPIO_NUM             21
+#define RX_GPIO_NUM             22
 #define EXAMPLE_TAG             "TWAI Master"
 
 #define ID_MASTER_STOP_CMD      0x0A0
@@ -132,28 +132,38 @@ static void twai_receive_task(void *arg)
             }
         } else if (action == RX_RECEIVE_DATA) {
             //Receive data messages from slave
-            uint32_t data_msgs_rec = 0;
-            while (data_msgs_rec < NO_OF_DATA_MSGS) {
-                twai_message_t rx_msg;
-                twai_receive(&rx_msg, portMAX_DELAY);
-                if (rx_msg.identifier == ID_SLAVE_DATA) {
-                    uint32_t data = 0;
-                    for (int i = 0; i < rx_msg.data_length_code; i++) {
-                        data |= (rx_msg.data[i] << (i * 8));
-                    }
-                    ESP_LOGI(EXAMPLE_TAG, "Received data value %"PRIu32, data);
+            twai_message_t rx_msg;
+            twai_receive(&rx_msg, portMAX_DELAY);
 
-                    if (strcmp(trouble_code_buff,"") == 0){
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff) - 4,"Fault code: %c",(char)data);
-                    }else{
-                        char temp[18];
-                        memcpy(temp,trouble_code_buff,sizeof(temp));
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%s%04li",temp,data);
-                    }
-                    data_msgs_rec ++;
-                }
+            if(rx_msg.identifier == ID_SLAVE_DATA && rx_msg.data_length_code >= 5){
+                char dtc[6] = {0};
+                memcpy(dtc, rx_msg.data, 5);
+                ESP_LOGI(EXAMPLE_TAG, "Fault code = %s", dtc);
             }
+
             xSemaphoreGive(fault_code_task_sem);
+            // uint32_t data_msgs_rec = 0;
+            // while (data_msgs_rec < NO_OF_DATA_MSGS) {
+            //     twai_message_t rx_msg;
+            //     twai_receive(&rx_msg, portMAX_DELAY);
+            //     if (rx_msg.identifier == ID_SLAVE_DATA) {
+            //         uint32_t data = 0;
+            //         for (int i = 0; i < rx_msg.data_length_code; i++) {
+            //             data |= (rx_msg.data[i] << (i * 8));
+            //         }
+            //         ESP_LOGI(EXAMPLE_TAG, "Received data value %"PRIu32, data);
+
+            //         if (strcmp(trouble_code_buff,"") == 0){
+            //             snprintf(trouble_code_buff,sizeof(trouble_code_buff) - 4,"Fault code: %c",(char)data);
+            //         }else{
+            //             char temp[18];
+            //             memcpy(temp,trouble_code_buff,sizeof(temp));
+            //             snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%s%04li",temp,data);
+            //         }
+            //         data_msgs_rec ++;
+            //     }
+            // }
+            // xSemaphoreGive(fault_code_task_sem);
         } else if (action == RX_RECEIVE_STOP_RESP) { 
             //Listen for stop response from slave
             while (1) {
@@ -178,11 +188,21 @@ static void twai_transmit_task(void *arg)
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
 
         if (action == TX_SEND_PINGS) {
-            //Repeatedly transmit pings
             ESP_LOGI(EXAMPLE_TAG, "Transmitting ping");
+
+            const uint32_t PING_TIMEOUT_MS = 3000;          // 3-s fail-safe
+            TickType_t t_start = xTaskGetTickCount();
+
+            /* keep sending pings until we either get stop_ping_sem
+               or we exceed the timeout                             */
             while (xSemaphoreTake(stop_ping_sem, 0) != pdTRUE) {
                 twai_transmit(&ping_message, portMAX_DELAY);
                 vTaskDelay(pdMS_TO_TICKS(PING_PERIOD_MS));
+
+                if ((xTaskGetTickCount() - t_start) > pdMS_TO_TICKS(PING_TIMEOUT_MS)) {
+                    ESP_LOGE(EXAMPLE_TAG, "Ping-response timeout - aborting ping loop");
+                    break;          // leave the loop so the task can pick up next command
+                }
             }
         } else if (action == TX_SEND_START_CMD) {
             //Transmit start command to slave
