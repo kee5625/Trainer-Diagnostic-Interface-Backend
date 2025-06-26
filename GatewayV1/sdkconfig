@@ -423,6 +423,12 @@ CONFIG_EXAMPLE_TASK_STACK_SIZE=3072
 # end of Example Configuration
 
 #
+# Trainer-Gateway
+#
+CONFIG_TRAINER_DEVICE_NAME="Trainer-PowerSeat"
+# end of Trainer-Gateway
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEBUG=y

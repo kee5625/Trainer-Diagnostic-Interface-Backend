@@ -24,3 +24,13 @@ menu "Example 'GATT SERVER' Config"
             This config the pipeline id for CI test. Only for internal used.
 
 endmenu
+
+menu "Trainer-Gateway"
+
+config TRAINER_DEVICE_NAME
+    string "BLE GAP device name"
+    default "Trainer-01"
+    help
+        Advertised name shown in BLE scans (change per board or via NVS).
+
+endmenu
