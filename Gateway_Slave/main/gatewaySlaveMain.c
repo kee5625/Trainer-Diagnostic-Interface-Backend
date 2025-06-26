@@ -97,20 +97,6 @@ static const twai_message_t stop_resp = {
     .data = {0},
 };
 
-// Data bytes of data message will be initialized in the transmit task
-// static twai_message_t data_message = {
-//     // Message type and format settings
-//     .extd = 0,              // Standard Format message (11-bit ID)
-//     .rtr = 0,               // Send a data frame
-//     .ss = 0,                // Not single shot
-//     .self = 0,              // Not a self reception request
-//     .dlc_non_comp = 0,      // DLC is less than 8
-//     // Message ID and payload
-//     .identifier = ID_SLAVE_DATA,
-//     .data_length_code = 4,
-//     .data = {0,1,2,3},
-// };
-
 static twai_message_t dtc_msg = {
     .identifier       = ID_SLAVE_DATA,
     .extd             = 0, .rtr = 0, .ss = 0, .self = 0, .dlc_non_comp = 0,
