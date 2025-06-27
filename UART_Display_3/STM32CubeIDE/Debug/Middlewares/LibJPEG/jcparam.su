@@ -1,0 +1,11 @@
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:24:1:jpeg_add_quant_table.constprop	40	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:24:1:jpeg_add_quant_table.constprop	40	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:24:1:jpeg_add_quant_table	40	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:91:1:jpeg_default_qtables	16	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:106:1:jpeg_set_linear_quality	16	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:123:1:jpeg_quality_scaling	0	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:149:1:jpeg_set_quality	16	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:413:1:jpeg_set_colorspace	16	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:381:1:jpeg_default_colorspace	16	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:285:1:jpeg_set_defaults	24	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcparam.c:559:1:jpeg_simple_progression	32	static

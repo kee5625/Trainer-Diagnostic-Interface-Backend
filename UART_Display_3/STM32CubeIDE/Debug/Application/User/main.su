@@ -1,0 +1,5 @@
+C:/TouchGFXProjects/UART_Display_3/Core/Src/main.c:707:6:StartDefaultTask	8	static
+C:/TouchGFXProjects/UART_Display_3/Core/Src/main.c:222:6:SystemClock_Config	136	static
+C:/TouchGFXProjects/UART_Display_3/Core/Src/main.c:116:5:main	104	static,ignoring_inline_asm
+C:/TouchGFXProjects/UART_Display_3/Core/Src/main.c:798:6:HAL_TIM_PeriodElapsedCallback	0	static
+C:/TouchGFXProjects/UART_Display_3/Core/Src/main.c:816:6:Error_Handler	0	static

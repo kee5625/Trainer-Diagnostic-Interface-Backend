@@ -1,0 +1,5 @@
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jccoefct.c:101:1:start_pass_coef	8	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jccoefct.c:346:1:compress_output	80	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jccoefct.c:249:1:compress_first_pass	104	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jccoefct.c:144:1:compress_data	112	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jccoefct.c:410:1:jinit_c_coef_controller	40	static

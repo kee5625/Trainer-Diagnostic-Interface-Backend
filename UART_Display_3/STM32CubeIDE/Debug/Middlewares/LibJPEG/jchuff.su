@@ -1,0 +1,14 @@
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1197:1:encode_mcu_gather	64	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:161:1:jpeg_make_c_derived_tbl	1336	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1451:1:start_pass_huff	32	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1256:1:jpeg_gen_optimal_table	2144	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:459:1:emit_eobrun	48	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:511:1:emit_restart_e	32	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:541:1:encode_mcu_DC_first	64	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:739:1:encode_mcu_DC_refine	56	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:628:1:encode_mcu_AC_first	80	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:786:1:encode_mcu_AC_refine	336	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1073:1:finish_pass_huff	96	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1397:1:finish_pass_gather	80	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1016:1:encode_mcu_huff	128	static
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jchuff.c:1557:1:jinit_huff_encoder	16	static

@@ -1,0 +1,9 @@
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:635:1:start_pass	41
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:190:1:process_restart	10
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:106:1:arith_decode	19
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:503:1:decode_mcu	31
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:431:1:decode_mcu_AC_refine	17
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:398:1:decode_mcu_DC_refine	7
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:321:1:decode_mcu_AC_first	18
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:242:1:decode_mcu_DC_first	17
+C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdarith.c:745:1:jinit_arith_decoder	4

@@ -1,0 +1,13 @@
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:182:9:BSP_QSPI_DeInit	6
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:231:26:MX_QSPI_Init	1
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:97:9:BSP_QSPI_Init	24
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:329:9:BSP_QSPI_Read	5
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:368:9:BSP_QSPI_Write	8
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:437:9:BSP_QSPI_EraseBlock	5
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:476:9:BSP_QSPI_EraseChip	5
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:516:9:BSP_QSPI_GetStatus	3
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:552:9:BSP_QSPI_GetInfo	2
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:576:9:BSP_QSPI_EnableMemoryMappedMode	5
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:621:9:BSP_QSPI_DisableMemoryMappedMode	6
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:672:9:BSP_QSPI_ReadID	2
+C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_qspi.c:702:9:BSP_QSPI_ConfigFlash	9
