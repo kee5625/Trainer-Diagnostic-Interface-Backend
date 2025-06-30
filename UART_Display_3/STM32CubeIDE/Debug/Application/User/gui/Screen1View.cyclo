@@ -6,3 +6,4 @@ C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/screen1_screen/Screen1View.c
 ../../TouchGFX/gui/include/gui/screen1_screen/Screen1View.hpp:11:13:virtual Screen1View::~Screen1View()	1
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:3:1:Screen1View::Screen1View()	1
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:8:6:virtual void Screen1View::setupScreen()	1
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:19:6:void Screen1View::updateTCTextBox(const char*)	1

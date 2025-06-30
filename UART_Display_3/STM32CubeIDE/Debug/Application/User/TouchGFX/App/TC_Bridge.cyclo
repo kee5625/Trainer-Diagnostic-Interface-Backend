@@ -1,0 +1,2 @@
+../Application/User/TouchGFX/App/TC_Bridge.cpp:14:6:void setModelInstance(Model*)	1
+../Application/User/TouchGFX/App/TC_Bridge.cpp:19:6:void TC_Received(const char*)	2

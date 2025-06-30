@@ -15,6 +15,6 @@ C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:22:10:
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:31:32:touchgfx::Unicode::UnicodeChar touchgfx::TextProvider::getNextLigature(touchgfx::TextDirection)	8	static
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:45:6:void touchgfx::TextProvider::initializeInternal()	0	static
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:50:6:)	32	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:87:6:static void touchgfx::Texts::setLanguage(touchgfx::LanguageId)	16	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:117:6:static void touchgfx::Texts::setTranslation(touchgfx::LanguageId, const void*)	0	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:122:39:const touchgfx::Unicode::UnicodeChar* touchgfx::Texts::getText(touchgfx::TypedTextId) const	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:89:6:static void touchgfx::Texts::setLanguage(touchgfx::LanguageId)	16	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:119:6:static void touchgfx::Texts::setTranslation(touchgfx::LanguageId, const void*)	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:124:39:const touchgfx::Unicode::UnicodeChar* touchgfx::Texts::getText(touchgfx::TypedTextId) const	0	static

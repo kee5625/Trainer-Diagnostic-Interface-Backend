@@ -11,6 +11,8 @@ public:
     virtual ~Screen1View() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
+
+    void updateTCTextBox(const char* newText);
 protected:
 };
 

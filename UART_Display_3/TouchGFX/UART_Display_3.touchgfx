@@ -37,14 +37,19 @@
           {
             "Type": "TextArea",
             "Name": "TC_TextBox",
-            "X": 55,
-            "Y": 202,
-            "Width": 130,
-            "Height": 20,
+            "X": 17,
+            "Y": 200,
+            "Width": 206,
+            "Height": 22,
             "Visible": false,
-            "TextId": "__SingleUse_3ZF8",
+            "LockPosition": true,
+            "TextId": "__SingleUse_6VCK",
             "TextRotation": "0",
-            "AutoSize": true
+            "Wildcard1": {
+              "TextId": "TC_TextBox_Buffer",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
           }
         ],
         "Interactions": [

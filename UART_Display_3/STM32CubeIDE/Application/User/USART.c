@@ -15,6 +15,7 @@
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_uart.h"
 #include "blinking.h"
+#include "..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp"
 
 #define tc_size 5
 #define buff_size 32
@@ -115,6 +116,7 @@ void receive_uart(){
 				//setting trouble_codes
 				memcpy(trouble_code,data,sizeof(data));
 				trouble_code[tc_size] = '\0';
+				TC_Received(trouble_code);
 				break;
 			}else if (action == RX_TASK_EXIT){
 				break;

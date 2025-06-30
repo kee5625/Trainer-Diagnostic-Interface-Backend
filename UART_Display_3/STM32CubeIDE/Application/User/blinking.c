@@ -18,7 +18,7 @@ void blk_toggle_led(){
 	while(1){
 		if (osSemaphoreAcquire(blink_sem,osWaitForever) == osOK && !isCleanUp){
 			HAL_GPIO_TogglePin(GPIOI,GPIO_PIN_13);
-			osDelay(pdMS_TO_TICKS(1000));
+			osDelay(pdMS_TO_TICKS(250));
 			HAL_GPIO_TogglePin(GPIOI,GPIO_PIN_13);
 		}else{
 			osSemaphoreDelete(blink_sem);

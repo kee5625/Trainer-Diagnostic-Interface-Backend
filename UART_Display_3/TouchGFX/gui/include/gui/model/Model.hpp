@@ -1,7 +1,7 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
-class ModelListener;
+#include <gui/model/ModelListener.hpp>
 
 class Model
 {
@@ -14,6 +14,8 @@ public:
     }
 
     void tick();
+
+    void TC_Get(const char* data);
 protected:
     ModelListener* modelListener;
 };

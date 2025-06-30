@@ -6,11 +6,11 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="__SingleUse_3ZF8" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">Trouble Code</Translation>
+      <Text Id="TC_TextBox_Buffer" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">xxxxx</Translation>
       </Text>
-      <Text Id="Trouble_Code" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB"></Translation>
+      <Text Id="__SingleUse_6VCK" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB"> Trouble Code: &lt;%s&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_JHO3" Alignment="Center" TypographyId="Default">
         <Translation Language="GB">Trouble Code</Translation>
@@ -18,7 +18,7 @@
     </TextGroup>
   </Texts>
   <Typographies>
-    <Typography Id="Default" Font="verdana.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="Default" Font="calibri.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,A-Z" />
     <Typography Id="Large" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="Small" Font="verdana.ttf" Size="10" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
   </Typographies>

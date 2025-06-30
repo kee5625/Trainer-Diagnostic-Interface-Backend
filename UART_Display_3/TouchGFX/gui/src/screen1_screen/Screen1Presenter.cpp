@@ -16,3 +16,8 @@ void Screen1Presenter::deactivate()
 {
 
 }
+
+void Screen1Presenter::updateTextBox(const char* data)
+{
+    view.updateTCTextBox(data);
+}

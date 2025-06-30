@@ -27,6 +27,7 @@ public:
 
     virtual ~Screen1Presenter() {}
 
+    void updateTextBox(const char * data) override;
 private:
     Screen1Presenter();
 

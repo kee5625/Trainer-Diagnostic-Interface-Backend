@@ -1,2 +1,3 @@
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:4:1:Model::Model()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:9:6:void Model::tick()	1
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:5:1:Model::Model()	1
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:10:6:void Model::tick()	1
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:15:6:void Model::TC_Get(const char*)	1

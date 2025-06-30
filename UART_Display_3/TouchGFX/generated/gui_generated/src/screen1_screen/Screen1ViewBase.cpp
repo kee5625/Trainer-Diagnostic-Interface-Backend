@@ -26,10 +26,12 @@ Screen1ViewBase::Screen1ViewBase() :
     TC_Button.setAction(buttonCallback);
     add(TC_Button);
 
-    TC_TextBox.setXY(55, 202);
+    TC_TextBox.setPosition(17, 200, 206, 22);
     TC_TextBox.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     TC_TextBox.setLinespacing(0);
-    TC_TextBox.setTypedText(touchgfx::TypedText(T___SINGLEUSE_3ZF8));
+    Unicode::snprintf(TC_TextBoxBuffer, TC_TEXTBOX_SIZE, "%s", touchgfx::TypedText(T_TC_TEXTBOX_BUFFER).getText());
+    TC_TextBox.setWildcard(TC_TextBoxBuffer);
+    TC_TextBox.setTypedText(touchgfx::TypedText(T___SINGLEUSE_6VCK));
     TC_TextBox.setVisible(false);
     add(TC_TextBox);
 }

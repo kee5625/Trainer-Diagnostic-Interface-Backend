@@ -10,7 +10,7 @@
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 
 class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
@@ -30,7 +30,13 @@ protected:
     touchgfx::Box __background;
     touchgfx::ScalableImage scalableImage1;
     touchgfx::ButtonWithLabel TC_Button;
-    touchgfx::TextArea TC_TextBox;
+    touchgfx::TextAreaWithOneWildcard TC_TextBox;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t TC_TEXTBOX_SIZE = 10;
+    touchgfx::Unicode::UnicodeChar TC_TextBoxBuffer[TC_TEXTBOX_SIZE];
 
 private:
 
