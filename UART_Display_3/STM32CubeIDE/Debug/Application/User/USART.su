@@ -1,6 +1,7 @@
-../Application/User/USART.c:93:6:send_uart	16	static
-../Application/User/USART.c:110:6:receive_uart	16	static
-../Application/User/USART.c:63:6:HAL_UART_RxCpltCallback	16	static
-../Application/User/USART.c:80:6:HAL_UART_TxCpltCallback	16	static
-../Application/User/USART.c:134:6:init_error_check	0	static
-../Application/User/USART.c:140:6:USART_Init_Start	8	static
+../Application/User/USART.c:86:6:send_uart	16	static
+../Application/User/USART.c:106:6:receive_uart	16	static
+../Application/User/USART.c:51:6:HAL_UART_RxCpltCallback	16	static
+../Application/User/USART.c:70:6:HAL_UART_TxCpltCallback	16	static
+../Application/User/USART.c:136:6:init_error_check	0	static
+../Application/User/USART.c:142:6:UART_REST_TC	8	static
+../Application/User/USART.c:158:6:Get_TC_USART	8	static

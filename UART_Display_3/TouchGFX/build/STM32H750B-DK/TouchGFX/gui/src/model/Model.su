@@ -1,0 +1,3 @@
+Model.cpp:5:1:Model::Model()	8	static
+Model.cpp:10:6:void Model::tick()	0	static
+Model.cpp:15:6:void Model::TC_Get(const char*)	0	static

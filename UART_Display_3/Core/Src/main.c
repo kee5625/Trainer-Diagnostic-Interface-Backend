@@ -74,7 +74,7 @@ osThreadId_t GUITaskHandle;
 const osThreadAttr_t GUITask_attributes = {
   .name = "GUITask",
   .stack_size = 8192 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
 osThreadId_t UARTHandle;
@@ -192,7 +192,7 @@ int main(void)
   GUITaskHandle = osThreadNew(TouchGFX_Task, NULL, &GUITask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  UARTHandle = osThreadNew(USART_Init_Start, NULL, &UARTTask_attributes);
+  UARTHandle = osThreadNew(Get_TC_USART, NULL, &UARTTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -615,12 +615,9 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOJ_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(FRAME_RATE_GPIO_Port, FRAME_RATE_Pin, GPIO_PIN_RESET);
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LCD_DE_GPIO_Port, LCD_DE_Pin, GPIO_PIN_RESET);
@@ -639,13 +636,6 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOJ, GPIO_PIN_2, GPIO_PIN_SET);
-
-  /*Configure GPIO pin : FRAME_RATE_Pin */
-  GPIO_InitStruct.Pin = FRAME_RATE_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(FRAME_RATE_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LCD_DE_Pin */
   GPIO_InitStruct.Pin = LCD_DE_Pin;

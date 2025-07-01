@@ -22,7 +22,7 @@
 
 
 char trouble_code[6];
-char data[5];
+char data[6];
 
 osThreadId_t send_handle;
 const osThreadAttr_t sendTask_attributes = {
@@ -46,30 +46,20 @@ const osThreadAttr_t blinkTask_attributes = {
 static osMessageQueueId_t  send_task_queue;
 static osMessageQueueId_t  receive_task_queue;
 static osSemaphoreId_t  receive_code_sem;
-bool isCleanUp = false;
-
-typedef enum {
-    TX_SEND_PINGS,
-    TX_SEND_START_CMD,
-    TX_TASK_EXIT,
-} tx_task_action_t;
-
-typedef enum {
-    RX_RECEIVE_PING_RESP,
-    RX_RECEIVE_DATA,
-    RX_TASK_EXIT,
-} rx_task_action_t;
+Action_phase_t Action_phase;
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 
 	if(huart->Instance == USART1){
-		if (!isCleanUp){
+		if (Action_phase == Get_TC_Phase){
 			rx_task_action_t rx_action = RX_RECEIVE_DATA;
 			osMessageQueuePut(receive_task_queue,&rx_action, 0,0);
-		}else{
+		}else if (Action_phase == Clean_Up_Phase){
 			rx_task_action_t rx_action = RX_TASK_EXIT;
 			osMessageQueuePut(receive_task_queue,&rx_action, 0,0);
+		}else{
+			//no action for read in rest_tc_phase
 		}
 	}
 
@@ -79,10 +69,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
 	if (huart->Instance == USART1){
-		if (!isCleanUp){
+		if (Action_phase == Get_TC_Phase){
 			tx_task_action_t tx_action = TX_SEND_START_CMD;
 			osMessageQueuePut(send_task_queue,&tx_action, 0,0);
-		}else{
+		}else if (Action_phase == Reset_TC_Phase){
+			tx_task_action_t tx_action = TX_Reset_TC;
+			osMessageQueuePut(send_task_queue, &tx_action,0,0);
+		}else if (Action_phase == Clean_Up_Phase){
 			tx_task_action_t tx_action = TX_TASK_EXIT;
 			osMessageQueuePut(send_task_queue,&tx_action, 0,0);
 		}
@@ -91,42 +84,51 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
 
 
 void send_uart(){
-		tx_task_action_t action;
-	    while(1){
-	    	if(osMessageQueueGet(send_task_queue, &action, NULL, osWaitForever) == osOK){
-				if (action == TX_SEND_START_CMD) {
-					HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Send trouble code.",strlen("Send trouble code."));
-					osDelay(pdMS_TO_TICKS(5000));
-				}else if (action == TX_TASK_EXIT){
-					break;
-				}else{
-					//not set up for now
-				}
-	    	}
+	osDelay(50);//small delay for USART initialization
+	tx_task_action_t action;
+	while(1){
+		if(osMessageQueueGet(send_task_queue, &action, NULL, osWaitForever) == osOK){
+			if (action == TX_SEND_START_CMD) {
+				HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Send trouble code\n",strlen("Send trouble code\n"));
+				osDelay(pdMS_TO_TICKS(5000));
+			}else if (action == TX_Reset_TC){
+				HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Reset TC\n",strlen("Reset TC\n"));
+				osDelay(pdMS_TO_TICKS(1500));
+			}else if (action == TX_TASK_EXIT){
+				break;
+			}
 		}
-	    osThreadExit();
+	}
+	osMessageQueueDelete(send_task_queue);
+	osThreadExit();
 }
 
 void receive_uart(){
+	osDelay(50); //small delay for USART to initialize
 	rx_task_action_t action;
 	while(1){
 		if(osMessageQueueGet(receive_task_queue, &action, NULL,osWaitForever) == osOK){
 			if (action == RX_RECEIVE_DATA){
-				osSemaphoreRelease(blink_sem);
 				//setting trouble_codes
-				memcpy(trouble_code,data,sizeof(data));
-				trouble_code[tc_size] = '\0';
-				TC_Received(trouble_code);
-				break;
+				if (isalpha(data[0])&& data[tc_size] == '\n' && (data[0] == 'P' || data[0] == 'C' || data[0] == 'B' || data[0] == 'U')){
+					osSemaphoreRelease(blink_sem);
+					memcpy(trouble_code,data,sizeof(data));
+					TC_Received(trouble_code); //pass trouble code to GUI
+					break;
+				}
 			}else if (action == RX_TASK_EXIT){
 				break;
+			}else if (action == RX_TC_Cleared){
+				Action_phase = Clean_Up_Phase;
+				break;
 			}else{
-				HAL_UART_Receive_IT(&huart1,(uint8_t *)data,tc_size); //only runs if trouble_code was NULL. Then it will retry getting the trouble code
+				HAL_UART_Receive_IT(&huart1,(uint8_t *)data,tc_size + 2);
 			}
 		}
 	}
 	//terminating thread
 	osSemaphoreRelease(receive_code_sem);
+	osMessageQueueDelete(receive_task_queue);
 	osThreadExit();
 
 }
@@ -137,13 +139,30 @@ void init_error_check(void *ptr){
 	}
 }
 
-void USART_Init_Start()
+void UART_REST_TC(){
+	//waiting till thread is deleted to start again
+	while (osThreadGetState(send_handle) != osThreadTerminated){
+		osDelay(10);
+	}
+	osDelay(50); //waiting extra time for setup
+
+	//starting queue and thread
+	send_task_queue = osMessageQueueNew(1, sizeof(tx_task_action_t),NULL);
+	init_error_check(send_task_queue);
+	send_handle = osThreadNew(send_uart, NULL, &sendTask_attributes);
+	init_error_check(send_handle);
+	//start callback
+	HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Reset TC\n",strlen("Reset TC\n"));
+}
+
+void Get_TC_USART()
 {
 
   //setting up FreeRTOS*********************************************************************************
   /**
-   * Setup and error checking
+   * Setup and error checking. To load next trouble code call function again.
    */
+  Action_phase = Get_TC_Phase;
   send_task_queue = osMessageQueueNew(1, sizeof(tx_task_action_t),NULL);
   init_error_check(send_task_queue);
   receive_task_queue = osMessageQueueNew(1, sizeof(rx_task_action_t),NULL);
@@ -159,17 +178,15 @@ void USART_Init_Start()
 
   //setting interrupts**********************************************************************************
   HAL_UART_Transmit_IT(&huart1, (uint8_t *)"Send trouble code.",strlen("Send trouble code."));
-  HAL_UART_Receive_IT(&huart1,(uint8_t *)data, tc_size);
+  HAL_UART_Receive_IT(&huart1,(uint8_t *)data, tc_size + 2);
 
   //waiting for trouble code to be received*************************************************************
   osSemaphoreAcquire(receive_code_sem, HAL_MAX_DELAY);
 
   //clean up after code received************************************************************************
-  isCleanUp= true;
+  Action_phase = Clean_Up_Phase;
   osSemaphoreRelease(blink_sem);
   osDelay(pdMS_TO_TICKS(1000)); //waiting for tasks to exit
-  osMessageQueueDelete(send_task_queue);
-  osMessageQueueDelete(receive_task_queue);
   osSemaphoreDelete(receive_code_sem);
   HAL_UART_Abort_IT(&huart1);
   //turning off led if left on from blink_handle

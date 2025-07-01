@@ -1,0 +1,5 @@
+Home_ScreenPresenter.hpp:28:13:Home_ScreenPresenter::~Home_ScreenPresenter()	0	static
+Home_ScreenPresenter.cpp:10:6:virtual void Home_ScreenPresenter::activate()	0	static
+Home_ScreenPresenter.hpp:28:13:virtual Home_ScreenPresenter::~Home_ScreenPresenter()	8	static
+Home_ScreenPresenter.hpp:28:13:virtual void* Home_ScreenPresenter::_ZThn4_N20Home_ScreenPresenterD1Ev()	0	static
+Home_ScreenPresenter.cpp:4:1:Home_ScreenPresenter::Home_ScreenPresenter(Home_ScreenView&)	8	static

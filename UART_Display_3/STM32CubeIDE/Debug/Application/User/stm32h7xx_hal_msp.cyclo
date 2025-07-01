@@ -10,6 +10,6 @@ C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:414:6:HAL_LTDC_M
 C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:482:6:HAL_QSPI_MspInit	3
 C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:576:6:HAL_QSPI_MspDeInit	2
 C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:619:6:HAL_UART_MspInit	3
-C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:678:6:HAL_UART_MspDeInit	2
-C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:816:6:HAL_SDRAM_MspInit	3
-C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:900:6:HAL_SDRAM_MspDeInit	2
+C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:670:6:HAL_UART_MspDeInit	2
+C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:806:6:HAL_SDRAM_MspInit	3
+C:/TouchGFXProjects/UART_Display_3/Core/Src/stm32h7xx_hal_msp.c:890:6:HAL_SDRAM_MspDeInit	2

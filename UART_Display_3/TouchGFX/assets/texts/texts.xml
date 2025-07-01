@@ -6,14 +6,26 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="TC_TextBox_Buffer" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">xxxxx</Translation>
+      <Text Id="__SingleUse_KXSK" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">No trouble code!</Translation>
+      </Text>
+      <Text Id="Erase_TC_Text" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Erase Code</Translation>
+      </Text>
+      <Text Id="__SingleUse_885X" Alignment="Center" TypographyId="Small">
+        <Translation Language="GB">Read Live Data</Translation>
+      </Text>
+      <Text Id="__SingleUse_Q1M4" Alignment="Center" TypographyId="Small">
+        <Translation Language="GB">Read Trouble Code</Translation>
+      </Text>
+      <Text Id="__SingleUse_JHO3" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Trouble Code</Translation>
       </Text>
       <Text Id="__SingleUse_6VCK" Alignment="Center" TypographyId="Default">
         <Translation Language="GB"> Trouble Code: &lt;%s&gt;</Translation>
       </Text>
-      <Text Id="__SingleUse_JHO3" Alignment="Center" TypographyId="Default">
-        <Translation Language="GB">Trouble Code</Translation>
+      <Text Id="TC_TextBox_Buffer" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">xxxxx</Translation>
       </Text>
     </TextGroup>
   </Texts>

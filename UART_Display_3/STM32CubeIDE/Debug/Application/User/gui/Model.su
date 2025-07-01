@@ -1,3 +1,6 @@
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:5:1:Model::Model()	8	static
 C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:10:6:void Model::tick()	0	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:15:6:void Model::TC_Get(const char*)	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:15:6:void Model::TC_Set(const char*)	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:22:6:void Model::reset_TC()	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:26:6:bool Model::TC_Status()	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:32:6:void Model::TC_Give()	0	static

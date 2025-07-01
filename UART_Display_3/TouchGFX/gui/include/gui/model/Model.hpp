@@ -15,9 +15,16 @@ public:
 
     void tick();
 
-    void TC_Get(const char* data);
+    void TC_Set(const char* str);
+    void TC_Give();
+    bool TC_Status();
+    void reset_TC();
+
+
 protected:
     ModelListener* modelListener;
+    const char * data;
+    bool TC_Ready = false;
 };
 
 #endif // MODEL_HPP

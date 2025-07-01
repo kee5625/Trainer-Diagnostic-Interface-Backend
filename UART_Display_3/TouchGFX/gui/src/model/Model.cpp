@@ -12,7 +12,29 @@ void Model::tick()
 
 }
 
-void Model::TC_Get(const char* data)
+void Model::TC_Set(const char* str)
 {
-    modelListener->updateTextBox(data);
+	this->data = str;
+	TC_Ready = true;
+    //modelListener->updateTextBox(data);
 }
+
+void Model::reset_TC(){
+	to_logic_reset_TC();
+}
+
+bool Model::TC_Status(){
+	return TC_Ready;
+}
+//*************************************Need to add error message if no trouble code
+//*************************************given when read tc button pressed.
+//Give function will update tc_textBox with correct trouble code.
+void Model::TC_Give(){
+	if (modelListener != nullptr && data != nullptr){
+		modelListener->updateTextBox(data);
+	}
+}
+
+
+
+

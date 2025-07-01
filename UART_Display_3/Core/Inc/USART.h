@@ -19,7 +19,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
 void send_uart();
 void receive_uart();
-void USART_Init_Start();
+void Get_TC_USART();
 
 
 

@@ -2,11 +2,97 @@
   "Application": {
     "Screens": [
       {
-        "Name": "Screen1",
+        "Name": "Home_Screen",
         "Components": [
           {
             "Type": "ScalableImage",
-            "Name": "scalableImage1",
+            "Name": "ATECH_LOGO",
+            "Width": 480,
+            "Height": 272,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "ButtonWithLabel",
+            "Name": "Read_TC_Start_button",
+            "X": 110,
+            "Y": 222,
+            "Width": 110,
+            "Height": 50,
+            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
+            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
+            "TextId": "__SingleUse_Q1M4",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0"
+          },
+          {
+            "Type": "ButtonWithLabel",
+            "Name": "Read_live_data_Start_button",
+            "Y": 222,
+            "Width": 110,
+            "Height": 50,
+            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
+            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
+            "TextId": "__SingleUse_885X",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "TC_not_loaded",
+            "X": 39,
+            "Y": 178,
+            "Width": 143,
+            "Height": 22,
+            "Visible": false,
+            "TextId": "__SingleUse_KXSK",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255
+            },
+            "AutoSize": true
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "TC_Read_Screen_Switch",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Read_TC_Start_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "TC_Screen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "TC_Screen",
+        "Components": [
+          {
+            "Type": "ScalableImage",
+            "Name": "ATECH_LOGO",
             "Width": 480,
             "Height": 272,
             "Filename": "images.png",
@@ -16,10 +102,10 @@
             "Type": "ButtonWithLabel",
             "Name": "TC_Button",
             "Y": 222,
-            "Width": 240,
+            "Width": 175,
             "Height": 50,
-            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_medium_rounded_pressed.png",
-            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_medium_rounded_normal.png",
+            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
+            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
             "TextId": "__SingleUse_JHO3",
             "ReleasedColor": {
               "Red": 255,
@@ -31,16 +117,14 @@
               "Green": 255,
               "Blue": 255
             },
-            "TextRotation": "0",
-            "Preset": "alternate_theme\\presets\\button\\regular\\height_50\\medium_rounded_normal.json"
+            "TextRotation": "0"
           },
           {
             "Type": "TextArea",
             "Name": "TC_TextBox",
-            "X": 17,
-            "Y": 200,
-            "Width": 206,
-            "Height": 22,
+            "Y": 178,
+            "Width": 240,
+            "Height": 44,
             "Visible": false,
             "LockPosition": true,
             "TextId": "__SingleUse_6VCK",
@@ -50,11 +134,31 @@
               "UseBuffer": true,
               "BufferSize": 10
             }
+          },
+          {
+            "Type": "ButtonWithLabel",
+            "Name": "Erase_TC_Button",
+            "X": 305,
+            "Y": 222,
+            "Width": 175,
+            "Height": 50,
+            "Visible": false,
+            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
+            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
+            "TextId": "Erase_TC_Text",
+            "ReleasedColor": {
+              "Red": 247
+            },
+            "PressedColor": {
+              "Red": 255
+            },
+            "TextRotation": "0"
           }
         ],
         "Interactions": [
           {
-            "InteractionName": "showTC",
+            "InteractionName": "Show_TC",
+            "HasCompletedTrigger": true,
             "Trigger": {
               "Type": "TriggerClicked",
               "TriggerComponent": "TC_Button"
@@ -62,6 +166,30 @@
             "Action": {
               "Type": "ActionShow",
               "ActionComponent": "TC_TextBox"
+            }
+          },
+          {
+            "InteractionName": "Show_Erase_TC_Button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_TC"
+            },
+            "Action": {
+              "Type": "ActionShow",
+              "ActionComponent": "Erase_TC_Button"
+            }
+          },
+          {
+            "InteractionName": "Erase_Change_Screen",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Erase_TC_Button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
             }
           }
         ]
@@ -74,7 +202,7 @@
       "Height": 272
     },
     "SelectedColorDepth": 16,
-    "StartupScreenName": "Screen1",
+    "StartupScreenName": "Home_Screen",
     "SelectedStartupLanguage": "GB",
     "TouchGfxPath": "../Middlewares/ST/touchgfx",
     "UIPath": ".",

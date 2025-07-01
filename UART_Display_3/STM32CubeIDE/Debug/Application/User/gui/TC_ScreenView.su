@@ -1,0 +1,14 @@
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:104:18:virtual void touchgfx::Screen::afterTransition()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:144:18:virtual void touchgfx::Screen::handleTickEvent()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:154:18:virtual void touchgfx::Screen::handleKeyEvent(uint8_t)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:357:8:touchgfx::Callback<TC_ScreenView, const touchgfx::AbstractButton&>::~Callback()	0	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenView.cpp:17:6:virtual void TC_ScreenView::tearDownScreen()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:386:18:void touchgfx::Callback<dest_type, T1, void, void>::execute(T1) [with dest_type = TC_ScreenView; T1 = const touchgfx::AbstractButton&]	4	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:396:18:bool touchgfx::Callback<dest_type, T1, void, void>::isValid() const [with dest_type = TC_ScreenView; T1 = const touchgfx::AbstractButton&]	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:357:8:virtual touchgfx::Callback<TC_ScreenView, const touchgfx::AbstractButton&>::~Callback()	8	static
+../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenView.hpp:12:13:TC_ScreenView::~TC_ScreenView()	8	static
+../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenView.hpp:12:13:virtual TC_ScreenView::~TC_ScreenView()	8	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenView.cpp:4:1:TC_ScreenView::TC_ScreenView()	8	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenView.cpp:9:6:virtual void TC_ScreenView::setupScreen()	8	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenView.cpp:22:6:void TC_ScreenView::bufferUpdateTCTextBox(const char*)	8	static
+C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenView.cpp:30:6:void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButton&)	24	static
