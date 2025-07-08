@@ -1,5 +1,5 @@
 Middlewares/FreeRTOS/queue.o: \
- C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/queue.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/queue.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../../Core/Inc/FreeRTOSConfig.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \

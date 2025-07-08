@@ -14,33 +14,26 @@
 #ifndef APPLICATION_USER_USART_USART_H_
 #define APPLICATION_USER_USART_USART_H_
 
-typedef enum {
-    TX_SEND_PINGS,
-    TX_SEND_START_CMD,
-	TX_Reset_TC,
-    TX_TASK_EXIT,
-} tx_task_action_t;
-
-typedef enum {
-    RX_RECEIVE_PING_RESP,
-    RX_RECEIVE_DATA,
-	RX_TC_Cleared,
-    RX_TASK_EXIT,
-} rx_task_action_t;
-
-typedef enum {
-	Get_TC_Phase,
-	Reset_TC_Phase,
-	Clean_Up_Phase,
-}Action_phase_t;
-
 extern UART_HandleTypeDef huart1;
+
+typedef enum {
+    start_cmd = 1,
+	received_cmd,
+	retry_cmd,
+    TC_Req_cmd,
+    TC_Received_cmd,
+	TC_Receiving,
+    TC_Reset_cmd,
+    Read_live_cmd,
+	end_of_cmd,
+    stop_cmd,
+	Exit_Task_cmd,
+}uart_comms_t;
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
-void send_uart();
-void receive_uart();
 void init_error_check(void *ptr);
-
+void UART_REST_TC();
 void Get_TC_USART();
 
 

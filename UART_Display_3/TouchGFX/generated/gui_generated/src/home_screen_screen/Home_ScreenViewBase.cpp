@@ -3,42 +3,75 @@
 /*********************************************************************************/
 #include <gui_generated/home_screen_screen/Home_ScreenViewBase.hpp>
 #include <touchgfx/Color.hpp>
-#include <images/BitmapDatabase.hpp>
 #include <texts/TextKeysAndLanguages.hpp>
+#include <images/BitmapDatabase.hpp>
 
 Home_ScreenViewBase::Home_ScreenViewBase() :
-    buttonCallback(this, &Home_ScreenViewBase::buttonCallbackHandler)
+    flexButtonCallback(this, &Home_ScreenViewBase::flexButtonCallbackHandler)
 {
     __background.setPosition(0, 0, 480, 272);
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    ATECH_LOGO.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
-    ATECH_LOGO.setPosition(0, 0, 480, 272);
-    ATECH_LOGO.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
-    add(ATECH_LOGO);
+    box1.setPosition(0, 0, 480, 272);
+    box1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    add(box1);
 
-    Read_TC_Start_button.setXY(110, 222);
-    Read_TC_Start_button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_TINY_ROUNDED_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_TINY_ROUNDED_DISABLED_ID));
-    Read_TC_Start_button.setLabelText(touchgfx::TypedText(T___SINGLEUSE_Q1M4));
-    Read_TC_Start_button.setLabelColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    Read_TC_Start_button.setLabelColorPressed(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    Read_TC_Start_button.setAction(buttonCallback);
-    add(Read_TC_Start_button);
+    box3.setPosition(0, 216, 480, 43);
+    box3.setColor(touchgfx::Color::getColorFromRGB(194, 0, 0));
+    add(box3);
 
-    Read_live_data_Start_button.setXY(0, 222);
-    Read_live_data_Start_button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_TINY_ROUNDED_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_TINY_ROUNDED_DISABLED_ID));
-    Read_live_data_Start_button.setLabelText(touchgfx::TypedText(T___SINGLEUSE_885X));
-    Read_live_data_Start_button.setLabelColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    Read_live_data_Start_button.setLabelColorPressed(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    add(Read_live_data_Start_button);
-
-    TC_not_loaded.setXY(39, 178);
+    TC_not_loaded.setXY(169, 94);
     TC_not_loaded.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
     TC_not_loaded.setLinespacing(0);
     TC_not_loaded.setTypedText(touchgfx::TypedText(T___SINGLEUSE_KXSK));
     TC_not_loaded.setVisible(false);
     add(TC_not_loaded);
+
+    ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
+    ATech_Logo.setPosition(359, 0, 121, 59);
+    ATech_Logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
+    add(ATech_Logo);
+
+    Read_live_data_Start_button.setBoxWithBorderPosition(0, 0, 97, 64);
+    Read_live_data_Start_button.setBorderSize(5);
+    Read_live_data_Start_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    Read_live_data_Start_button.setText(TypedText(T___SINGLEUSE_VXGB));
+    Read_live_data_Start_button.setTextPosition(0, 43, 97, 64);
+    Read_live_data_Start_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
+    Read_live_data_Start_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID));
+    Read_live_data_Start_button.setIconXY(24, -3);
+    Read_live_data_Start_button.setPosition(87, 136, 97, 64);
+    add(Read_live_data_Start_button);
+
+    Read_TC_Start_button.setBoxWithBorderPosition(0, 0, 97, 64);
+    Read_TC_Start_button.setBorderSize(5);
+    Read_TC_Start_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    Read_TC_Start_button.setText(TypedText(T___SINGLEUSE_0MCX));
+    Read_TC_Start_button.setTextPosition(0, 43, 97, 64);
+    Read_TC_Start_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
+    Read_TC_Start_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_CAR_REPAIR_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_CAR_REPAIR_50_50_E8F6FB_SVG_ID));
+    Read_TC_Start_button.setIconXY(23, -2);
+    Read_TC_Start_button.setAction(flexButtonCallback);
+    Read_TC_Start_button.setPosition(311, 136, 97, 64);
+    add(Read_TC_Start_button);
+
+    box2.setPosition(0, 222, 480, 50);
+    box2.setColor(touchgfx::Color::getColorFromRGB(26, 33, 71));
+    add(box2);
+
+    textArea1.setXY(10, 235);
+    textArea1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    textArea1.setLinespacing(0);
+    textArea1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_DOM7));
+    add(textArea1);
+
+    qrCode1.setXY(0, 0);
+    qrCode1.setBuffers(qrBuffer_qrCode1, qrScratchBuffer_qrCode1);
+    qrCode1.setQRCodeVersion(1);
+    qrCode1.setScale(5);
+    qrCode1.convertStringToQRCode("https://www.atechtraining.com/products/automobile/power-seat-system");
+    add(qrCode1);
 }
 
 Home_ScreenViewBase::~Home_ScreenViewBase()
@@ -51,7 +84,7 @@ void Home_ScreenViewBase::setupScreen()
 
 }
 
-void Home_ScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
+void Home_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src)
 {
     if (&src == &Read_TC_Start_button)
     {

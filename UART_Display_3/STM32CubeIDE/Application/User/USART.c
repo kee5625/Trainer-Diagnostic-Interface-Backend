@@ -7,23 +7,28 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "main.h"
-#include "string.h"
-#include "stdbool.h"
+#include <string.h>
+#include <stdbool.h>
 #include <ctype.h>
-#include "USART.h"
 #include "cmsis_os.h"
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_uart.h"
+#include "USART.h"
 #include "blinking.h"
 #include "..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp"
 
 #define tc_size 5
-#define buff_size 32
+#define uart_start_pad 1
+#define uart_end_pad 6
 
+//global static
+static char trouble_code[6];
+static uint8_t data;
+static bool retry_last = false;
+static osMessageQueueId_t  send_task_queue;
+static osMessageQueueId_t  receive_task_queue;
 
-char trouble_code[6];
-char data[6];
-
+//thread setup
 osThreadId_t send_handle;
 const osThreadAttr_t sendTask_attributes = {
   .name = "sendTask",
@@ -43,94 +48,11 @@ const osThreadAttr_t blinkTask_attributes = {
   .priority = (osPriority_t) osPriorityBelowNormal2,
 };
 
-static osMessageQueueId_t  send_task_queue;
-static osMessageQueueId_t  receive_task_queue;
-static osSemaphoreId_t  receive_code_sem;
-Action_phase_t Action_phase;
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-
-	if(huart->Instance == USART1){
-		if (Action_phase == Get_TC_Phase){
-			rx_task_action_t rx_action = RX_RECEIVE_DATA;
-			osMessageQueuePut(receive_task_queue,&rx_action, 0,0);
-		}else if (Action_phase == Clean_Up_Phase){
-			rx_task_action_t rx_action = RX_TASK_EXIT;
-			osMessageQueuePut(receive_task_queue,&rx_action, 0,0);
-		}else{
-			//no action for read in rest_tc_phase
-		}
-	}
-
-
-}
-
-
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
-	if (huart->Instance == USART1){
-		if (Action_phase == Get_TC_Phase){
-			tx_task_action_t tx_action = TX_SEND_START_CMD;
-			osMessageQueuePut(send_task_queue,&tx_action, 0,0);
-		}else if (Action_phase == Reset_TC_Phase){
-			tx_task_action_t tx_action = TX_Reset_TC;
-			osMessageQueuePut(send_task_queue, &tx_action,0,0);
-		}else if (Action_phase == Clean_Up_Phase){
-			tx_task_action_t tx_action = TX_TASK_EXIT;
-			osMessageQueuePut(send_task_queue,&tx_action, 0,0);
-		}
-	}
-}
-
-
-void send_uart(){
-	osDelay(50);//small delay for USART initialization
-	tx_task_action_t action;
-	while(1){
-		if(osMessageQueueGet(send_task_queue, &action, NULL, osWaitForever) == osOK){
-			if (action == TX_SEND_START_CMD) {
-				HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Send trouble code\n",strlen("Send trouble code\n"));
-				osDelay(pdMS_TO_TICKS(5000));
-			}else if (action == TX_Reset_TC){
-				HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Reset TC\n",strlen("Reset TC\n"));
-				osDelay(pdMS_TO_TICKS(1500));
-			}else if (action == TX_TASK_EXIT){
-				break;
-			}
-		}
-	}
-	osMessageQueueDelete(send_task_queue);
-	osThreadExit();
-}
-
-void receive_uart(){
-	osDelay(50); //small delay for USART to initialize
-	rx_task_action_t action;
-	while(1){
-		if(osMessageQueueGet(receive_task_queue, &action, NULL,osWaitForever) == osOK){
-			if (action == RX_RECEIVE_DATA){
-				//setting trouble_codes
-				if (isalpha(data[0])&& data[tc_size] == '\n' && (data[0] == 'P' || data[0] == 'C' || data[0] == 'B' || data[0] == 'U')){
-					osSemaphoreRelease(blink_sem);
-					memcpy(trouble_code,data,sizeof(data));
-					TC_Received(trouble_code); //pass trouble code to GUI
-					break;
-				}
-			}else if (action == RX_TASK_EXIT){
-				break;
-			}else if (action == RX_TC_Cleared){
-				Action_phase = Clean_Up_Phase;
-				break;
-			}else{
-				HAL_UART_Receive_IT(&huart1,(uint8_t *)data,tc_size + 2);
-			}
-		}
-	}
-	//terminating thread
-	osSemaphoreRelease(receive_code_sem);
-	osMessageQueueDelete(receive_task_queue);
-	osThreadExit();
-
+//padding added for error checking
+static inline uint8_t uart_byte_setup(uart_comms_t command){
+		return     ((uart_start_pad & 0x01) << 7) |
+				   ((command & 0x0F) << 3) |
+				   ((uart_end_pad & 0x07) << 0);
 }
 
 void init_error_check(void *ptr){
@@ -139,60 +61,149 @@ void init_error_check(void *ptr){
 	}
 }
 
-void UART_REST_TC(){
-	//waiting till thread is deleted to start again
-	while (osThreadGetState(send_handle) != osThreadTerminated){
-		osDelay(10);
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
+	if (huart->Instance == USART1){
 	}
-	osDelay(50); //waiting extra time for setup
-
-	//starting queue and thread
-	send_task_queue = osMessageQueueNew(1, sizeof(tx_task_action_t),NULL);
-	init_error_check(send_task_queue);
-	send_handle = osThreadNew(send_uart, NULL, &sendTask_attributes);
-	init_error_check(send_handle);
-	//start callback
-	HAL_UART_Transmit_IT(&huart1, (const uint8_t *)"Reset TC\n",strlen("Reset TC\n"));
 }
 
-void Get_TC_USART()
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+	if(huart->Instance == USART1){
+		osMessageQueuePut(receive_task_queue,&data, 0,0);
+	}
+}
+
+
+/*
+ * Function Description: Sends action passed to send_task_queue
+ * Note: see UART_RX() for expected command order.
+ *
+ */
+static void UART_TX(){
+	uart_comms_t tx_action;
+	int wait_time = 1000;
+	uint8_t byte;
+	while(1){
+		if(retry_last || osMessageQueueGet(send_task_queue, &tx_action, NULL, osWaitForever) == osOK){
+			///////////////////////////////////////////////////////////////////////////////////////////
+			byte = uart_byte_setup(tx_action);
+			HAL_UART_Transmit_IT(&huart1, &byte,1);
+			///////////////////////////////////////////////////////////////////////////////////////////
+			if (tx_action == TC_Reset_cmd ){
+				osDelay(pdMS_TO_TICKS(5000));
+			}
+			osDelay(pdMS_TO_TICKS(wait_time));
+		}
+		HAL_UART_Receive_IT(&huart1,&data, 1);
+	}
+}
+
+/*
+ * Function Description: Grabs receive_task_queue and follows appropriate action from queue.
+ *
+ *
+ * Below is the expected command order for the display(master) from the gateway(slave).
+ * CMD order send  : start     , TC request, TC received, TC reset, start....
+ * CMD oder receive: received, TC        ,            , received, received...
+ */
+static void UART_RX(){
+	uint8_t byte;
+	uart_comms_t rx_action;
+	bool TC_code_rx = false;
+	osStatus_t rx_Queue_Get;
+	uint32_t ticks = osKernelGetTickFreq() * 3;
+
+	while(1){
+		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_action, NULL,ticks);
+		if(rx_Queue_Get == osOK){
+			retry_last = false;
+			if (!TC_code_rx){
+				rx_action = ((data>>3) & 0x0F); // Call back only to prevent overlapping receives or writes
+			}else{
+				rx_action =TC_Receiving; // default condition of switch
+			}
+
+			switch (rx_action){
+			case received_cmd:
+				if (ticks == osWaitForever){
+					ticks = osKernelGetTickFreq() * 3;
+				}else{
+					ticks = osWaitForever;
+					TC_code_rx = true;
+					byte = TC_Req_cmd;
+					osMessageQueuePut(send_task_queue, &byte, 0, osWaitForever);
+					HAL_UART_Receive_IT(&huart1,(uint8_t *)trouble_code,tc_size + 1);
+				}
+				break;
+			case retry_cmd:
+				retry_last = true;
+				break;
+			case Read_live_cmd:
+				break;
+			case TC_Receiving:
+				if (isalpha(trouble_code[0]) && (trouble_code[0] == 'P' || trouble_code[0] == 'C' || trouble_code[0] == 'B' || trouble_code[0] == 'U')){
+					osSemaphoreRelease(blink_sem);
+					TC_code_rx = false;
+					byte = TC_Received_cmd;
+					osMessageQueuePut(send_task_queue, &byte, 0, 0);
+					TC_GUI_Pass(trouble_code);
+					//RX rearmed by reset UART_REST_TC()
+				}else{
+					byte = TC_Req_cmd;
+					osMessageQueuePut(send_task_queue, &byte, 0, 0);
+					HAL_UART_Receive_IT(&huart1,(uint8_t *)trouble_code,tc_size + 1);
+				}
+				break;
+			default:
+				break;
+			}
+		}else if (rx_Queue_Get == osErrorTimeout ){
+			byte = start_cmd;
+			if (osMessageQueuePut(send_task_queue, &byte, 0, osKernelGetTickFreq() / 5) == osOK) {
+				HAL_UART_Receive_IT(&huart1,&data, 1);
+			}
+		}
+
+	}
+}
+
+/*
+ * Function Description: Called by GUI to start reset TC procedure.
+ *
+ */
+void UART_REST_TC(){
+	uint8_t byte;
+	memcpy(trouble_code,"XXXXX\0", sizeof(trouble_code));
+	TC_GUI_Pass(trouble_code); //not needed because the screen can't switch without new code**********************************************************************************************************
+	byte = TC_Reset_cmd;
+	osMessageQueuePut(send_task_queue, &byte, 0, 0);
+	HAL_UART_Receive_IT(&huart1,&data, 1);
+}
+
+/*
+ * Function Description: Used to start and initiate UART. Also for clean up.
+ *
+ */
+void Get_TC_USART(){
 
   //setting up FreeRTOS*********************************************************************************
-  /**
-   * Setup and error checking. To load next trouble code call function again.
-   */
-  Action_phase = Get_TC_Phase;
-  send_task_queue = osMessageQueueNew(1, sizeof(tx_task_action_t),NULL);
+  send_task_queue = osMessageQueueNew(3, sizeof(uart_comms_t),NULL);
   init_error_check(send_task_queue);
-  receive_task_queue = osMessageQueueNew(1, sizeof(rx_task_action_t),NULL);
+  receive_task_queue = osMessageQueueNew(1, sizeof(uart_comms_t),NULL);
   init_error_check(receive_task_queue);
-  receive_code_sem = osSemaphoreNew(1,0,NULL);
-  init_error_check(receive_code_sem);
-  send_handle = osThreadNew(send_uart, NULL, &sendTask_attributes);
-  init_error_check(send_handle);
-  receive_handle = osThreadNew(receive_uart, NULL, &receiveTask_attributes);
+  receive_handle = osThreadNew(UART_RX, NULL, &receiveTask_attributes);
   init_error_check(receive_handle);
+  send_handle = osThreadNew(UART_TX, NULL, &sendTask_attributes);
+  init_error_check(send_handle);
   blink_handle = osThreadNew(blk_toggle_led,NULL,&blinkTask_attributes);
   init_error_check(blink_handle);
 
   //setting interrupts**********************************************************************************
-  HAL_UART_Transmit_IT(&huart1, (uint8_t *)"Send trouble code.",strlen("Send trouble code."));
-  HAL_UART_Receive_IT(&huart1,(uint8_t *)data, tc_size + 2);
+  uint8_t byte;
+  byte = start_cmd;
+  osMessageQueuePut(send_task_queue, &byte, 0, 0);
+  HAL_UART_Receive_IT(&huart1,&data, 1);
 
-  //waiting for trouble code to be received*************************************************************
-  osSemaphoreAcquire(receive_code_sem, HAL_MAX_DELAY);
-
-  //clean up after code received************************************************************************
-  Action_phase = Clean_Up_Phase;
-  osSemaphoreRelease(blink_sem);
-  osDelay(pdMS_TO_TICKS(1000)); //waiting for tasks to exit
-  osSemaphoreDelete(receive_code_sem);
-  HAL_UART_Abort_IT(&huart1);
-  //turning off led if left on from blink_handle
-  if (HAL_GPIO_ReadPin(GPIOI,GPIO_PIN_13) == GPIO_PIN_RESET){
-  	  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_13, GPIO_PIN_SET);
-  }
   osThreadExit();
 }
 

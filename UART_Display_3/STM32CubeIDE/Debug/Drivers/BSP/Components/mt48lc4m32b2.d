@@ -1,6 +1,6 @@
 Drivers/BSP/Components/mt48lc4m32b2.o: \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.c \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.h \
  ../../Core/Inc/mt48lc4m32b2_conf.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../../Core/Inc/stm32h7xx_hal_conf.h \
@@ -44,7 +44,7 @@ Drivers/BSP/Components/mt48lc4m32b2.o: \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/mt48lc4m32b2/mt48lc4m32b2.h:
 ../../Core/Inc/mt48lc4m32b2_conf.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../../Core/Inc/stm32h7xx_hal_conf.h:

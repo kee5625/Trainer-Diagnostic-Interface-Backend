@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/twai_network_master")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/gatewayv1")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/ESP-IDF/GatewayV1/build/esp-idf/esp_hw_support/port/esp32/cmake_install.cmake")
+  include("C:/ESP-IDF/Gatway_updates/GatewayV2/build/esp-idf/esp_hw_support/port/esp32/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/ESP-IDF/GatewayV1/build/esp-idf/esp_hw_support/lowpower/cmake_install.cmake")
+  include("C:/ESP-IDF/Gatway_updates/GatewayV2/build/esp-idf/esp_hw_support/lowpower/cmake_install.cmake")
 endif()
 

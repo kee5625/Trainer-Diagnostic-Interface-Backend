@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/ESP-IDF/Gateway_Slave/build/CMakeFiles/bootloader
-C:/ESP-IDF/Gateway_Slave/build/CMakeFiles/bootloader.rule
-C:/ESP-IDF/Gateway_Slave/build/CMakeFiles/bootloader-complete.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/ESP-IDF/Gateway_Slave/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/CMakeFiles/bootloader
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/CMakeFiles/bootloader.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/CMakeFiles/bootloader-complete.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

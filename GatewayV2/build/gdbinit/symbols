@@ -18,8 +18,8 @@ end
 
 # Load bootloader symbols
 set confirm off
-    add-symbol-file C:/ESP-IDF/GatewayV1/build/bootloader/bootloader.elf
+    add-symbol-file C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader/bootloader.elf
 set confirm on
 
 # Load application symbols
-file C:/ESP-IDF/GatewayV1/build/gatewayv1.elf
+file C:/ESP-IDF/Gatway_updates/GatewayV2/build/gatewayv1.elf

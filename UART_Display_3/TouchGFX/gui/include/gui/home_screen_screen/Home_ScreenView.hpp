@@ -17,8 +17,8 @@ public:
     virtual void handleTickEvent() override;
 
 protected:
-    touchgfx::Callback<Home_ScreenView, const touchgfx::AbstractButton&> wr_TC_Button_Pressed;
-    void read_tc_button_pressed(const touchgfx::AbstractButton& source);
+    touchgfx::Callback<Home_ScreenView, const touchgfx::AbstractButtonContainer&> wr_TC_Button_Pressed;
+    void read_tc_button_pressed(const touchgfx::AbstractButtonContainer& src);
     bool error_msg_show = false;
     int tick_count = 150; //equivalent to 150 frames or 5 seconds
 };

@@ -11,13 +11,13 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1388:18:virtual void touchgfx::HAL::InvalidateTextureCache()	1
 ../../TouchGFX/target/TouchGFXHAL.hpp:35:7:TouchGFXHAL::~TouchGFXHAL()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:683:18:virtual void touchgfx::HAL::backPorchExited()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:86:11:virtual uint16_t* TouchGFXHAL::getTFTFrameBuffer() const	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:101:6:virtual void TouchGFXHAL::setTFTFrameBuffer(uint16_t*)	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:118:6:virtual void TouchGFXHAL::flushFrameBuffer(const touchgfx::Rect&)	3
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:140:6:virtual void TouchGFXHAL::configureInterrupts()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:153:6:virtual void TouchGFXHAL::enableInterrupts()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:166:6:virtual void TouchGFXHAL::disableInterrupts()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:180:6:virtual void TouchGFXHAL::enableLCDControllerInterrupt()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:86:11:virtual uint16_t* TouchGFXHAL::getTFTFrameBuffer() const	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:101:6:virtual void TouchGFXHAL::setTFTFrameBuffer(uint16_t*)	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:118:6:virtual void TouchGFXHAL::flushFrameBuffer(const touchgfx::Rect&)	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:140:6:virtual void TouchGFXHAL::configureInterrupts()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:153:6:virtual void TouchGFXHAL::enableInterrupts()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:166:6:virtual void TouchGFXHAL::disableInterrupts()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:180:6:virtual void TouchGFXHAL::enableLCDControllerInterrupt()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:161:18:virtual void touchgfx::HAL::setFrameBufferSize(uint16_t, uint16_t)	2
 ../../TouchGFX/target/generated/TouchGFXGeneratedHAL.hpp:119:18:virtual void TouchGFXGeneratedHAL::unlockFrameBuffer()	1
 ../../TouchGFX/target/TouchGFXHAL.hpp:113:18:virtual void TouchGFXHAL::flushFrameBuffer()	1
@@ -25,7 +25,7 @@ C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:180:6:virtual
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1341:18:virtual void touchgfx::HAL::performDisplayOrientationChange()	4
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:356:28:virtual touchgfx::BlitOperations touchgfx::HAL::getBlitCaps()	2
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1143:21:virtual touchgfx::DMAType touchgfx::HAL::getDMAType()	2
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:38:6:virtual void TouchGFXHAL::initialize()	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:38:6:virtual void TouchGFXHAL::initialize()	2
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:765:18:virtual void touchgfx::HAL::setFrameBufferStartAddresses(void*, void*, void*)	2
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:53:6:virtual void TouchGFXHAL::taskEntry()	2
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:192:19:long int IdleTaskHook(void*)	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:53:6:virtual void TouchGFXHAL::taskEntry()	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:192:19:long int IdleTaskHook(void*)	2

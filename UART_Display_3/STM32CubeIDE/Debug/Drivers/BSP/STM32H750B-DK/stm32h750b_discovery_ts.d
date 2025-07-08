@@ -1,6 +1,6 @@
 Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.o: \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.h \
  ../../Core/Inc/stm32h750b_discovery_conf.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../../Core/Inc/stm32h7xx_hal_conf.h \
@@ -44,13 +44,13 @@ Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.o: \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336.h \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336_reg.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336_reg.h \
  ../../Core/Inc/ft5336_conf.h \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.h \
- C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/Common/ts.h
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.h:
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/Common/ts.h
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.h:
 ../../Core/Inc/stm32h750b_discovery_conf.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../../Core/Inc/stm32h7xx_hal_conf.h:
@@ -94,9 +94,9 @@ C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discover
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h:
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336.h:
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336_reg.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/ft5336/ft5336_reg.h:
 ../../Core/Inc/ft5336_conf.h:
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.h:
-C:/TouchGFXProjects/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/Common/ts.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/Common/ts.h:

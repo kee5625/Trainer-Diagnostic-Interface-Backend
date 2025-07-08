@@ -1,8 +1,8 @@
-# Install script for directory: C:/ESP-IDF/GatewayV1/main
+# Install script for directory: C:/ESP-IDF/Gatway_updates/GatewayV2/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/twai_network_master")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/gatewayv1")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

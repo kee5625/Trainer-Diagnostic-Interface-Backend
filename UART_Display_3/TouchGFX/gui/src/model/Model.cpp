@@ -14,13 +14,12 @@ void Model::tick()
 
 void Model::TC_Set(const char* str)
 {
+	TC_Ready = (TC_Ready == true) ? false : true;
 	this->data = str;
-	TC_Ready = true;
-    //modelListener->updateTextBox(data);
 }
 
 void Model::reset_TC(){
-	to_logic_reset_TC();
+	Logic_Reset_TC();
 }
 
 bool Model::TC_Status(){

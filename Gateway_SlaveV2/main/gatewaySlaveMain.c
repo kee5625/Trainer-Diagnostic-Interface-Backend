@@ -24,7 +24,7 @@
 /* --------------------- Definitions and static variables ------------------ */
 //Example Configuration
 #define DATA_PERIOD_MS                  50
-#define NO_OF_ITERS                     2
+#define NO_OF_ITERS                     1
 #define ITER_DELAY_MS                   1000
 #define RX_TASK_PRIO                    8       //Receiving task priority
 #define TX_TASK_PRIO                    9       //Sending task priority
@@ -60,9 +60,10 @@ static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_25KBITS();
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
 //setting fault codes
-static t_code_t cylinder_4_misfire = {code304,'P'};
-t_code_t *fault_code_ptr = &cylinder_4_misfire; //setting fault code...change point to change fault code
-bool send_letter = true; //used to send letter first then number
+static uint8_t cylinder_4_misfire[2] = {
+    0x03,0x04
+}; //code P0304 in two bytes
+uint8_t *fault_code_ptr = cylinder_4_misfire; //setting fault code...change point to change fault code
 //-------------------------------------------^ code P0304
 
 
@@ -103,8 +104,8 @@ static twai_message_t data_message = {
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
     .identifier = ID_SLAVE_DATA,
-    .data_length_code = 4,
-    .data = {0,1,2,3},
+    .data_length_code = 2,
+    .data = {},
 };
 
 static QueueHandle_t tx_task_queue;
@@ -172,23 +173,13 @@ static void twai_transmit_task(void *arg)
             //Transmit data messages until stop command is received
             ESP_LOGI(EXAMPLE_TAG, "Start transmitting data");
             while (1) {
-                uint32_t sensor_data;
-                //FreeRTOS tick count used to simulate sensor data
-
-                if (send_letter){ //sends letter on first iteration
-                    sensor_data = (uint32_t)fault_code_ptr->letter;
-                    send_letter = false;
-                }else{
-                    sensor_data = fault_code_ptr->num;
+                for (int i = 0; i <data_message.data_length_code; i++){
+                    data_message.data[i] = fault_code_ptr[i];
+                    ESP_LOGI(EXAMPLE_TAG,"%i", data_message.data[i]);
                 }
-
-                for (int i = 0; i < 4; i++) {
-                   data_message.data[i] = (sensor_data >> (i * 8)) & 0xFF;
-                }
-
                 twai_transmit(&data_message, portMAX_DELAY);
                 vTaskDelay(pdMS_TO_TICKS(DATA_PERIOD_MS));
-
+                data_message.data_length_code = 0; //setting data length back to one byte
                 if (xSemaphoreTake(stop_data_sem, 0) == pdTRUE) {
                     break;
                 }

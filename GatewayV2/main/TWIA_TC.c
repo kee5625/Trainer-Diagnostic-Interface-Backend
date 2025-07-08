@@ -23,11 +23,84 @@
 #include "sys/time.h"
 
 #include "TWIA_TC.h"
+#include "TC_ref.h"
+
+
+//twai driver setup
+#define PING_PERIOD_MS          250
+#define NO_OF_DATA_MSGS         1
+#define NO_OF_ITERS             1
+#define ITER_DELAY_MS           1000
+#define RX_TASK_PRIO            8
+#define TX_TASK_PRIO            9
+#define TROUBLE_CODE_TSK_PRIO     10
+#define TX_GPIO_NUM             14
+#define RX_GPIO_NUM             15
+#define EXAMPLE_TAG             "TWAI Master"
+
+#define ID_MASTER_STOP_CMD      0x0A0
+#define ID_MASTER_START_CMD     0x0A1
+#define ID_MASTER_PING          0x0A2
+#define ID_SLAVE_STOP_RESP      0x0B0
+#define ID_Trainer              0x0B1
+#define ID_SLAVE_PING_RESP      0x0B2
+
+
+//twai config setup
+static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_25KBITS();
+static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
+
+static const twai_message_t ping_message = {
+    // Message type and format settings
+    .extd = 0,              // Standard Format message (11-bit ID)
+    .rtr = 0,               // Send a data frame
+    .ss = 1,                // Is single shot (won't retry on error or NACK)
+    .self = 0,              // Not a self reception request
+    .dlc_non_comp = 0,      // DLC is less than 8
+    // Message ID and payload
+    .identifier = ID_MASTER_PING,
+    .data_length_code = 0,
+    .data = {0},
+};
+
+static const twai_message_t start_message = {
+    // Message type and format settings
+    .extd = 0,              // Standard Format message (11-bit ID)
+    .rtr = 0,               // Send a data frame
+    .ss = 0,                // Not single shot
+    .self = 0,              // Not a self reception request
+    .dlc_non_comp = 0,      // DLC is less than 8
+    // Message ID and payload
+    .identifier = ID_MASTER_START_CMD,
+    .data_length_code = 0,
+    .data = {0},
+};
+
+static const twai_message_t stop_message = {
+    // Message type and format settings
+    .extd = 0,              // Standard Format message (11-bit ID)
+    .rtr = 0,               // Send a data frame
+    .ss = 0,                // Not single shot
+    .self = 0,              // Not a self reception request
+    .dlc_non_comp = 0,      // DLC is less than 8
+    // Message ID and payload
+    .identifier = ID_MASTER_STOP_CMD,
+    .data_length_code = 0,
+    .data = {0},
+};
 
 /* --------------------------- Tasks and Functions TWAI-------------------------- */
+static char trouble_code[tc_size + 2];
+static QueueHandle_t tx_task_queue;
+static QueueHandle_t rx_task_queue;
+static SemaphoreHandle_t stop_ping_sem;
+static SemaphoreHandle_t Trouble_Code_Task_Sem;
+static SemaphoreHandle_t done_sem;
 
-static void twai_receive_task(void *arg)
+static void twai_receive_task()
 {
+    uint8_t trouble_code_buff[2];
     while (1) {
         rx_task_action_t action;
         xQueueReceive(rx_task_queue, &action, portMAX_DELAY);
@@ -44,27 +117,17 @@ static void twai_receive_task(void *arg)
                 }
             }
         } else if (action == RX_RECEIVE_DATA) {
-            //Receive data messages from slave
-            uint32_t data_msgs_rec = 0;
-            while (data_msgs_rec < NO_OF_DATA_MSGS) {
-                twai_message_t rx_msg;
-                twai_receive(&rx_msg, portMAX_DELAY);
-                if (rx_msg.identifier == ID_SLAVE_DATA) {
-                    uint32_t data = 0;
-                    for (int i = 0; i < rx_msg.data_length_code; i++) {
-                        data |= (rx_msg.data[i] << (i * 8));
-                    }
-                    ESP_LOGI(EXAMPLE_TAG, "Received data value %"PRIu32, data);
-
-                    if (strcmp(trouble_code_buff,"") == 0){
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%c",(char)data);
-                    }else{
-                        char temp;
-                        temp = trouble_code_buff[0];
-                        snprintf(trouble_code_buff,sizeof(trouble_code_buff),"%c%04li",temp,data);
-                    }
-                    data_msgs_rec ++;
-                }
+            //grabbing TC from trainer TWIA network
+            twai_message_t rx_msg;
+            rx_msg.data_length_code = 2;
+            twai_receive(&rx_msg, portMAX_DELAY);
+            if (rx_msg.identifier == ID_Trainer) {
+                // for(int i = 0;i < rx_msg.data_length_code; i ++){
+                    // trouble_code_buff = rx_msg.data;
+                // }   
+                memcpy(trouble_code_buff,rx_msg.data,sizeof(trouble_code_buff));     
+                memcpy(trouble_code, TC_buff_conv_char(trouble_code_buff), sizeof(trouble_code));
+                ESP_LOGI(EXAMPLE_TAG, "Received: %s", trouble_code);
             }
             xSemaphoreGive(Trouble_Code_Task_Sem);
         } else if (action == RX_RECEIVE_STOP_RESP) { 
@@ -84,7 +147,7 @@ static void twai_receive_task(void *arg)
     vTaskDelete(NULL);
 }
 
-static void twai_transmit_task(void *arg)
+static void twai_transmit_task()
 {
     while (1) {
         tx_task_action_t action;
@@ -113,7 +176,7 @@ static void twai_transmit_task(void *arg)
 }
 
 //used to grab trouble code from TWAI network
-static void trouble_code_buff_task(void *arg)
+static void trouble_code_buff_task()
 {
     xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
     tx_task_action_t tx_action;
@@ -163,7 +226,7 @@ static void trouble_code_buff_task(void *arg)
     vTaskDelete(NULL);
 }
 
-//grabs fc from slave/trainer
+//grabs tc from slave/trainer
 void twai_TC_Get(){
     //Create tasks, queues, and semaphores
     rx_task_queue = xQueueCreate(1, sizeof(rx_task_action_t));
@@ -192,5 +255,6 @@ void twai_TC_Get(){
     vSemaphoreDelete(stop_ping_sem);
     vSemaphoreDelete(done_sem);
 
+    TC_Code_set(trouble_code); //passing trouble_code to the main function
     xSemaphoreGive(TC_Recieved_sem);
 }

@@ -12,8 +12,8 @@
 #include "cmsis_os.h"
 #include "USART.h"
 
-extern Action_phase_t Action_phase;
 extern osSemaphoreId_t  blink_sem;
+
 void blk_toggle_led();
 
 

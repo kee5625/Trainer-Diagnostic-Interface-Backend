@@ -1,5 +1,5 @@
 Application/User/generated/Table_calibri_20_4bpp.o: \
- C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/fonts/src/Table_calibri_20_4bpp.cpp \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/fonts/src/Table_calibri_20_4bpp.cpp \
  ../../TouchGFX/generated/fonts/include/fonts/GeneratedFont.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/ConstFont.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Font.hpp \

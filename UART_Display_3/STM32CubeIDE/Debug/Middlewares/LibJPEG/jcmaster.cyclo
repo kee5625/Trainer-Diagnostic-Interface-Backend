@@ -1,8 +1,8 @@
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:358:1:validate_script	88
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:528:1:select_scan_parameters	12
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:753:1:pass_startup	1
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:767:1:finish_pass_master	6
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:572:1:per_scan_setup	17
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:665:1:prepare_for_pass	11
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:53:1:jpeg_calc_jpeg_dimensions	18
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:807:1:jinit_c_master_control	48
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:358:1:validate_script	88
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:528:1:select_scan_parameters	12
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:753:1:pass_startup	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:767:1:finish_pass_master	6
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:572:1:per_scan_setup	17
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:665:1:prepare_for_pass	11
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:53:1:jpeg_calc_jpeg_dimensions	18
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcmaster.c:807:1:jinit_c_master_control	48

@@ -22,10 +22,11 @@
 #include "esp_bt_device.h"
 #include "esp_spp_api.h"
 #include "BT_SPP_TC.h"
-
+#include "TC_ref.h"
 
 #include "time.h"
 #include "sys/time.h"
+
 
 #define SPP_TAG "SPP_Gateway"
 #define SPP_SERVER_NAME "Gateway"
@@ -35,11 +36,10 @@
 #define BT_SPP_CB_PRIO  5
 #define BT_GAP_CB_PRIO  6
 
-extern char  trouble_code_buff[22]; //shared with gatway_main.c
-
 static const esp_spp_mode_t esp_spp_mode = ESP_SPP_MODE_CB;
 static const bool esp_spp_enable_l2cap_ertm = true;
 static uint32_t btHandle = 0;
+static char trouble_code[tc_size + 2];
 
 static void spp_callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param) {
 
@@ -65,7 +65,7 @@ static void spp_callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param) {
                 printf("%s Pinged...\n", SPP_TAG);
             }else{
                 //sending trouble code to serial port
-                esp_spp_write(btHandle,strlen(trouble_code_buff),(uint8_t *)trouble_code_buff);
+                esp_spp_write(btHandle,sizeof(trouble_code),(uint8_t *) trouble_code);
             }
             fflush(stdout);
             break;
@@ -133,7 +133,8 @@ static void bt_gap_callback(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *
     }
 }
 
-void bt_spp_setup(){
+void bt_spp_setup(char tc[tc_size + 2]){
+    memcpy(trouble_code,tc,sizeof(trouble_code));
     /**
      * NVS flash setup
      */

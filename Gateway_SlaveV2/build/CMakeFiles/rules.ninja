@@ -1809,7 +1809,7 @@ rule C_STATIC_LIBRARY_LINKER____idf_main_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\ESP-IDF\ESP-IDF_tools\tools\cmake\3.30.2\bin\cmake.exe --regenerate-during-build -SC:\ESP-IDF\Gateway_Slave -BC:\ESP-IDF\Gateway_Slave\build
+  command = C:\ESP-IDF\ESP-IDF_tools\tools\cmake\3.30.2\bin\cmake.exe --regenerate-during-build -SC:\ESP-IDF\Gatway_updates\Gateway_SlaveV2 -BC:\ESP-IDF\Gatway_updates\Gateway_SlaveV2\build
   description = Re-running CMake...
   generator = 1
 

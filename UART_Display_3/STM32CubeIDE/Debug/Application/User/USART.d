@@ -42,7 +42,6 @@ Application/User/USART.o: ../Application/User/USART.c \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- ../Application/User/USART.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../../Core/Inc/FreeRTOSConfig.h \
@@ -54,7 +53,7 @@ Application/User/USART.o: ../Application/User/USART.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Application/User/blinking.h \
+ ../Application/User/USART.h ../Application/User/blinking.h \
  ../../Core/Inc/..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp
 ../../Core/Inc/main.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -99,7 +98,6 @@ Application/User/USART.o: ../Application/User/USART.c \
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-../Application/User/USART.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../../Core/Inc/FreeRTOSConfig.h:
@@ -111,5 +109,6 @@ Application/User/USART.o: ../Application/User/USART.c \
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
+../Application/User/USART.h:
 ../Application/User/blinking.h:
 ../../Core/Inc/..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp:

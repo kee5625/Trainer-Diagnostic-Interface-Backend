@@ -1,5 +1,5 @@
 Application/User/generated/CachedFont.o: \
- C:/TouchGFXProjects/UART_Display_3/TouchGFX/generated/fonts/src/CachedFont.cpp \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/fonts/src/CachedFont.cpp \
  ../../TouchGFX/generated/fonts/include/fonts/CachedFont.hpp \
  ../../TouchGFX/generated/fonts/include/fonts/FontCache.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Font.hpp \

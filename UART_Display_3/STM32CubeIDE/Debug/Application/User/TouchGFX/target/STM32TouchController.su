@@ -1,4 +1,4 @@
 ../../TouchGFX/target/STM32TouchController.hpp:36:7:STM32TouchController::~STM32TouchController()	0	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/STM32TouchController.cpp:26:6:virtual void STM32TouchController::init()	24	static
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/STM32TouchController.cpp:40:6:virtual bool STM32TouchController::sampleTouch(int32_t&, int32_t&)	32	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/STM32TouchController.cpp:26:6:virtual void STM32TouchController::init()	24	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/STM32TouchController.cpp:40:6:virtual bool STM32TouchController::sampleTouch(int32_t&, int32_t&)	32	static
 ../../TouchGFX/target/STM32TouchController.hpp:36:7:virtual STM32TouchController::~STM32TouchController()	8	static

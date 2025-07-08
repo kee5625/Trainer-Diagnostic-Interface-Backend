@@ -12,18 +12,14 @@
 osSemaphoreId_t blink_sem;
 
 void blk_toggle_led(){
-	blink_sem = osSemaphoreNew(100,0,NULL);
+	blink_sem = osSemaphoreNew(1,0,NULL);
 	init_error_check(blink_sem);
 	while(1){
-		if (osSemaphoreAcquire(blink_sem,osWaitForever) == osOK && Action_phase != Clean_Up_Phase){
+		if (osSemaphoreAcquire(blink_sem,osWaitForever) == osOK){
 			HAL_GPIO_TogglePin(GPIOI,GPIO_PIN_13);
 			osDelay(pdMS_TO_TICKS(250));
 			HAL_GPIO_TogglePin(GPIOI,GPIO_PIN_13);
-		}else{
-			osSemaphoreDelete(blink_sem);
-			osThreadExit();
 		}
 	}
-
 }
 

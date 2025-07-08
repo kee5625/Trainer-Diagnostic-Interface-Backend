@@ -1,7 +1,7 @@
-../Application/User/USART.c:86:6:send_uart	4
-../Application/User/USART.c:106:6:receive_uart	8
-../Application/User/USART.c:51:6:HAL_UART_RxCpltCallback	4
-../Application/User/USART.c:70:6:HAL_UART_TxCpltCallback	5
-../Application/User/USART.c:136:6:init_error_check	2
-../Application/User/USART.c:142:6:UART_REST_TC	4
-../Application/User/USART.c:158:6:Get_TC_USART	7
+../Application/User/USART.c:82:13:UART_TX	4
+../Application/User/USART.c:109:13:UART_RX	12
+../Application/User/USART.c:58:6:init_error_check	2
+../Application/User/USART.c:64:6:HAL_UART_TxCpltCallback	1
+../Application/User/USART.c:69:6:HAL_UART_RxCpltCallback	2
+../Application/User/USART.c:174:6:UART_REST_TC	1
+../Application/User/USART.c:187:6:Get_TC_USART	5

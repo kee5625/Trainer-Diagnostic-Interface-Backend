@@ -13,12 +13,16 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    ATECH_LOGO.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
-    ATECH_LOGO.setPosition(0, 0, 480, 272);
-    ATECH_LOGO.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
-    add(ATECH_LOGO);
+    box1.setPosition(0, 0, 480, 272);
+    box1.setColor(touchgfx::Color::getColorFromRGB(145, 144, 144));
+    add(box1);
 
-    TC_Button.setXY(0, 222);
+    ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
+    ATech_Logo.setPosition(359, 0, 121, 59);
+    ATech_Logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
+    add(ATech_Logo);
+
+    TC_Button.setXY(27, 166);
     TC_Button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID));
     TC_Button.setLabelText(touchgfx::TypedText(T___SINGLEUSE_JHO3));
     TC_Button.setLabelColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -26,7 +30,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     TC_Button.setAction(buttonCallback);
     add(TC_Button);
 
-    TC_TextBox.setPosition(0, 178, 240, 44);
+    TC_TextBox.setPosition(0, 92, 480, 54);
     TC_TextBox.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     TC_TextBox.setLinespacing(0);
     Unicode::snprintf(TC_TextBoxBuffer, TC_TEXTBOX_SIZE, "%s", touchgfx::TypedText(T_TC_TEXTBOX_BUFFER).getText());
@@ -35,7 +39,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     TC_TextBox.setVisible(false);
     add(TC_TextBox);
 
-    Erase_TC_Button.setXY(305, 222);
+    Erase_TC_Button.setXY(272, 166);
     Erase_TC_Button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID));
     Erase_TC_Button.setLabelText(touchgfx::TypedText(T_ERASE_TC_TEXT));
     Erase_TC_Button.setLabelColor(touchgfx::Color::getColorFromRGB(247, 0, 0));

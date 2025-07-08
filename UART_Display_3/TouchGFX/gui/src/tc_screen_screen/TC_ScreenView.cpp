@@ -2,7 +2,7 @@
 #include <touchgfx/widgets/AbstractButton.hpp>
 
 TC_ScreenView::TC_ScreenView()
-    : myButtonCallback(this, &TC_ScreenView::onMyButtonPressed)  // 👈 Wrap your function
+    : myButtonCallback(this, &TC_ScreenView::onMyButtonPressed)
 {}
 
 
@@ -52,7 +52,7 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButton& source)
 		//Erase_Change_Screen
 		//When Erase_TC_Button clicked change screen to Home_Screen
 		//Go to Home_Screen with screen transition towards East
+    	application().gotoHome_ScreenScreenWipeTransitionEast();
     	presenter->reset_TC();
-		application().gotoHome_ScreenScreenWipeTransitionEast();
      }
 }

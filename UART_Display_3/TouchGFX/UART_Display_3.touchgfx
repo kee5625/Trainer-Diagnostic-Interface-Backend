@@ -5,61 +5,31 @@
         "Name": "Home_Screen",
         "Components": [
           {
-            "Type": "ScalableImage",
-            "Name": "ATECH_LOGO",
+            "Type": "Box",
+            "Name": "box1",
             "Width": 480,
             "Height": 272,
-            "Filename": "images.png",
-            "ScalingAlgorithm": "Nearest-neighbor"
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
           },
           {
-            "Type": "ButtonWithLabel",
-            "Name": "Read_TC_Start_button",
-            "X": 110,
-            "Y": 222,
-            "Width": 110,
-            "Height": 50,
-            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
-            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
-            "TextId": "__SingleUse_Q1M4",
-            "ReleasedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "PressedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "TextRotation": "0"
-          },
-          {
-            "Type": "ButtonWithLabel",
-            "Name": "Read_live_data_Start_button",
-            "Y": 222,
-            "Width": 110,
-            "Height": 50,
-            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
-            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_tiny_rounded_disabled.png",
-            "TextId": "__SingleUse_885X",
-            "ReleasedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "PressedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
-            "TextRotation": "0"
+            "Type": "Box",
+            "Name": "box3",
+            "Y": 216,
+            "Width": 480,
+            "Height": 43,
+            "Color": {
+              "Red": 194
+            }
           },
           {
             "Type": "TextArea",
             "Name": "TC_not_loaded",
-            "X": 39,
-            "Y": 178,
+            "X": 169,
+            "Y": 94,
             "Width": 143,
             "Height": 22,
             "Visible": false,
@@ -69,6 +39,179 @@
               "Red": 255
             },
             "AutoSize": true
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Read_live_data_Start_button",
+            "X": 87,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 24,
+                "Y": -3,
+                "IconReleased": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_VXGB",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Read_TC_Start_button",
+            "X": 311,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 23,
+                "Y": -2,
+                "IconReleased": "__generated\\icon_theme_images_maps_car_repair_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_car_repair_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_0MCX",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "Box",
+            "Name": "box2",
+            "Y": 222,
+            "Width": 480,
+            "Height": 50,
+            "Color": {
+              "Red": 26,
+              "Green": 33,
+              "Blue": 71
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea1",
+            "X": 10,
+            "Y": 235,
+            "Width": 349,
+            "Height": 24,
+            "TextId": "__SingleUse_DOM7",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "QRCode",
+            "Name": "qrCode1",
+            "Width": 105,
+            "Height": 105,
+            "QRVersion": 1,
+            "Scale": 5,
+            "Text": "https://www.atechtraining.com/products/automobile/power-seat-system",
+            "BackgroundColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
           }
         ],
         "Interactions": [
@@ -91,17 +234,30 @@
         "Name": "TC_Screen",
         "Components": [
           {
-            "Type": "ScalableImage",
-            "Name": "ATECH_LOGO",
+            "Type": "Box",
+            "Name": "box1",
             "Width": 480,
             "Height": 272,
+            "Color": {
+              "Red": 145,
+              "Green": 144,
+              "Blue": 144
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
             "Filename": "images.png",
             "ScalingAlgorithm": "Nearest-neighbor"
           },
           {
             "Type": "ButtonWithLabel",
             "Name": "TC_Button",
-            "Y": 222,
+            "X": 27,
+            "Y": 166,
             "Width": 175,
             "Height": 50,
             "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
@@ -122,9 +278,9 @@
           {
             "Type": "TextArea",
             "Name": "TC_TextBox",
-            "Y": 178,
-            "Width": 240,
-            "Height": 44,
+            "Y": 92,
+            "Width": 480,
+            "Height": 54,
             "Visible": false,
             "LockPosition": true,
             "TextId": "__SingleUse_6VCK",
@@ -138,8 +294,8 @@
           {
             "Type": "ButtonWithLabel",
             "Name": "Erase_TC_Button",
-            "X": 305,
-            "Y": 222,
+            "X": 272,
+            "Y": 166,
             "Width": 175,
             "Height": 50,
             "Visible": false,

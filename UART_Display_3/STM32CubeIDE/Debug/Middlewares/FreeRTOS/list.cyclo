@@ -1,5 +1,5 @@
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:37:6:vListInitialise	1
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:62:6:vListInitialiseItem	1
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:74:6:vListInsertEnd	1
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:103:6:vListInsert	3
-C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:170:13:uxListRemove	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:37:6:vListInitialise	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:62:6:vListInitialiseItem	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:74:6:vListInsertEnd	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:103:6:vListInsert	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/list.c:170:13:uxListRemove	2

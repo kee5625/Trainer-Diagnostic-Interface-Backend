@@ -1,5 +1,5 @@
 Middlewares/FreeRTOS/port.o: \
- C:/TouchGFXProjects/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../../Core/Inc/FreeRTOSConfig.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \

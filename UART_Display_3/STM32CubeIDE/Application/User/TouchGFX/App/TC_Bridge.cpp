@@ -16,15 +16,15 @@ void setModelInstance(Model* model)
     modelInstance = model;
 }
 
-void TC_Received(const char* data)
+void TC_GUI_Pass(const char* data)
 {
     if (modelInstance)
     {
-        modelInstance->TC_Set(data);  // call into the GUI logic
+    	modelInstance->TC_Set(data);  // call into the GUI logic
     }
 }
 
-void to_logic_reset_TC(){
+void Logic_Reset_TC(){
 	UART_REST_TC();
 }
 

@@ -1,6 +1,6 @@
 Application/User/LIBJPEG/App/libjpeg.o: \
- C:/TouchGFXProjects/UART_Display_3/LIBJPEG/App/libjpeg.c \
- C:/TouchGFXProjects/UART_Display_3/LIBJPEG/App/libjpeg.h \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/LIBJPEG/App/libjpeg.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/LIBJPEG/App/libjpeg.h \
  ../../Middlewares/Third_Party/LibJPEG/include/jpeglib.h \
  ../../LIBJPEG/Target/jconfig.h ../../LIBJPEG/Target/jdata_conf.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
@@ -15,7 +15,7 @@ Application/User/LIBJPEG/App/libjpeg.o: \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../../LIBJPEG/Target/jmorecfg.h
-C:/TouchGFXProjects/UART_Display_3/LIBJPEG/App/libjpeg.h:
+C:/ESP-IDF/Gatway_updates/UART_Display_3/LIBJPEG/App/libjpeg.h:
 ../../Middlewares/Third_Party/LibJPEG/include/jpeglib.h:
 ../../LIBJPEG/Target/jconfig.h:
 ../../LIBJPEG/Target/jdata_conf.h:

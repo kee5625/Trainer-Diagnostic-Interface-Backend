@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/ESP-IDF/Gateway_Slave/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
+  include("C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
 endif()
 

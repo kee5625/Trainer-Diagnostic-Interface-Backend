@@ -28,7 +28,8 @@ protected:
      * Member Declarations
      */
     touchgfx::Box __background;
-    touchgfx::ScalableImage ATECH_LOGO;
+    touchgfx::Box box1;
+    touchgfx::ScalableImage ATech_Logo;
     touchgfx::ButtonWithLabel TC_Button;
     touchgfx::TextAreaWithOneWildcard TC_TextBox;
     touchgfx::ButtonWithLabel Erase_TC_Button;

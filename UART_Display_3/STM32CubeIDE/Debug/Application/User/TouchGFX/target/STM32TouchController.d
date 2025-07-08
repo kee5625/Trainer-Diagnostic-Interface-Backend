@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/STM32TouchController.o: \
- C:/TouchGFXProjects/UART_Display_3/TouchGFX/target/STM32TouchController.cpp \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/STM32TouchController.cpp \
  ../../TouchGFX/target/STM32TouchController.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/platform/driver/touch/TouchController.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/Types.hpp \

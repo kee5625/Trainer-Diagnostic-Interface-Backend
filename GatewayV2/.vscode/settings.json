@@ -17,6 +17,7 @@
     "trouble_code_setup.h": "c",
     "bt_spp_tc.h": "c",
     "semphr.h": "c",
-    "uart_tc.h": "c"
+    "uart_tc.h": "c",
+    "string.h": "c"
   }
 }

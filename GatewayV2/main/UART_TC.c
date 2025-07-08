@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include "string.h"
+#include <ctype.h>
 #include "driver/uart.h"
 #include "driver/gpio.h"
 #include "sdkconfig.h"
@@ -17,13 +18,15 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#include "TC_ref.h"
 #include "UART_TC.h"
 
 #define ECHO_TEST_TXD (CONFIG_EXAMPLE_UART_TXD)
 #define ECHO_TEST_RXD (CONFIG_EXAMPLE_UART_RXD)
 #define ECHO_TEST_RTS (UART_PIN_NO_CHANGE)
 #define ECHO_TEST_CTS (UART_PIN_NO_CHANGE)
-#define UART_Priority 5 //twai ones are set to 8-10 (TWAI and UART do not run at the same time)
+#define UART_Priority 7 //twai ones are set to 8-10 (TWAI and UART do not run at the same time rn)
+#define UART_RX_Priority 5
 #define BUF_SIZE (1024)
 
 #define UART_PORT_NUM      (CONFIG_EXAMPLE_UART_PORT_NUM)
@@ -31,13 +34,125 @@
 #define ECHO_TASK_STACK_SIZE    (CONFIG_EXAMPLE_TASK_STACK_SIZE)
 #define CONFIG_UART_ISR_IN_IRAM false
 
+static const char *TAG = "UART Service";
+static char trouble_code[tc_size + 2];
+static QueueHandle_t uart_queue;
+static QueueHandle_t uart_send_queue;
+
+static inline uint8_t uart_byte_setup(uart_comms_t command){
+		return     ((uart_start_pad & 0x01) << 7) |
+				   ((command & 0x0F) << 3) |
+				   ((uart_end_pad & 0x07) << 0);
+}
+
+/**
+ * Fucntion Description: Sends UART based on the xQueueSend from UART_RX() function.
+ * Note: See the UART_RX() function for the expected command order.
+ */
+static void UART_TX(){
+    uart_send_queue = xQueueCreate(1, sizeof(uart_comms_t));
+    uart_comms_t action;
+    uint8_t temp_byte;
+
+    for (;;){
+        xQueueReceive(uart_send_queue,&action,portMAX_DELAY); 
+        uart_flush(UART_PORT_NUM);
+        switch (action){
+            case received_cmd:
+                ESP_LOGI(TAG,"Sending received command back.");
+                temp_byte = uart_byte_setup(received_cmd);
+                uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
+                break;
+            case TC_Req_cmd:
+                    uart_write_bytes(UART_PORT_NUM, trouble_code, sizeof(trouble_code)-1);
+                    trouble_code[5] = '\0';
+                    ESP_LOGI(TAG,"Trouble code %s sent.",trouble_code);
+                break;
+            case TC_Reset_cmd:
+                ESP_LOGI(TAG,"Received rest TC command");
+                temp_byte = uart_byte_setup(received_cmd);
+                uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
+                memset(trouble_code,0,sizeof(trouble_code));
+                TC_Code_set(trouble_code);
+                break;
+            default:
+                break;
+        }
+        uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
+    }
+}
 
 
-QueueHandle_t uart_queue;
-static const char *TAG = "UART TEST";
+/**
+ * Function Description: Receive inputs from UART and fill queue for uart_send_queue in the UART_TX() function.
+ * Notes: Below is the expected command order the Gateway(slave) should receive from the Display(master)
+ * CMD order receive: Start   , TC request, TC received, TC reset, start...
+ * CMD order Send   : received, TC        ,            , received, received...
+ */
+static void UART_RX(){
+    uart_event_t rx_action;
+    uart_comms_t action;
+    uint8_t rx_data;
+    while(1){
+        xQueueReceive(uart_queue,&rx_action,portMAX_DELAY);
+        switch (rx_action.type){
+            case UART_DATA:
+                for(;;){
+                    uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
+                    // checking if data is valid
+                    if (((rx_data >> 7) & uart_start_pad) && ((rx_data & 0x07) & uart_end_pad)){
+                        ESP_LOGI(TAG,"Command valid.");//************************************************************************************************************** */
+                        break;
+                    }else{
+                        action = retry_cmd;
+                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        ESP_LOGW(TAG, "Invalid command.\n Command: %02X", rx_data);
+                    }
+                }
+                 
+                //checking command
+                switch ((rx_data >> 3) & 0x0F){
+                    case start_cmd:
+                        ESP_LOGI(TAG,"Received start command.");
+                        action = received_cmd;
+                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        break;
+                    case TC_Req_cmd:
+                        memcpy(trouble_code,TC_Code_Get(),sizeof(trouble_code));
+                        if (trouble_code[0] == '\0'){
+                            ESP_LOGI(TAG,"TC not loaded yet but requested.");
+                            action = retry_cmd;
+                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                            }else{
+                            ESP_LOGI(TAG,"Received TC request.");
+                            action = TC_Req_cmd;
+                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        }
+                        break;
+                    case TC_Received_cmd:
+                        ESP_LOGI(TAG,"TC sent successfully.");
+                        break;
+                    case TC_Reset_cmd:
+                        ESP_LOGI(TAG,"Loading new trouble code.");
+                        action = TC_Reset_cmd;
+                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        vTaskDelay(pdMS_TO_TICKS(300));
+                        new_tc_tasks(); //grab new code for reset
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }   
+    }
+    vTaskDelete(NULL);
+}
 
-//sends fault code over uart
-static void uart_send_tc(){
+void UART_INIT(char tc_pass[tc_size + 2])
+{   
+
     uart_config_t uart_config = {
         .baud_rate = ECHO_UART_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
@@ -51,19 +166,10 @@ static void uart_send_tc(){
 #if CONFIG_UART_ISR_IN_IRAM
     intr_alloc_flags = ESP_INTR_FLAG_IRAM;
 #endif
-    ESP_ERROR_CHECK(uart_driver_install(UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 10, NULL, intr_alloc_flags));
+    ESP_ERROR_CHECK(uart_driver_install(UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 1, &uart_queue, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(UART_PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
-
-    for(;;){
-        uart_write_bytes(UART_PORT_NUM, trouble_code_buff, strlen(trouble_code_buff));
-        uart_wait_tx_done(UART_PORT_NUM, 1000 / portTICK_PERIOD_MS); //waiting 0-10s for send to go through
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        ESP_LOGI(TAG,"Sending trouble code %s.",trouble_code_buff);
-    }
-}
-
-void uart_start(void)
-{   
-    xTaskCreate(uart_send_tc, "uart_send_tc_task", ECHO_TASK_STACK_SIZE, NULL, UART_Priority, NULL);
+    memcpy(trouble_code,tc_pass,sizeof(trouble_code));
+    xTaskCreate(UART_TX, "UART_TX_task", ECHO_TASK_STACK_SIZE, NULL, UART_Priority, NULL);
+    xTaskCreate(UART_RX, "UART_RX", ECHO_TASK_STACK_SIZE, NULL, UART_RX_Priority, NULL);
 }

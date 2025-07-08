@@ -1,10 +1,10 @@
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:28:13:TC_ScreenPresenter::~TC_ScreenPresenter()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:15:6:virtual void TC_ScreenPresenter::deactivate()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:15:6:virtual void TC_ScreenPresenter::deactivate()	1
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:28:13:virtual TC_ScreenPresenter::~TC_ScreenPresenter()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:10:6:virtual void TC_ScreenPresenter::activate()	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:24:6:virtual void TC_ScreenPresenter::updateTextBox(const char*)	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:10:6:virtual void TC_ScreenPresenter::activate()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:24:6:virtual void TC_ScreenPresenter::updateTextBox(const char*)	1
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:28:13:virtual void* TC_ScreenPresenter::_ZThn4_N18TC_ScreenPresenterD1Ev()	1
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:28:13:virtual void* TC_ScreenPresenter::_ZThn4_N18TC_ScreenPresenterD0Ev()	1
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:10:virtual void TC_ScreenPresenter::_ZThn4_N18TC_ScreenPresenter13updateTextBoxEPKc(const char*)	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:4:1:TC_ScreenPresenter::TC_ScreenPresenter(TC_ScreenView&)	1
-C:/TouchGFXProjects/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:20:6:void TC_ScreenPresenter::reset_TC()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:4:1:TC_ScreenPresenter::TC_ScreenPresenter(TC_ScreenView&)	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:20:6:void TC_ScreenPresenter::reset_TC()	1

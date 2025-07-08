@@ -1,5 +1,5 @@
 Drivers/CMSIS/system_stm32h7xx.o: \
- C:/TouchGFXProjects/UART_Display_3/Core/Src/system_stm32h7xx.c \
+ C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/system_stm32h7xx.c \
  ../../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h \
  ../../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h750xx.h \
  ../../Drivers/CMSIS/Include/core_cm7.h \

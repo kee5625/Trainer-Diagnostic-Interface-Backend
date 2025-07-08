@@ -15,8 +15,8 @@ extern "C" {
 #endif
 
 
-void TC_Received(const char* data); // Function to call from C
-void to_logic_reset_TC();
+void TC_GUI_Pass(const char* data); // Function to call from C
+void Logic_Reset_TC();
 void UART_REST_TC();
 
 #ifdef __cplusplus

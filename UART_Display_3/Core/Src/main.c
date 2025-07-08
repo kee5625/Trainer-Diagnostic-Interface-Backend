@@ -801,13 +801,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /**
   * @brief  This function is executed in case of error occurrence.
-  * @retval None
+  * @retval Nones
   */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+  HAL_GPIO_WritePin(GPIOJ, GPIO_PIN_2, GPIO_PIN_SET);
   /* User can add his own implementation to report the HAL error return state */
-
+  while(1){
+	  HAL_GPIO_TogglePin(GPIOI, GPIO_PIN_13);  // Toggle PA5
+	  HAL_Delay(500); // 500 ms delay
+	  HAL_GPIO_TogglePin(GPIOJ,GPIO_PIN_2);
+  }
   /* USER CODE END Error_Handler_Debug */
 }
 

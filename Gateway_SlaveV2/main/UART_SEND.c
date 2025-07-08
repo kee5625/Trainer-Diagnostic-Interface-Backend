@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 #include "driver/uart.h"
 #include "driver/gpio.h"
 #include "sdkconfig.h"
@@ -39,11 +40,85 @@
 #define ECHO_TASK_STACK_SIZE    (3072)
 
 static const char *TAG = "UART TEST";
-QueueHandle_t uart_queue;
+static QueueHandle_t uart_queue;
+static SemaphoreHandle_t TC_rec_sem;
 #define BUF_SIZE (1024)
 
-static void echo_task(void *arg)
-{
+//Slave only for monitoring uart
+// static void uart_write_tx(){
+//     uint8_t *tx_data = (uint8_t *) malloc(BUF_SIZE);
+//     uart_event_t event;
+
+//     if (xQueueReceive(uart_queue, (void *) &event, portMAX_DELAY)){
+//         switch (event.type) {
+//             case UART_DATA:
+//                 // Data received; read from UART
+//                 int len = uart_read_bytes(ECHO_UART_PORT_NUM, tx_data, event.size, portMAX_DELAY);
+//                 tx_data[len] = '\0';
+//                 switch (tx_data){
+//                     case TC_Reset_cmd:
+
+//                         break;
+//                     default:
+                        
+//                         break;
+//                 }
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }
+// }
+
+static void uart_monitor_rx(){
+    uint8_t rx_data;
+    char trouble_code[7];
+    int count = 0;
+    uart_event_t event;
+    for (;;){
+        if (xQueueReceive(uart_queue, (void *) &event, portMAX_DELAY)){
+            switch (event.type) {
+                case UART_DATA:
+                    for(;;){
+                        // Data received; read from UART
+                        uart_read_bytes(ECHO_UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
+                        ESP_LOGI(TAG,"%X", rx_data);
+                        switch ((rx_data >>3) & 0x0F){
+                            case start_cmd:
+                                ESP_LOGI(TAG,"Start command received.");
+                                break;
+                            case received_cmd:
+                                ESP_LOGI(TAG,"Received command received.");
+                                break;
+                            case TC_Reset_cmd:
+                                break;
+                            case end_of_cmd:
+                                break;
+                            case Read_live_cmd:
+                                break;
+                            default:
+                                trouble_code[count] = (char)rx_data;
+                                count ++;
+                                if ( rx_data == '\n'){
+                                    trouble_code[5] = '\0';
+                                    ESP_LOGI(TAG,"Trouble Code: %s", trouble_code);
+                                    count = 0;
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+static void new_tc_task()
+{   
+    TC_rec_sem = xSemaphoreCreateBinary();
     /* Configure parameters of an UART driver,
      * communication pins and install the driver */
     uart_config_t uart_config = {
@@ -65,31 +140,19 @@ static void echo_task(void *arg)
     ESP_ERROR_CHECK(uart_set_pin(ECHO_UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
 
     // Configure a temporary buffer for the incoming data
-    uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
-    uart_event_t event;
+    uint8_t send_comm;
     while (1) {
         // Write data back to the UART
-        uart_write_bytes(ECHO_UART_PORT_NUM, "Send trouble code.", strlen("Send trouble code."));
-        vTaskDelay(100);
-        if (xQueueReceive(uart_queue, (void *) &event, portMAX_DELAY)){
-            switch (event.type) {
-                case UART_DATA:
-                    // Data received; read from UART
-                    int len = uart_read_bytes(ECHO_UART_PORT_NUM, data, event.size, portMAX_DELAY);
-                    if (len > 0) {
-                        // Process 'data' of length 'len'
-                        data[len] = 0;
-                        ESP_LOGI(TAG, "Received fault code: %s.", data);
-                    }
-                    break;
-                default:
-                    break;
-            }
+        send_comm = start_cmd;
+        for(;;){
+            uart_write_bytes(ECHO_UART_PORT_NUM, &send_comm, sizeof(send_comm));
         }
+        vTaskDelay(100);
     }
 }
 
 void UART_Start(void)
 {
-    xTaskCreate(echo_task, "uart_echo_task", ECHO_TASK_STACK_SIZE, NULL, 10, NULL);
+    xTaskCreate(new_tc_task, "new_TC_task", ECHO_TASK_STACK_SIZE, NULL, 10, NULL);
+    xTaskCreate(uart_monitor_rx, "rx_task", ECHO_TASK_STACK_SIZE, NULL, 12, NULL);
 }

@@ -9,6 +9,7 @@ Home_ScreenView::Home_ScreenView()
 void Home_ScreenView::setupScreen()
 {
     Home_ScreenViewBase::setupScreen();
+    qrCode1.setVisible(true);
     Read_TC_Start_button.setAction(wr_TC_Button_Pressed);
 }
 
@@ -28,8 +29,8 @@ void Home_ScreenView::handleTickEvent(){
 	}
 }
 
-void Home_ScreenView::read_tc_button_pressed(const touchgfx::AbstractButton& source){
-	if (&source == &Read_TC_Start_button){
+void Home_ScreenView::read_tc_button_pressed(const touchgfx::AbstractButtonContainer& src){
+	if (&src == &Read_TC_Start_button){
 		if (presenter->TC_Ready()){
 			error_msg_show = false;
 			tick_count = 150;
