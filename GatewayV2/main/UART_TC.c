@@ -7,7 +7,7 @@
  */
 
 #include <stdio.h>
-#include "string.h"
+#include <string.h>
 #include <ctype.h>
 #include "driver/uart.h"
 #include "driver/gpio.h"
@@ -45,6 +45,10 @@ static inline uint8_t uart_byte_setup(uart_comms_t command){
 				   ((uart_end_pad & 0x07) << 0);
 }
 
+static inline bool is_valid_frame(uint8_t byte){
+	return ((byte >> 7) & uart_start_pad) && ((byte & 0x07) & uart_end_pad);
+}
+
 /**
  * Fucntion Description: Sends UART based on the xQueueSend from UART_RX() function.
  * Note: See the UART_RX() function for the expected command order.
@@ -74,6 +78,11 @@ static void UART_TX(){
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 memset(trouble_code,0,sizeof(trouble_code));
                 TC_Code_set(trouble_code);
+                break;
+            case retry_cmd:
+                ESP_LOGI(TAG, "Sending retry commmand request.");
+                temp_byte = uart_byte_setup(retry_cmd);
+                uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
             default:
                 break;
@@ -121,9 +130,10 @@ static void UART_RX(){
                         memcpy(trouble_code,TC_Code_Get(),sizeof(trouble_code));
                         if (trouble_code[0] == '\0'){
                             ESP_LOGI(TAG,"TC not loaded yet but requested.");
+                            vTaskDelay(pdMS_TO_TICKS(500));
                             action = retry_cmd;
                             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-                            }else{
+                        }else{
                             ESP_LOGI(TAG,"Received TC request.");
                             action = TC_Req_cmd;
                             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
@@ -143,8 +153,20 @@ static void UART_RX(){
                         break;
                 }
                 break;
-            default:
+            //error handeling for rx line.
+            case UART_FIFO_OVF:
+            case UART_BUFFER_FULL:
+            case UART_BREAK:
+            case UART_PARITY_ERR:
+            case UART_FRAME_ERR:
+                ESP_LOGI(TAG, "%i", rx_action.type);
+                uart_flush_input(UART_PORT_NUM);
+                xQueueReset(uart_queue);
+                action = retry_cmd;
+                xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                 break;
+            default:
+                break; 
         }   
     }
     vTaskDelete(NULL);
@@ -156,7 +178,7 @@ void UART_INIT(char tc_pass[tc_size + 2])
     uart_config_t uart_config = {
         .baud_rate = ECHO_UART_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
+        .parity    = UART_PARITY_EVEN,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
     };
