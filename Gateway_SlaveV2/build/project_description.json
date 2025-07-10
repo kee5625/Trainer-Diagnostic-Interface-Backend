@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "Gateway_Slave",
-    "project_version":    "75a6f7e-dirty",
+    "project_version":    "d569e4a-dirty",
     "project_path":       "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2",
     "idf_path":           "C:/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build",
@@ -1195,7 +1195,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/tCodes_list.c", "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/trouble_codes.c", "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/UART_SEND.c", "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/gatewaySlaveMain.c" ],
+            "sources": [ "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/UART_SEND.c", "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/main/gatewaySlaveMain.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

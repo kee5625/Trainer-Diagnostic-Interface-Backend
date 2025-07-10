@@ -6,7 +6,7 @@
         "Components": [
           {
             "Type": "Box",
-            "Name": "box1",
+            "Name": "white_background",
             "Width": 480,
             "Height": 272,
             "Color": {
@@ -17,28 +17,25 @@
           },
           {
             "Type": "Box",
-            "Name": "box3",
+            "Name": "red_box",
             "Y": 216,
             "Width": 480,
-            "Height": 43,
+            "Height": 19,
             "Color": {
               "Red": 194
             }
           },
           {
-            "Type": "TextArea",
-            "Name": "TC_not_loaded",
-            "X": 169,
-            "Y": 94,
-            "Width": 143,
-            "Height": 22,
-            "Visible": false,
-            "TextId": "__SingleUse_KXSK",
-            "TextRotation": "0",
+            "Type": "Box",
+            "Name": "blue_box",
+            "Y": 222,
+            "Width": 480,
+            "Height": 50,
             "Color": {
-              "Red": 255
-            },
-            "AutoSize": true
+              "Red": 26,
+              "Green": 33,
+              "Blue": 71
+            }
           },
           {
             "Type": "ScalableImage",
@@ -172,23 +169,11 @@
             ]
           },
           {
-            "Type": "Box",
-            "Name": "box2",
-            "Y": 222,
-            "Width": 480,
-            "Height": 50,
-            "Color": {
-              "Red": 26,
-              "Green": 33,
-              "Blue": 71
-            }
-          },
-          {
             "Type": "TextArea",
-            "Name": "textArea1",
+            "Name": "Trainer_Name",
             "X": 10,
             "Y": 235,
-            "Width": 349,
+            "Width": 327,
             "Height": 24,
             "TextId": "__SingleUse_DOM7",
             "TextRotation": "0",
@@ -212,6 +197,21 @@
               "Green": 255,
               "Blue": 255
             }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "TC_not_loaded",
+            "X": 169,
+            "Y": 94,
+            "Width": 143,
+            "Height": 24,
+            "Visible": false,
+            "TextId": "__SingleUse_KXSK",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255
+            },
+            "AutoSize": true
           }
         ],
         "Interactions": [
@@ -227,6 +227,18 @@
               "ScreenTransitionDirection": "East",
               "ActionComponent": "TC_Screen"
             }
+          },
+          {
+            "InteractionName": "RLD_Screen_Switch",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Read_live_data_Start_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Read_Live_Data_Screen"
+            }
           }
         ]
       },
@@ -235,7 +247,7 @@
         "Components": [
           {
             "Type": "Box",
-            "Name": "box1",
+            "Name": "gray_background",
             "Width": 480,
             "Height": 272,
             "Color": {
@@ -349,9 +361,193 @@
             }
           }
         ]
+      },
+      {
+        "Name": "Read_Live_Data_Screen",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "blue_background",
+            "Width": 480,
+            "Height": 272,
+            "Color": {
+              "Red": 8,
+              "Green": 14,
+              "Blue": 87
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "ScrollList",
+            "Name": "RLD_Options",
+            "Y": 59,
+            "Width": 480,
+            "Height": 213,
+            "ItemTemplateName": "rowItem",
+            "NumberofItems": 59,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "home_button",
+            "Width": 48,
+            "Height": 35,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 8,
+                "Y": 1,
+                "IconReleased": "__generated\\icon_theme_images_action_home_filled_33_33_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_home_filled_33_33_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 48,
+                "Height": 35,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "home_Button_int",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "home_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          }
+        ]
       }
     ],
-    "CustomContainerDefinitions": [],
+    "CustomContainerDefinitions": [
+      {
+        "Name": "rowItem",
+        "Width": 480,
+        "Height": 36,
+        "Components": [
+          {
+            "Type": "TextArea",
+            "Name": "Value_TB",
+            "X": 424,
+            "Width": 56,
+            "Height": 36,
+            "TextId": "__SingleUse_LRP1",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_R4U0",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Title_TB",
+            "X": 51,
+            "Width": 373,
+            "Height": 36,
+            "TextId": "__SingleUse_V6KV",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_TECY",
+              "UseBuffer": true,
+              "BufferSize": 75
+            }
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Graph_Button",
+            "Width": 51,
+            "Height": 36,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 6,
+                "Y": -1,
+                "IconReleased": "__generated\\icon_theme_images_action_assessment_40_40_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_assessment_40_40_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 50,
+                "Height": 50,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          }
+        ],
+        "Interactions": []
+      }
+    ],
     "Name": "UART_Display_3",
     "Resolution": {
       "Width": 480,

@@ -1,3 +1,4 @@
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:15:18:virtual void ModelListener::updateTextBox(const char*)	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:5:1:Model::Model()	8	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:10:6:void Model::tick()	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:15:6:void Model::TC_Set(const char*)	0	static

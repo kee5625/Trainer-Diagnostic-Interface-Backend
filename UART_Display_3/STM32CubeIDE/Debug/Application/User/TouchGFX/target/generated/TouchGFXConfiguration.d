@@ -59,7 +59,6 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp \
  ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp \
@@ -73,6 +72,7 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp \
@@ -89,6 +89,14 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
  ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ButtonWithLabel.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Button.hpp \
+ ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp \
+ ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp \
+ ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollList.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollBase.hpp \
+ ../../TouchGFX/gui/include/gui/containers/rowItem.hpp \
+ ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItemBase.hpp \
  ../../TouchGFX/generated/images/include/BitmapDatabase.hpp \
  ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/VectorFontRendererImpl.hpp \
@@ -200,7 +208,6 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp:
@@ -214,6 +221,7 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp:
@@ -230,6 +238,14 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ButtonWithLabel.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Button.hpp:
+../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:
+../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp:
+../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollList.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollBase.hpp:
+../../TouchGFX/gui/include/gui/containers/rowItem.hpp:
+../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItemBase.hpp:
 ../../TouchGFX/generated/images/include/BitmapDatabase.hpp:
 ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/VectorFontRendererImpl.hpp:

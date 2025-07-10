@@ -28,6 +28,9 @@ public:
     // TC_Screen
     void gotoTC_ScreenScreenWipeTransitionEast();
 
+    // Read_Live_Data_Screen
+    void gotoRead_Live_Data_ScreenScreenNoTransition();
+
 protected:
     touchgfx::Callback<FrontendApplicationBase> transitionCallback;
     FrontendHeap& frontendHeap;
@@ -40,6 +43,9 @@ protected:
 
     // TC_Screen
     void gotoTC_ScreenScreenWipeTransitionEastImpl();
+
+    // Read_Live_Data_Screen
+    void gotoRead_Live_Data_ScreenScreenNoTransitionImpl();
 };
 
 #endif // FRONTENDAPPLICATIONBASE_HPP

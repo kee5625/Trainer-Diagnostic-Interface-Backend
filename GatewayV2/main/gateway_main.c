@@ -50,6 +50,7 @@ char* TC_buff_conv_char(uint8_t TC_buff[2]){
     TC_code[3] = ((char)(TC_buff[1] >> 4) & 0x0F) + '0';
     TC_code[4] = ((char)TC_buff[1] & 0x0F) + '0';
     TC_code[5] = '\n';
+    ESP_LOGI("main", "TC = %s", TC_code);
     return TC_code;
 }
 

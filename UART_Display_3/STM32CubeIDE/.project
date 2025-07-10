@@ -625,6 +625,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/common/FrontendApplication.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/gui/rowItem.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/containers/rowItem.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/gui/Home_ScreenPresenter.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp</locationURI>
@@ -638,6 +643,16 @@
 			<name>Application/User/gui/Model.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/model/Model.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/gui/Read_Live_Data_ScreenPresenter.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/gui/Read_Live_Data_ScreenView.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/gui/TC_ScreenPresenter.cpp</name>
@@ -675,24 +690,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/FontCache.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/Font_arial_20_4bpp_0.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Font_arial_20_4bpp_0.cpp</locationURI>
-		</link>
-		<link>
 			<name>Application/User/generated/Font_calibri_20_4bpp_0.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Font_calibri_20_4bpp_0.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/Font_verdana_10_4bpp_0.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Font_verdana_10_4bpp_0.cpp</locationURI>
-		</link>
-		<link>
 			<name>Application/User/generated/Font_verdana_15_4bpp_0.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Font_verdana_15_4bpp_0.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/generated/Font_verdana_17_4bpp_0.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Font_verdana_17_4bpp_0.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/Font_verdana_40_4bpp_0.cpp</name>
@@ -705,19 +715,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/GeneratedFont.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/Kerning_arial_20_4bpp.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_arial_20_4bpp.cpp</locationURI>
-		</link>
-		<link>
 			<name>Application/User/generated/Kerning_calibri_20_4bpp.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_calibri_20_4bpp.cpp</locationURI>
-		</link>
-		<link>
-			<name>Application/User/generated/Kerning_verdana_10_4bpp.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_verdana_10_4bpp.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/Kerning_verdana_15_4bpp.cpp</name>
@@ -725,14 +725,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_verdana_15_4bpp.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/generated/Kerning_verdana_17_4bpp.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_verdana_17_4bpp.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/generated/Kerning_verdana_40_4bpp.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Kerning_verdana_40_4bpp.cpp</locationURI>
-		</link>
-		<link>
-			<name>Application/User/generated/Table_arial_20_4bpp.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Table_arial_20_4bpp.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/Table_calibri_20_4bpp.cpp</name>
@@ -740,14 +740,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Table_calibri_20_4bpp.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/Table_verdana_10_4bpp.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Table_verdana_10_4bpp.cpp</locationURI>
-		</link>
-		<link>
 			<name>Application/User/generated/Table_verdana_15_4bpp.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Table_verdana_15_4bpp.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/generated/Table_verdana_17_4bpp.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/fonts/src/Table_verdana_17_4bpp.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/Table_verdana_40_4bpp.cpp</name>
@@ -770,9 +770,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/generated/rowItemBase.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/containers/rowItemBase.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/generated/Home_ScreenViewBase.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/home_screen_screen/Home_ScreenViewBase.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/generated/Read_Live_Data_ScreenViewBase.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/TC_ScreenViewBase.cpp</name>
@@ -793,6 +803,16 @@
 			<name>Application/User/generated/image_alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/__generated/image_alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/generated/image_icon_theme_images_action_assessment_40_40_E8F6FB.svg.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/__generated/image_icon_theme_images_action_assessment_40_40_E8F6FB.svg.cpp</locationURI>
+		</link>
+		<link>
+			<name>Application/User/generated/image_icon_theme_images_action_home_filled_33_33_E8F6FB.svg.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/__generated/image_icon_theme_images_action_home_filled_33_33_E8F6FB.svg.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/image_icon_theme_images_maps_car_repair_50_50_E8F6FB.svg.cpp</name>

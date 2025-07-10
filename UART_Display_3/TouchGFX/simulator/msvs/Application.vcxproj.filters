@@ -196,6 +196,30 @@
     <Filter Include="Source Files\generated\gui_generated\tc_screen_screen">
       <UniqueIdentifier>508B169B-1556-AE82-841C-F4F66B5CD710</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\read_live_data_screen_screen">
+      <UniqueIdentifier>93646F15-9792-EB0A-CB51-9EAAA840F7BC</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\read_live_data_screen_screen">
+      <UniqueIdentifier>48E90E02-4B11-3A12-E954-DDF95DE9C109</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\containers">
+      <UniqueIdentifier>2DE5432B-2E46-8438-5BCE-A17F98B2C961</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\containers">
+      <UniqueIdentifier>7AE6200C-BBC1-B04C-AAC9-80D189108D71</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\containers">
+      <UniqueIdentifier>91BA9D01-C05E-EA61-906F-702B276B76C5</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\containers">
+      <UniqueIdentifier>C2033948-A734-FC97-8693-DC1AA2E4CD6F</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\read_live_data_screen_screen">
+      <UniqueIdentifier>6508A598-91DC-6641-D27F-95833608DD34</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\read_live_data_screen_screen">
+      <UniqueIdentifier>2ED03089-0637-8B9A-E101-6DB9141FB309</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -245,6 +269,21 @@
     </ClCompile>
     <ClCompile Include="..\..\generated\gui_generated\src\tc_screen_screen\TC_ScreenViewBase.cpp">
       <Filter>Source Files\generated\gui_generated\tc_screen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\read_live_data_screen_screen\Read_Live_Data_ScreenPresenter.cpp">
+      <Filter>Source Files\gui\read_live_data_screen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\read_live_data_screen_screen\Read_Live_Data_ScreenView.cpp">
+      <Filter>Source Files\gui\read_live_data_screen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\read_live_data_screen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\containers\rowItem.cpp">
+      <Filter>Source Files\gui\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItemBase.cpp">
+      <Filter>Source Files\generated\gui_generated\containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -705,6 +744,21 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\tc_screen_screen\TC_ScreenViewBase.hpp">
       <Filter>Header Files\generated\gui_generated\tc_screen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\read_live_data_screen_screen\Read_Live_Data_ScreenPresenter.hpp">
+      <Filter>Header Files\gui\read_live_data_screen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\read_live_data_screen_screen\Read_Live_Data_ScreenView.hpp">
+      <Filter>Header Files\gui\read_live_data_screen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\read_live_data_screen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\containers\rowItem.hpp">
+      <Filter>Header Files\gui\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItemBase.hpp">
+      <Filter>Header Files\generated\gui_generated\containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

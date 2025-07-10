@@ -47,9 +47,6 @@ Application/User/gui/Home_ScreenPresenter.o: \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp \
  ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp \
@@ -63,6 +60,9 @@ Application/User/gui/Home_ScreenPresenter.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp \
@@ -121,9 +121,6 @@ Application/User/gui/Home_ScreenPresenter.o: \
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp:
@@ -137,6 +134,9 @@ Application/User/gui/Home_ScreenPresenter.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp:

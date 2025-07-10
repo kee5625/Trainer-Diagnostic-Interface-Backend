@@ -1,0 +1,32 @@
+HardwareMJPEGDecoder.hpp:62:22:virtual uint32_t HardwareMJPEGDecoder::getCurrentFrameNumber() const	0	static
+HardwareMJPEGDecoder.hpp:75:23:virtual MJPEGDecoder::AVIErrors HardwareMJPEGDecoder::getLastError()	0	static
+HardwareMJPEGDecoder.cpp:300:6:virtual bool HardwareMJPEGDecoder::hasVideo()	0	static
+HardwareMJPEGDecoder.cpp:528:10:virtual uint32_t HardwareMJPEGDecoder::getNumberOfFrames()	0	static
+HardwareMJPEGDecoder.cpp:533:6:virtual void HardwareMJPEGDecoder::setRepeatVideo(bool)	0	static
+HardwareMJPEGDecoder.cpp:538:6:virtual void HardwareMJPEGDecoder::getVideoInfo(touchgfx::VideoInformation*)	8	static
+HardwareMJPEGDecoder.hpp:45:7:HardwareMJPEGDecoder::~HardwareMJPEGDecoder()	0	static
+HardwareMJPEGDecoder.cpp:502:6:virtual bool HardwareMJPEGDecoder::decodeThumbnail(uint32_t, uint8_t*, uint16_t, uint16_t)	8	static
+HardwareMJPEGDecoder.hpp:45:7:virtual HardwareMJPEGDecoder::~HardwareMJPEGDecoder()	8	static
+HardwareMJPEGDecoder.cpp:103:1:HardwareMJPEGDecoder::HardwareMJPEGDecoder()	8	static
+HardwareMJPEGDecoder.cpp:117:5:int HardwareMJPEGDecoder::compare(uint32_t, const char*, uint32_t)	8	static
+HardwareMJPEGDecoder.cpp:132:17:uint32_t HardwareMJPEGDecoder::getU32(uint32_t)	8	static
+HardwareMJPEGDecoder.cpp:152:17:uint32_t HardwareMJPEGDecoder::getU16(uint32_t)	0	static
+HardwareMJPEGDecoder.cpp:170:16:const uint8_t* HardwareMJPEGDecoder::readData(uint32_t, uint32_t)	16	static
+HardwareMJPEGDecoder.cpp:245:6:virtual bool HardwareMJPEGDecoder::gotoNextFrame()	24	static
+HardwareMJPEGDecoder.cpp:508:6:virtual void HardwareMJPEGDecoder::gotoFrame(uint32_t)	16	static
+HardwareMJPEGDecoder.cpp:305:6:void HardwareMJPEGDecoder::readVideoHeader()	24	static
+HardwareMJPEGDecoder.cpp:282:6:virtual void HardwareMJPEGDecoder::setVideoData(const uint8_t*, uint32_t)	0	static
+HardwareMJPEGDecoder.cpp:291:6:virtual void HardwareMJPEGDecoder::setVideoData(touchgfx::VideoDataReader&)	8	static
+HardwareMJPEGDecoder.cpp:555:14:uint32_t JPEG_Decode_DMA(JPEG_HandleTypeDef*, uint8_t*, uint32_t, uint8_t*)	24	static
+HardwareMJPEGDecoder.cpp:596:10:void HAL_JPEG_InfoReadyCallback(JPEG_HandleTypeDef*, JPEG_ConfTypeDef*)	0	static
+HardwareMJPEGDecoder.cpp:652:10:void HAL_JPEG_GetDataCallback(JPEG_HandleTypeDef*, uint32_t)	8	static
+HardwareMJPEGDecoder.cpp:671:10:void HAL_JPEG_DataReadyCallback(JPEG_HandleTypeDef*, uint8_t*, uint32_t)	32	static
+HardwareMJPEGDecoder.cpp:738:10:void HAL_JPEG_ErrorCallback(JPEG_HandleTypeDef*)	0	static
+HardwareMJPEGDecoder.cpp:751:10:void HAL_JPEG_DecodeCpltCallback(JPEG_HandleTypeDef*)	0	static
+HardwareMJPEGDecoder.cpp:762:10:uint32_t JPEG_OutputHandler(JPEG_HandleTypeDef*)	16	static
+HardwareMJPEGDecoder.cpp:407:6:void HardwareMJPEGDecoder::decodeMJPEGFrame(const uint8_t*, uint32_t, uint8_t*, uint16_t, uint16_t, uint32_t)	16	static
+HardwareMJPEGDecoder.cpp:193:6:virtual bool HardwareMJPEGDecoder::decodeNextFrame(uint8_t*, uint16_t, uint16_t, uint32_t)	48	static
+HardwareMJPEGDecoder.cpp:448:6:virtual bool HardwareMJPEGDecoder::decodeFrame(const touchgfx::Rect&, uint8_t*, uint32_t)	32	static
+HardwareMJPEGDecoder.cpp:796:6:void DMA2D_CopyBuffer(JPEG_Data_BufferTypeDef&)	20	static
+HardwareMJPEGDecoder.cpp:844:6:void DMA2D_CropBuffer(JPEG_Data_BufferTypeDef&)	80	static
+HardwareMJPEGDecoder.cpp:908:6:void DMA2D_ExternalJobCompleted(JPEG_Data_BufferTypeDef&)	0	static

@@ -36,7 +36,7 @@
 #define ECHO_TEST_CTS (UART_PIN_NO_CHANGE)
 
 #define ECHO_UART_PORT_NUM      (2)
-#define ECHO_UART_BAUD_RATE     9600//(115200)
+#define ECHO_UART_BAUD_RATE     (115200)
 #define ECHO_TASK_STACK_SIZE    (3072)
 
 static const char *TAG = "UART TEST";
@@ -84,17 +84,20 @@ static void uart_monitor_rx(){
                         uart_read_bytes(ECHO_UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
                         ESP_LOGI(TAG,"%X", rx_data);
                         switch ((rx_data >>3) & 0x0F){
-                            case start_cmd:
+                            case UART_Start_cmd:
                                 ESP_LOGI(TAG,"Start command received.");
                                 break;
-                            case received_cmd:
+                            case UART_Received_cmd:
                                 ESP_LOGI(TAG,"Received command received.");
                                 break;
-                            case TC_Reset_cmd:
+                            case UART_TC_Reset_cmd:
                                 break;
-                            case end_of_cmd:
+                            case UART_end_of_cmd:
                                 break;
-                            case Read_live_cmd:
+                            case UART_Read_live_cmd:
+                                break;
+                            case UART_TC_Received_cmd:
+                                ESP_LOGI(TAG,"TC received cmd sent.");
                                 break;
                             default:
                                 trouble_code[count] = (char)rx_data;
@@ -143,7 +146,7 @@ static void new_tc_task()
     uint8_t send_comm;
     while (1) {
         // Write data back to the UART
-        send_comm = start_cmd;
+        send_comm = UART_Start_cmd;
         for(;;){
             uart_write_bytes(ECHO_UART_PORT_NUM, &send_comm, sizeof(send_comm));
         }

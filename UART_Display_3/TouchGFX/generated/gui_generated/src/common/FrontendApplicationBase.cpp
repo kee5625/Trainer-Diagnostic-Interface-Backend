@@ -13,6 +13,8 @@
 #include <gui/home_screen_screen/Home_ScreenPresenter.hpp>
 #include <gui/tc_screen_screen/TC_ScreenView.hpp>
 #include <gui/tc_screen_screen/TC_ScreenPresenter.hpp>
+#include <gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp>
+#include <gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp>
 
 using namespace touchgfx;
 
@@ -68,4 +70,17 @@ void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEast()
 void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEastImpl()
 {
     touchgfx::makeTransition<TC_ScreenView, TC_ScreenPresenter, touchgfx::WipeTransition<EAST>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+
+// Read_Live_Data_Screen
+
+void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransition()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransitionImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransitionImpl()
+{
+    touchgfx::makeTransition<Read_Live_Data_ScreenView, Read_Live_Data_ScreenPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }

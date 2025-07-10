@@ -1,0 +1,11 @@
+stm32h750b_discovery_ts.c:128:9:BSP_TS_Init	56	static
+stm32h750b_discovery_ts.c:181:9:BSP_TS_DeInit	8	static
+stm32h750b_discovery_ts.c:206:9:BSP_TS_GetCapabilities	8	static
+stm32h750b_discovery_ts.c:227:9:BSP_TS_EnableIT	32	static
+stm32h750b_discovery_ts.c:277:9:BSP_TS_DisableIT	8	static
+stm32h750b_discovery_ts.c:309:6:BSP_TS_IRQHandler	0	static
+stm32h750b_discovery_ts.c:319:13:BSP_TS_Callback	0	static
+stm32h750b_discovery_ts.c:672:13:TS_EXTI_Callback	8	static
+stm32h750b_discovery_ts.c:334:9:BSP_TS_GetState	40	static
+stm32h750b_discovery_ts.c:597:9:BSP_TS_Set_Orientation	0	static
+stm32h750b_discovery_ts.c:609:9:BSP_TS_Get_Orientation	0	static

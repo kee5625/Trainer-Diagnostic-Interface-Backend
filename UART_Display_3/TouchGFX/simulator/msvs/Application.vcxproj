@@ -27,6 +27,11 @@
     <ClCompile Include="..\..\gui\src\tc_screen_screen\TC_ScreenPresenter.cpp"/>
     <ClCompile Include="..\..\gui\src\tc_screen_screen\TC_ScreenView.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\tc_screen_screen\TC_ScreenViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\read_live_data_screen_screen\Read_Live_Data_ScreenPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\read_live_data_screen_screen\Read_Live_Data_ScreenView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\containers\rowItem.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItemBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xml"/>
@@ -183,6 +188,11 @@
     <ClInclude Include="..\..\gui\include\gui\tc_screen_screen\TC_ScreenPresenter.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\tc_screen_screen\TC_ScreenView.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\tc_screen_screen\TC_ScreenViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\read_live_data_screen_screen\Read_Live_Data_ScreenPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\read_live_data_screen_screen\Read_Live_Data_ScreenView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\containers\rowItem.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItemBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

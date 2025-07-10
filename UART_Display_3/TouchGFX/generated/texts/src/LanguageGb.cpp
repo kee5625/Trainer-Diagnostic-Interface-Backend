@@ -10,6 +10,10 @@ KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE;
 // Remap all strings
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
+    119, // T___SINGLEUSE_R4U0: "Value\n"
+    126, // T___SINGLEUSE_TECY: "Title"
+    55,  // T___SINGLEUSE_V6KV: "<>"
+    55,  // T___SINGLEUSE_LRP1: "<>"
     0,   // T___SINGLEUSE_DOM7: "Power Seat Trainer diagnostic interface"
     98,  // T___SINGLEUSE_0MCX: "Read Codes"
     109, // T___SINGLEUSE_VXGB: "Live Data"
@@ -17,5 +21,5 @@ KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
     87,  // T_ERASE_TC_TEXT: "Erase Code"
     74,  // T___SINGLEUSE_JHO3: "Trouble Code"
     40,  // T___SINGLEUSE_6VCK: " Trouble Code: <>"
-    119  // T_TC_TEXTBOX_BUFFER: "xxxxx"
+    132  // T_TC_TEXTBOX_BUFFER: "xxxxx"
 };

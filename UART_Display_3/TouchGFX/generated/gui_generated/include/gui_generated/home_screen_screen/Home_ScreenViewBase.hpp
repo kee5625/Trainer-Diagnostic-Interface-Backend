@@ -8,9 +8,9 @@
 #include <mvp/View.hpp>
 #include <gui/home_screen_screen/Home_ScreenPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/QRCode.hpp>
 
 class Home_ScreenViewBase : public touchgfx::View<Home_ScreenPresenter>
@@ -29,17 +29,17 @@ protected:
      * Member Declarations
      */
     touchgfx::Box __background;
-    touchgfx::Box box1;
-    touchgfx::Box box3;
-    touchgfx::TextArea TC_not_loaded;
+    touchgfx::Box white_background;
+    touchgfx::Box red_box;
+    touchgfx::Box blue_box;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_live_data_Start_button;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_TC_Start_button;
-    touchgfx::Box box2;
-    touchgfx::TextArea textArea1;
+    touchgfx::TextArea Trainer_Name;
     uint8_t qrBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
     uint8_t qrScratchBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
     touchgfx::QRCode qrCode1;
+    touchgfx::TextArea TC_not_loaded;
 
 private:
 

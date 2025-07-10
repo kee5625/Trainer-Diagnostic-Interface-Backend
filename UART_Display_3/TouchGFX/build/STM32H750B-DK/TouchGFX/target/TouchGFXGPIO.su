@@ -1,0 +1,5 @@
+TouchGFXGPIO.cpp:72:6:static void touchgfx::GPIO::set(touchgfx::GPIO::GPIO_ID)	0	static
+TouchGFXGPIO.cpp:102:6:static void touchgfx::GPIO::clear(touchgfx::GPIO::GPIO_ID)	0	static
+TouchGFXGPIO.cpp:132:6:static void touchgfx::GPIO::toggle(touchgfx::GPIO::GPIO_ID)	0	static
+TouchGFXGPIO.cpp:162:6:static bool touchgfx::GPIO::get(touchgfx::GPIO::GPIO_ID)	8	static
+TouchGFXGPIO.cpp:58:6:static void touchgfx::GPIO::init()	16	static

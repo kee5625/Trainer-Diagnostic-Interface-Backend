@@ -13,9 +13,9 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    box1.setPosition(0, 0, 480, 272);
-    box1.setColor(touchgfx::Color::getColorFromRGB(145, 144, 144));
-    add(box1);
+    gray_background.setPosition(0, 0, 480, 272);
+    gray_background.setColor(touchgfx::Color::getColorFromRGB(145, 144, 144));
+    add(gray_background);
 
     ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
     ATech_Logo.setPosition(359, 0, 121, 59);

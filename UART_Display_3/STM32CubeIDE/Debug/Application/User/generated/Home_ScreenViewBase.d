@@ -46,9 +46,6 @@ Application/User/generated/Home_ScreenViewBase.o: \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp \
  ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp \
@@ -62,6 +59,9 @@ Application/User/generated/Home_ScreenViewBase.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp \
@@ -72,8 +72,8 @@ Application/User/generated/Home_ScreenViewBase.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/QRCode.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/utils/qrcodegen.hpp \
- ../../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp \
- ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp
+ ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp \
+ ../../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp
 ../../TouchGFX/generated/gui_generated/include/gui_generated/home_screen_screen/Home_ScreenViewBase.hpp:
 ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp:
@@ -120,9 +120,6 @@ Application/User/generated/Home_ScreenViewBase.o: \
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Box.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/ScalableImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/Image.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/Buttons.hpp:
@@ -136,6 +133,9 @@ Application/User/generated/Home_ScreenViewBase.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/RepeatButtonTrigger.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TextButtonStyle.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Texts.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TiledImageButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TiledImage.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ToggleButtonTrigger.hpp:
@@ -146,5 +146,5 @@ Application/User/generated/Home_ScreenViewBase.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/QRCode.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/utils/qrcodegen.hpp:
-../../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp:
 ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp:
+../../TouchGFX/generated/texts/include/texts/TextKeysAndLanguages.hpp:

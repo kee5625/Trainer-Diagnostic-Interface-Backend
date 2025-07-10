@@ -1,0 +1,9 @@
+stm32h750b_discovery_bus.c:228:9:BSP_I2C4_DeInit	8	static
+stm32h750b_discovery_bus.c:256:26:MX_I2C4_Init	8	static
+stm32h750b_discovery_bus.c:185:9:BSP_I2C4_Init	104	static
+stm32h750b_discovery_bus.c:302:9:BSP_I2C4_WriteReg	24	static
+stm32h750b_discovery_bus.c:333:9:BSP_I2C4_ReadReg	24	static
+stm32h750b_discovery_bus.c:364:9:BSP_I2C4_WriteReg16	24	static
+stm32h750b_discovery_bus.c:395:9:BSP_I2C4_ReadReg16	24	static
+stm32h750b_discovery_bus.c:425:9:BSP_I2C4_IsReady	8	static
+stm32h750b_discovery_bus.c:441:9:BSP_GetTick	0	static

@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "time.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -17,8 +19,6 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "driver/twai.h"
-#include "trouble_codes.c"
-#include "string.h"
 #include "UART_SEND.h"
 
 /* --------------------- Definitions and static variables ------------------ */
@@ -60,10 +60,9 @@ static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_25KBITS();
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
 //setting fault codes
-static uint8_t cylinder_4_misfire[2] = {
-    0x03,0x04
-}; //code P0304 in two bytes
-uint8_t *fault_code_ptr = cylinder_4_misfire; //setting fault code...change point to change fault code
+static uint8_t (*fault_code)[2] = NULL; 
+
+uint8_t *fault_code_ptr; //setting fault code...change point to change fault code
 //-------------------------------------------^ code P0304
 
 
@@ -116,6 +115,30 @@ static SemaphoreHandle_t done_sem;
 
 /* --------------------------- Tasks and Functions -------------------------- */
 
+static inline uint8_t first_byte_TC(){
+    uint8_t temp = 0b00000000;
+    uint8_t count;
+    temp = rand() % 3;
+    count = (temp << 6);
+    temp = rand() % 3;
+    count = (temp<<4);
+    temp = rand() % 9;
+    count = (temp<<0);
+    ESP_LOGI(EXAMPLE_TAG,"Random first byte: %i", count);
+    return temp;
+}
+
+static inline uint8_t second_byte_TC(){
+    uint8_t temp;
+    uint8_t count;
+    temp = rand() % 9;
+    count = (temp <<4);
+    temp = rand() % 9; 
+    count = (temp); 
+    ESP_LOGI(EXAMPLE_TAG,"Random second byte: %i", temp);
+    return temp;
+}
+
 static void twai_receive_task(void *arg)
 {
     while (1) {
@@ -160,7 +183,8 @@ static void twai_receive_task(void *arg)
 }
 
 static void twai_transmit_task(void *arg)
-{
+{   
+    int count = 0;
     while (1) {
         tx_task_action_t action;
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
@@ -170,20 +194,32 @@ static void twai_transmit_task(void *arg)
             ESP_LOGI(EXAMPLE_TAG, "Transmitted ping response");
             xSemaphoreGive(ctrl_task_sem);
         } else if (action == TX_SEND_DATA) {    
+            int num_TCs = (rand() % 12) + 1;
+            fault_code = malloc(num_TCs * sizeof(uint8_t[2]));
+            for (int i = 0; i < num_TCs; i ++){
+                fault_code[i][0] = first_byte_TC();
+                fault_code[i][1] = second_byte_TC();
+            }
+            ESP_LOGI(EXAMPLE_TAG, "%i", fault_code[0][0]);
+            ESP_LOGI(EXAMPLE_TAG, "second element: %i", fault_code[1][0]);
             //Transmit data messages until stop command is received
             ESP_LOGI(EXAMPLE_TAG, "Start transmitting data");
             while (1) {
                 for (int i = 0; i <data_message.data_length_code; i++){
-                    data_message.data[i] = fault_code_ptr[i];
+                    data_message.data[i] = fault_code[count][i];
                     ESP_LOGI(EXAMPLE_TAG,"%i", data_message.data[i]);
                 }
                 twai_transmit(&data_message, portMAX_DELAY);
                 vTaskDelay(pdMS_TO_TICKS(DATA_PERIOD_MS));
-                data_message.data_length_code = 0; //setting data length back to one byte
                 if (xSemaphoreTake(stop_data_sem, 0) == pdTRUE) {
                     break;
                 }
+                if (count != sizeof(fault_code)){
+                    count ++;
+                }
             }
+            data_message.data_length_code = 1; 
+            count = 0;
         } else if (action == TX_SEND_STOP_RESP) {
             //Transmit stop response to master
             twai_transmit(&stop_resp, portMAX_DELAY);
@@ -255,12 +291,13 @@ static void twai_control_task(void *arg)
 }
 
 void app_main(void)
-{
+{    
+    srand(time(NULL));
     //Add short delay to allow master it to initialize firstS
     for (int i = 3; i > 0; i--) {
         printf("Slave starting in %d\n", i);
         vTaskDelay(pdMS_TO_TICKS(1000));
-    }
+    }  
 
     //Create semaphores and tasks
     tx_task_queue = xQueueCreate(1, sizeof(tx_task_action_t));
@@ -289,6 +326,9 @@ void app_main(void)
     vSemaphoreDelete(done_sem);
     vQueueDelete(tx_task_queue);
     vQueueDelete(rx_task_queue);
+
+    free(fault_code);
+    fault_code = NULL;
 
     UART_Start();
 }

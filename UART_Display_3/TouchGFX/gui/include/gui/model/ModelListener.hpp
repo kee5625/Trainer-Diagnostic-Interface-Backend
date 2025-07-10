@@ -12,7 +12,7 @@ public:
     
     virtual ~ModelListener() {}
 
-    virtual void updateTextBox(const char* newText);
+    virtual void updateTextBox(const char* newText) {};
 
     void bind(Model* m)
     {

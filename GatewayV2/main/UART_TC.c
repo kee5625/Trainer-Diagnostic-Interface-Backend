@@ -30,7 +30,7 @@
 #define BUF_SIZE (1024)
 
 #define UART_PORT_NUM      (CONFIG_EXAMPLE_UART_PORT_NUM)
-#define ECHO_UART_BAUD_RATE     9600//(CONFIG_EXAMPLE_UART_BAUD_RATE)
+#define ECHO_UART_BAUD_RATE     115200 
 #define ECHO_TASK_STACK_SIZE    (CONFIG_EXAMPLE_TASK_STACK_SIZE)
 #define CONFIG_UART_ISR_IN_IRAM false
 
@@ -62,26 +62,26 @@ static void UART_TX(){
         xQueueReceive(uart_send_queue,&action,portMAX_DELAY); 
         uart_flush(UART_PORT_NUM);
         switch (action){
-            case received_cmd:
+            case UART_Received_cmd:
                 ESP_LOGI(TAG,"Sending received command back.");
-                temp_byte = uart_byte_setup(received_cmd);
+                temp_byte = uart_byte_setup(UART_Received_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 break;
-            case TC_Req_cmd:
+            case UART_TC_Req_cmd:
                     uart_write_bytes(UART_PORT_NUM, trouble_code, sizeof(trouble_code)-1);
                     trouble_code[5] = '\0';
                     ESP_LOGI(TAG,"Trouble code %s sent.",trouble_code);
                 break;
-            case TC_Reset_cmd:
+            case UART_TC_Reset_cmd:
                 ESP_LOGI(TAG,"Received rest TC command");
-                temp_byte = uart_byte_setup(received_cmd);
+                temp_byte = uart_byte_setup(UART_Received_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 memset(trouble_code,0,sizeof(trouble_code));
                 TC_Code_set(trouble_code);
                 break;
-            case retry_cmd:
+            case UART_Retry_cmd:
                 ESP_LOGI(TAG, "Sending retry commmand request.");
-                temp_byte = uart_byte_setup(retry_cmd);
+                temp_byte = uart_byte_setup(UART_Retry_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
             default:
@@ -113,7 +113,7 @@ static void UART_RX(){
                         ESP_LOGI(TAG,"Command valid.");//************************************************************************************************************** */
                         break;
                     }else{
-                        action = retry_cmd;
+                        action = UART_Retry_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         ESP_LOGW(TAG, "Invalid command.\n Command: %02X", rx_data);
                     }
@@ -121,30 +121,30 @@ static void UART_RX(){
                  
                 //checking command
                 switch ((rx_data >> 3) & 0x0F){
-                    case start_cmd:
+                    case UART_Start_cmd:
                         ESP_LOGI(TAG,"Received start command.");
-                        action = received_cmd;
+                        action = UART_Received_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
-                    case TC_Req_cmd:
+                    case UART_TC_Req_cmd:
                         memcpy(trouble_code,TC_Code_Get(),sizeof(trouble_code));
                         if (trouble_code[0] == '\0'){
                             ESP_LOGI(TAG,"TC not loaded yet but requested.");
                             vTaskDelay(pdMS_TO_TICKS(500));
-                            action = retry_cmd;
+                            action = UART_Retry_cmd;
                             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         }else{
                             ESP_LOGI(TAG,"Received TC request.");
-                            action = TC_Req_cmd;
+                            action = UART_TC_Req_cmd;
                             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         }
                         break;
-                    case TC_Received_cmd:
+                    case UART_TC_Received_cmd:
                         ESP_LOGI(TAG,"TC sent successfully.");
                         break;
-                    case TC_Reset_cmd:
+                    case UART_TC_Reset_cmd:
                         ESP_LOGI(TAG,"Loading new trouble code.");
-                        action = TC_Reset_cmd;
+                        action = UART_TC_Reset_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         vTaskDelay(pdMS_TO_TICKS(300));
                         new_tc_tasks(); //grab new code for reset
@@ -162,7 +162,7 @@ static void UART_RX(){
                 ESP_LOGI(TAG, "%i", rx_action.type);
                 uart_flush_input(UART_PORT_NUM);
                 xQueueReset(uart_queue);
-                action = retry_cmd;
+                action = UART_Retry_cmd;
                 xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                 break;
             default:

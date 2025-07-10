@@ -114,7 +114,7 @@ static void UART_TX(){
 				byte = uart_byte_setup(tx_action);
 				HAL_UART_Transmit_IT(&huart1, &byte,1);
 				///////////////////////////////////////////////////////////////////////////////////////////
-				if (tx_action == TC_Reset_cmd ){
+				if (tx_action == UART_TC_Reset_cmd ){
 					osDelay(pdMS_TO_TICKS(5000));
 				}
 				osDelay(pdMS_TO_TICKS(wait_time));
@@ -143,39 +143,39 @@ static void UART_RX(){
 				if (is_valid_frame(rx_data)){
 					rx_action = ((rx_data>>3) & 0x0F); // Call back only to prevent overlapping receives or writes
 				}else{
-					rx_action = retry_cmd;
+					rx_action = UART_Retry_cmd;
 				}
 			}else{
-				rx_action =TC_Receiving; // default condition of switch
+				rx_action =UART_TC_Receiving; // default condition of switch
 			}
 
 			switch (rx_action){
-			case received_cmd:
+			case UART_Received_cmd:
 				if (ticks == osWaitForever){
 					ticks = osKernelGetTickFreq() * 4;
 				}else{
 					ticks = osWaitForever;
 					TC_code_rx = true;
-					byte = TC_Req_cmd;
+					byte = UART_TC_Req_cmd ;
 					osMessageQueuePut(send_task_queue, &byte, 0, osWaitForever);
 					HAL_UART_Receive_IT(&huart1,(uint8_t *)trouble_code,tc_size + 1);
 				}
 				break;
-			case retry_cmd:
+			case UART_Retry_cmd:
 				retry_last = true;
 				break;
-			case Read_live_cmd:
+			case UART_Read_live_cmd:
 				break;
-			case TC_Receiving:
+			case UART_TC_Receiving:
 				if (isalpha(trouble_code[0]) && (trouble_code[0] == 'P' || trouble_code[0] == 'C' || trouble_code[0] == 'B' || trouble_code[0] == 'U')){
 					osSemaphoreRelease(blink_sem);
 					TC_code_rx = false;
-					byte = TC_Received_cmd;
+					byte = UART_TC_Received_cmd;
 					osMessageQueuePut(send_task_queue, &byte, 0, 0);
 					TC_GUI_Pass(trouble_code);
 					//RX rearmed by reset UART_REST_TC()
 				}else{
-					byte = TC_Req_cmd;
+					byte = UART_TC_Req_cmd ;
 					osMessageQueuePut(send_task_queue, &byte, 0, 0);
 					HAL_UART_Receive_IT(&huart1,(uint8_t *)trouble_code,tc_size + 1);
 				}
@@ -184,7 +184,7 @@ static void UART_RX(){
 				break;
 			}
 		}else if (rx_Queue_Get == osErrorTimeout ){
-			byte = start_cmd;
+			byte = UART_Start_cmd;
 			if (osMessageQueuePut(send_task_queue, &byte, 0, osKernelGetTickFreq() / 5) == osOK) {
 				HAL_UART_Receive_IT(&huart1,&rx_data, 1);
 			}
@@ -201,7 +201,7 @@ void UART_REST_TC(){
 	uint8_t byte;
 	memcpy(trouble_code,"XXXXX\0", sizeof(trouble_code));
 	TC_GUI_Pass(trouble_code); //not needed because the screen can't switch without new code**********************************************************************************************************
-	byte = TC_Reset_cmd;
+	byte = UART_TC_Reset_cmd;
 	osMessageQueuePut(send_task_queue, &byte, 0, 0);
 	HAL_UART_Receive_IT(&huart1,&rx_data, 1);
 }
@@ -226,7 +226,7 @@ void Get_TC_USART(){
 
   //setting interrupts**********************************************************************************
   uint8_t byte;
-  byte = start_cmd;
+  byte = UART_Start_cmd;
   osMessageQueuePut(send_task_queue, &byte, 0, 0);
   HAL_UART_Receive_IT(&huart1,&rx_data, 1);
 

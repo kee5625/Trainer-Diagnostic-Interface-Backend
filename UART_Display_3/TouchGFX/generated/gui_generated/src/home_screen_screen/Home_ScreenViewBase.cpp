@@ -3,8 +3,8 @@
 /*********************************************************************************/
 #include <gui_generated/home_screen_screen/Home_ScreenViewBase.hpp>
 #include <touchgfx/Color.hpp>
-#include <texts/TextKeysAndLanguages.hpp>
 #include <images/BitmapDatabase.hpp>
+#include <texts/TextKeysAndLanguages.hpp>
 
 Home_ScreenViewBase::Home_ScreenViewBase() :
     flexButtonCallback(this, &Home_ScreenViewBase::flexButtonCallbackHandler)
@@ -13,20 +13,17 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    box1.setPosition(0, 0, 480, 272);
-    box1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    add(box1);
+    white_background.setPosition(0, 0, 480, 272);
+    white_background.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    add(white_background);
 
-    box3.setPosition(0, 216, 480, 43);
-    box3.setColor(touchgfx::Color::getColorFromRGB(194, 0, 0));
-    add(box3);
+    red_box.setPosition(0, 216, 480, 19);
+    red_box.setColor(touchgfx::Color::getColorFromRGB(194, 0, 0));
+    add(red_box);
 
-    TC_not_loaded.setXY(169, 94);
-    TC_not_loaded.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
-    TC_not_loaded.setLinespacing(0);
-    TC_not_loaded.setTypedText(touchgfx::TypedText(T___SINGLEUSE_KXSK));
-    TC_not_loaded.setVisible(false);
-    add(TC_not_loaded);
+    blue_box.setPosition(0, 222, 480, 50);
+    blue_box.setColor(touchgfx::Color::getColorFromRGB(26, 33, 71));
+    add(blue_box);
 
     ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
     ATech_Logo.setPosition(359, 0, 121, 59);
@@ -41,6 +38,7 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     Read_live_data_Start_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     Read_live_data_Start_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID));
     Read_live_data_Start_button.setIconXY(24, -3);
+    Read_live_data_Start_button.setAction(flexButtonCallback);
     Read_live_data_Start_button.setPosition(87, 136, 97, 64);
     add(Read_live_data_Start_button);
 
@@ -56,15 +54,11 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     Read_TC_Start_button.setPosition(311, 136, 97, 64);
     add(Read_TC_Start_button);
 
-    box2.setPosition(0, 222, 480, 50);
-    box2.setColor(touchgfx::Color::getColorFromRGB(26, 33, 71));
-    add(box2);
-
-    textArea1.setXY(10, 235);
-    textArea1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    textArea1.setLinespacing(0);
-    textArea1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_DOM7));
-    add(textArea1);
+    Trainer_Name.setXY(10, 235);
+    Trainer_Name.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    Trainer_Name.setLinespacing(0);
+    Trainer_Name.setTypedText(touchgfx::TypedText(T___SINGLEUSE_DOM7));
+    add(Trainer_Name);
 
     qrCode1.setXY(0, 0);
     qrCode1.setBuffers(qrBuffer_qrCode1, qrScratchBuffer_qrCode1);
@@ -72,6 +66,13 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     qrCode1.setScale(5);
     qrCode1.convertStringToQRCode("https://www.atechtraining.com/products/automobile/power-seat-system");
     add(qrCode1);
+
+    TC_not_loaded.setXY(169, 94);
+    TC_not_loaded.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
+    TC_not_loaded.setLinespacing(0);
+    TC_not_loaded.setTypedText(touchgfx::TypedText(T___SINGLEUSE_KXSK));
+    TC_not_loaded.setVisible(false);
+    add(TC_not_loaded);
 }
 
 Home_ScreenViewBase::~Home_ScreenViewBase()
@@ -92,5 +93,12 @@ void Home_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButt
         //When Read_TC_Start_button clicked change screen to TC_Screen
         //Go to TC_Screen with screen transition towards East
         application().gotoTC_ScreenScreenWipeTransitionEast();
+    }
+    if (&src == &Read_live_data_Start_button)
+    {
+        //RLD_Screen_Switch
+        //When Read_live_data_Start_button clicked change screen to Read_Live_Data_Screen
+        //Go to Read_Live_Data_Screen with no screen transition
+        application().gotoRead_Live_Data_ScreenScreenNoTransition();
     }
 }
