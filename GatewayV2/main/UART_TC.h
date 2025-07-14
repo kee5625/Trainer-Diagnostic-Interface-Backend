@@ -22,6 +22,6 @@ typedef enum {
 	UART_CMD_MAX,
 }uart_comms_t;
 
-void UART_INIT(char tc_pass[tc_size + 2]);
+void UART_INIT();
 
 #endif

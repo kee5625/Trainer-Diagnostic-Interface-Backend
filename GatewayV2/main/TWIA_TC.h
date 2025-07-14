@@ -14,18 +14,12 @@
 
 //TWAI action type setup
 typedef enum {
-    TX_SEND_PINGS,
-    TX_SEND_START_CMD,
-    TX_SEND_STOP_CMD,
+    TX_REQUEST_STORED_DTCS,
+    TX_REQUEST_PENDING_DTCS,
+    TX_REQUEST_PERM_DTCS,
+    TX_FLOW_CONTROL_RESPONSE,
     TX_TASK_EXIT,
 } tx_task_action_t;
-
-typedef enum {
-    RX_RECEIVE_PING_RESP,
-    RX_RECEIVE_DATA,
-    RX_RECEIVE_STOP_RESP,
-    RX_TASK_EXIT,
-} rx_task_action_t;
 
 //funcitons
 void twai_TC_Get();

@@ -35,7 +35,9 @@
 #define CONFIG_UART_ISR_IN_IRAM false
 
 static const char *TAG = "UART Service";
-static char trouble_code[tc_size + 2];
+static uint8_t *dtcs; //1-d array of dtcs
+static uint8_t num_dtcs;
+static int dtcs_sent = 0;
 static QueueHandle_t uart_queue;
 static QueueHandle_t uart_send_queue;
 
@@ -68,20 +70,23 @@ static void UART_TX(){
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 break;
             case UART_TC_Req_cmd:
-                    uart_write_bytes(UART_PORT_NUM, trouble_code, sizeof(trouble_code)-1);
-                    trouble_code[5] = '\0';
-                    ESP_LOGI(TAG,"Trouble code %s sent.",trouble_code);
+                uart_write_bytes(UART_PORT_NUM, &dtcs[dtcs_sent], 1);
+                ESP_LOGI(TAG,"Trouble code bytes sent %i",dtcs[dtcs_sent]);
+                dtcs_sent ++;
                 break;
             case UART_TC_Reset_cmd:
                 ESP_LOGI(TAG,"Received rest TC command");
                 temp_byte = uart_byte_setup(UART_Received_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
-                memset(trouble_code,0,sizeof(trouble_code));
-                TC_Code_set(trouble_code);
                 break;
             case UART_Retry_cmd:
                 ESP_LOGI(TAG, "Sending retry commmand request.");
                 temp_byte = uart_byte_setup(UART_Retry_cmd);
+                uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
+                break;
+            case UART_TCs_End_cmd:
+                ESP_LOGI(TAG,"All dtcs codes sent");
+                temp_byte = uart_byte_setup(UART_TCs_End_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
             default:
@@ -95,8 +100,8 @@ static void UART_TX(){
 /**
  * Function Description: Receive inputs from UART and fill queue for uart_send_queue in the UART_TX() function.
  * Notes: Below is the expected command order the Gateway(slave) should receive from the Display(master)
- * CMD order receive: Start   , TC request, TC received, TC reset, start...
- * CMD order Send   : received, TC        ,            , received, received...
+ * CMD order receive: Start   , TC request, TC received, TC received, TC received, TC reset, start...
+ * CMD order Send   : received, TC        , Next TC    , Next TC    , TC end comm, received, received...
  */
 static void UART_RX(){
     uart_event_t rx_action;
@@ -127,8 +132,9 @@ static void UART_RX(){
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
                     case UART_TC_Req_cmd:
-                        memcpy(trouble_code,TC_Code_Get(),sizeof(trouble_code));
-                        if (trouble_code[0] == '\0'){
+                        dtcs = get_dtcs_flat();
+                        num_dtcs = get_num_dtcs() * 2; //one d array puts all in one line two per row
+                        if (num_dtcs == 0){
                             ESP_LOGI(TAG,"TC not loaded yet but requested.");
                             vTaskDelay(pdMS_TO_TICKS(500));
                             action = UART_Retry_cmd;
@@ -140,14 +146,26 @@ static void UART_RX(){
                         }
                         break;
                     case UART_TC_Received_cmd:
-                        ESP_LOGI(TAG,"TC sent successfully.");
+                        ESP_LOGI(TAG,"DTC sent successfully.");
+                        if (num_dtcs > dtcs_sent){
+                            action = UART_TC_Req_cmd;
+                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        }else{
+                            action = UART_TCs_End_cmd;
+                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        }
                         break;
                     case UART_TC_Reset_cmd:
                         ESP_LOGI(TAG,"Loading new trouble code.");
-                        action = UART_TC_Reset_cmd;
+                        action = UART_Received_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        //resetting trouble_code
+                        dtcs = NULL;
+                        num_dtcs = 0;
+                        DTCS_reset();
                         vTaskDelay(pdMS_TO_TICKS(300));
-                        new_tc_tasks(); //grab new code for reset
+                        service_request_t current_serv = SERV_CLEAR_DTCS;
+                        xQueueSend(service_queue, &current_serv, portMAX_DELAY);
                         break;
                     default:
                         break;
@@ -172,7 +190,7 @@ static void UART_RX(){
     vTaskDelete(NULL);
 }
 
-void UART_INIT(char tc_pass[tc_size + 2])
+void UART_INIT()
 {   
 
     uart_config_t uart_config = {
@@ -191,7 +209,6 @@ void UART_INIT(char tc_pass[tc_size + 2])
     ESP_ERROR_CHECK(uart_driver_install(UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 1, &uart_queue, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(UART_PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
-    memcpy(trouble_code,tc_pass,sizeof(trouble_code));
     xTaskCreate(UART_TX, "UART_TX_task", ECHO_TASK_STACK_SIZE, NULL, UART_Priority, NULL);
     xTaskCreate(UART_RX, "UART_RX", ECHO_TASK_STACK_SIZE, NULL, UART_RX_Priority, NULL);
 }

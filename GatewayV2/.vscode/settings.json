@@ -18,6 +18,10 @@
     "bt_spp_tc.h": "c",
     "semphr.h": "c",
     "uart_tc.h": "c",
-    "string.h": "c"
+    "string.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "span": "c"
   }
 }

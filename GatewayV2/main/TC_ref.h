@@ -10,11 +10,29 @@
 
 #define tc_size 5
 
-extern SemaphoreHandle_t TC_Recieved_sem;
+typedef enum {
+    SERV_CUR_DATA       = 1,
+    SERV_FREEZE_DATA    = 2,
+    SERV_STORED_DTCS    = 3,
+    SERV_CLEAR_DTCS     = 4,
 
-char * TC_buff_conv_char(uint8_t TC_buff[2]);
-void TC_Code_set(char TC_code[tc_size + 2]);
-char* TC_Code_Get();
-void new_tc_tasks();
+
+    SERV_PENDING_DTCS   = 7,
+
+
+
+    SERV_PERM_DTCS      = 10,
+    //more to be added later
+} service_request_t;
+
+extern SemaphoreHandle_t TC_Recieved_sem;
+extern SemaphoreHandle_t TWAI_GRAB_TC_sem;
+extern QueueHandle_t service_queue;
+
+void TC_Code_set(uint8_t *codes, int num_codes);
+void DTCS_reset();
+uint8_t *get_dtcs_flat();
+uint8_t get_num_dtcs();
+
 
 #endif

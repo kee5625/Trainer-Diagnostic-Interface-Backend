@@ -9,6 +9,7 @@
     "cstdint": "c",
     "uart.h": "c",
     "freertos.h": "c",
-    "esp_system.h": "c"
+    "esp_system.h": "c",
+    "numbers": "c"
   }
 }

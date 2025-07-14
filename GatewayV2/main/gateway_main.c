@@ -33,48 +33,44 @@
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
 
-static char trouble_code[tc_size + 2];
-static char TC_code[7];
+
+static uint8_t (*dtcs)[2];
+static uint8_t num_dtcs;
 SemaphoreHandle_t TC_Recieved_sem;
+SemaphoreHandle_t TWAI_GRAB_TC_sem;
+QueueHandle_t service_queue;
 
-//convert uint8_t[2] buff for trouble code to char [7]
-char* TC_buff_conv_char(uint8_t TC_buff[2]){
-    const char prefix_lookup[4] = {'P', 'C', 'B', 'U'};
 
-    //converting TC letter
-    TC_code[0] = prefix_lookup[(TC_buff[0] >> 6) & 0x03];    
-
-    //converting TC number within category
-    TC_code[1] = ((TC_buff[0] >> 4) & 0x03) + '0'; 
-    TC_code[2] = ((char)TC_buff[0] & 0x0F) + '0';
-    TC_code[3] = ((char)(TC_buff[1] >> 4) & 0x0F) + '0';
-    TC_code[4] = ((char)TC_buff[1] & 0x0F) + '0';
-    TC_code[5] = '\n';
-    ESP_LOGI("main", "TC = %s", TC_code);
-    return TC_code;
+void DTCS_reset(){
+    dtcs = NULL;
+    num_dtcs = 0;
 }
 
-void TC_Code_set(char TC_code[tc_size + 2]){
-    memcpy(trouble_code, TC_code,sizeof(trouble_code));
+void TC_Code_set(uint8_t *codes, int num_codes){
+    dtcs = malloc(num_codes);
+    num_dtcs = num_codes;
+    if (codes != NULL){
+        memcpy(dtcs,codes,num_codes);
+    }else{
+        dtcs = NULL;
+    }
 }
 
-char* TC_Code_Get(){
-    return trouble_code;
+uint8_t *get_dtcs_flat(){ //Made to have 1 D pointer to all values that can send through UART
+    return (uint8_t *)dtcs;
 }
 
-void new_tc_tasks(){
-    //grabbing trouble code from twia network and putting in trouble_code_buff
-    twai_TC_Get();
-    
-    //running bt to send trouble code to serial port
-    //bt_spp_setup();
+uint8_t get_num_dtcs(){
+    return num_dtcs;
 }
 
 void app_main(void)
 {  
+    service_queue = xQueueCreate(3, sizeof(service_request_t));
+    TWAI_GRAB_TC_sem = xSemaphoreCreateBinary();
     TC_Recieved_sem = xSemaphoreCreateBinary();
     twai_TC_Get();
     xSemaphoreTake(TC_Recieved_sem, portMAX_DELAY);
     //start and running UART to send trouble code over uart
-    UART_INIT(trouble_code);
+    UART_INIT();
 }

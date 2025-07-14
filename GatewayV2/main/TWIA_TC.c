@@ -21,9 +21,11 @@
 #include <inttypes.h>
 #include "time.h"
 #include "sys/time.h"
+#include  "math.h"
 
 #include "TWIA_TC.h"
 #include "TC_ref.h"
+#include "TWAI_OBD.h"
 
 
 //twai driver setup
@@ -33,38 +35,18 @@
 #define ITER_DELAY_MS           1000
 #define RX_TASK_PRIO            8
 #define TX_TASK_PRIO            9
-#define TROUBLE_CODE_TSK_PRIO     10
+#define TROUBLE_CODE_TSK_PRIO   10
 #define TX_GPIO_NUM             14
 #define RX_GPIO_NUM             15
-#define EXAMPLE_TAG             "TWAI Master"
-
-#define ID_MASTER_STOP_CMD      0x0A0
-#define ID_MASTER_START_CMD     0x0A1
-#define ID_MASTER_PING          0x0A2
-#define ID_SLAVE_STOP_RESP      0x0B0
-#define ID_Trainer              0x0B1
-#define ID_SLAVE_PING_RESP      0x0B2
-
+#define TAG                     "GateWayV2"
 
 //twai config setup
-static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_25KBITS();
+static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
 
-static const twai_message_t ping_message = {
-    // Message type and format settings
-    .extd = 0,              // Standard Format message (11-bit ID)
-    .rtr = 0,               // Send a data frame
-    .ss = 1,                // Is single shot (won't retry on error or NACK)
-    .self = 0,              // Not a self reception request
-    .dlc_non_comp = 0,      // DLC is less than 8
-    // Message ID and payload
-    .identifier = ID_MASTER_PING,
-    .data_length_code = 0,
-    .data = {0},
-};
-
-static const twai_message_t start_message = {
+//**********************************Trouble Code */
+static const twai_message_t TWAI_Request_msg = {
     // Message type and format settings
     .extd = 0,              // Standard Format message (11-bit ID)
     .rtr = 0,               // Send a data frame
@@ -72,12 +54,13 @@ static const twai_message_t start_message = {
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_MASTER_START_CMD,
-    .data_length_code = 0,
-    .data = {0},
+    .identifier = ID_DT,
+    .data_length_code = 8,
+    .data = {0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+    //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
 };
 
-static const twai_message_t stop_message = {
+static const twai_message_t TWAI_Clear_DTCS = {
     // Message type and format settings
     .extd = 0,              // Standard Format message (11-bit ID)
     .rtr = 0,               // Send a data frame
@@ -85,176 +68,249 @@ static const twai_message_t stop_message = {
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_MASTER_STOP_CMD,
-    .data_length_code = 0,
-    .data = {0},
+    .identifier = ID_DT,
+    .data_length_code = 8,
+    .data = {0x01, CLEAR_DTCS_REQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+    //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
 };
+
+//**********************************Flow Control */
+static const twai_message_t TWAI_Response_FC = { //only after FF unless ECU sending too fast
+    // Message type and format settings
+    .extd = 0,              // Standard Format message (11-bit ID)
+    .rtr = 0,               // Send a data frame
+    .ss = 0,                // Not single shot
+    .self = 0,              // Not a self reception request
+    .dlc_non_comp = 0,      // DLC is less than 8
+    // Message ID and payload
+    .identifier = ID_DT,
+    .data_length_code = 8,
+    .data = {MULT_FRAME_FLOW, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+};
+
 
 /* --------------------------- Tasks and Functions TWAI-------------------------- */
-static char trouble_code[tc_size + 2];
 static QueueHandle_t tx_task_queue;
-static QueueHandle_t rx_task_queue;
-static SemaphoreHandle_t stop_ping_sem;
-static SemaphoreHandle_t Trouble_Code_Task_Sem;
-static SemaphoreHandle_t done_sem;
+static SemaphoreHandle_t TC_Grabbed_sem;
+static uint8_t *dtcs;
+static int dtcs_bytes = 0;
+
+//returns index of mode response
+static inline uint8_t mode_find(twai_message_t msg, uint8_t last_service){
+    if (msg.data[0] < 0x10){ //single frame 
+        return msg.data[1];
+    }else if (msg.data[0] == 0x10){
+        return msg.data[2];
+    }
+    return last_service;
+}
+
+static inline twai_message_t req_msg_create(uint8_t request){
+    twai_message_t msg = TWAI_Request_msg;
+    msg.data[1] = request;
+    return msg;
+}
 
 static void twai_receive_task()
 {
-    uint8_t trouble_code_buff[2];
+    tx_task_action_t tx_response;
+    uint8_t num_bytes = 0;
+    uint8_t num_frames = 0;
+    uint8_t current_service = STORED_DTCS_RESP;
+    twai_message_t TC_received;
+    int next_dtc = 4;
     while (1) {
-        rx_task_action_t action;
-        xQueueReceive(rx_task_queue, &action, portMAX_DELAY);
-
-        if (action == RX_RECEIVE_PING_RESP) {
-            //Listen for ping response from slave
-            while (1) {
-                twai_message_t rx_msg;
-                twai_receive(&rx_msg, portMAX_DELAY);
-                if (rx_msg.identifier == ID_SLAVE_PING_RESP) {
-                    xSemaphoreGive(stop_ping_sem);
-                    xSemaphoreGive(Trouble_Code_Task_Sem);
-                    break;
+        twai_receive(&TC_received,portMAX_DELAY);
+        if (TC_received.identifier == ID_ECU || TC_received.identifier == ID_ECU_Second){
+            current_service = mode_find(TC_received,current_service);
+            if (current_service == STORED_DTCS_RESP ||  current_service == PENDING_DTCS_RESP  || current_service == PERM_DTCS_RESP){
+                if (TC_received.data[0] == MULT_FRAME_FIRST){
+                    num_bytes = TC_received.data[1];
+                    dtcs_bytes = num_bytes - 1;
+                    ESP_LOGI(TAG, "%i", dtcs_bytes);
+                    dtcs = malloc(dtcs_bytes);
+                    for (int i = 0; i < 4; i += 2){ //grab first two DTCS
+                        dtcs[i] = TC_received.data[i + 3];
+                        dtcs[i + 1] = TC_received.data[i + 4];
+                    }
+                    //setting  up for next frame
+                    num_bytes -= 5;
+                    num_frames = ceil( (double) num_bytes / 6.0); //starting down 4 bytes from FF and only 6 because DTCs cannot be split across frames
+                    ESP_LOGI(TAG,"Number bytes: %i and Number frames: %i",num_bytes, num_frames);
+                    //Getting next frame 
+                    ESP_LOGI(TAG,"First frame of multi frame received.");
+                    tx_response = TX_FLOW_CONTROL_RESPONSE;
+                    xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
+                }else if (TC_received.data[0] >= MULT_FRAME_CON){
+                    ESP_LOGI(TAG, "Consecutive frame %i received.", TC_received.data[0] - MULT_FRAME_CON);
+                    int cur_bytes = (num_bytes >= 6) ? 6 : num_bytes;
+                    ESP_LOGI(TAG, "current bytes: %i total bytes: %i ", cur_bytes, num_bytes);
+                    for (int i = 0; i < cur_bytes; i += 2){
+                        dtcs[i + next_dtc] = TC_received.data[i + 1];
+                        dtcs[i + next_dtc + 1] = TC_received.data[i + 2];
+                    }
+                    if (num_bytes >= 6){
+                        next_dtc += 6;
+                        num_bytes -= 6;
+                    }else{
+                        next_dtc += num_bytes;
+                    }
+                    ESP_LOGI(TAG,"Consecutive frame received successfully.");
+                    num_frames --;
+                    if (num_frames == 0){
+                        num_bytes = 0;
+                        next_dtc = 4;
+                        xSemaphoreGive(TC_Grabbed_sem);
+                    }
+                }else if (TC_received.data[0] <= SINGLE_FRAME){ //single frame
+                    num_bytes = TC_received.data[0] - 2;
+                    dtcs_bytes = num_bytes;
+                    dtcs = malloc(dtcs_bytes);
+                    if (TC_received.data[1] == STORED_DTCS_RESP){
+                        for (int i = 0; i < num_bytes; i += 2){     
+                            dtcs[i] = TC_received.data[i + 2];
+                            dtcs[i+ 1] = TC_received.data[i + 3];
+                        }
+                    }
+                    num_bytes = 0;
+                    ESP_LOGI(TAG,"SF received.");
+                    xSemaphoreGive(TC_Grabbed_sem);
+                }else{
+                    ESP_LOGE(TAG,"Unknown frame received: %i", TC_received.data[0]);
                 }
+            }else if (current_service == CLEAR_DTCS_GOOD_RESP){
+                ESP_LOGI(TAG, "DTCs reset successfully.");
+            }else if (current_service == CLEAR_DTCS_BAD_RESP){
+                ESP_LOGE(TAG,"FAILED to rest DTCs. Possibly unsupported or bad request.");
             }
-        } else if (action == RX_RECEIVE_DATA) {
-            //grabbing TC from trainer TWIA network
-            twai_message_t rx_msg;
-            rx_msg.data_length_code = 2;
-            twai_receive(&rx_msg, portMAX_DELAY);
-            if (rx_msg.identifier == ID_Trainer) {
-                // for(int i = 0;i < rx_msg.data_length_code; i ++){
-                    // trouble_code_buff = rx_msg.data;
-                // }   
-                memcpy(trouble_code_buff,rx_msg.data,sizeof(trouble_code_buff));     
-                memcpy(trouble_code, TC_buff_conv_char(trouble_code_buff), sizeof(trouble_code));
-                ESP_LOGI(EXAMPLE_TAG, "Received: %s", trouble_code);
-            }
-            xSemaphoreGive(Trouble_Code_Task_Sem);
-        } else if (action == RX_RECEIVE_STOP_RESP) { 
-            //Listen for stop response from slave
-            while (1) {
-                twai_message_t rx_msg;
-                twai_receive(&rx_msg, portMAX_DELAY);
-                if (rx_msg.identifier == ID_SLAVE_STOP_RESP) {
-                    xSemaphoreGive(Trouble_Code_Task_Sem);
-                    break;
-                }
-            }
-        } else if (action == RX_TASK_EXIT) {
-            break;
+        }else{
+            ESP_LOGI(TAG,"Wrong identifier.");
         }
     }
-    vTaskDelete(NULL);
 }
 
 static void twai_transmit_task()
 {
+    tx_task_action_t action;
+    twai_message_t TX_output;
     while (1) {
-        tx_task_action_t action;
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
-
-        if (action == TX_SEND_PINGS) {
-            //Repeatedly transmit pings
-            ESP_LOGI(EXAMPLE_TAG, "Transmitting ping");
-            while (xSemaphoreTake(stop_ping_sem, 0) != pdTRUE) {
-                twai_transmit(&ping_message, portMAX_DELAY);
-                vTaskDelay(pdMS_TO_TICKS(PING_PERIOD_MS));
-            }
-        } else if (action == TX_SEND_START_CMD) {
-            //Transmit start command to slave
-            twai_transmit(&start_message, portMAX_DELAY);
-            ESP_LOGI(EXAMPLE_TAG, "Transmitted start command");
-        } else if (action == TX_SEND_STOP_CMD) {
-            //Transmit stop command to slave
-            twai_transmit(&stop_message, portMAX_DELAY);
-            ESP_LOGI(EXAMPLE_TAG, "Transmitted stop command");
-        } else if (action == TX_TASK_EXIT) {
-            break;
+        switch(action){
+            case TX_REQUEST_STORED_DTCS:
+                TX_output = req_msg_create(STORED_DTCS_REQ);
+                twai_transmit(&TX_output, portMAX_DELAY);
+                ESP_LOGI(TAG,"Sent TC request ");
+                break;
+            case TX_REQUEST_PENDING_DTCS:
+                TX_output = req_msg_create(PENDING_DTCS_REQ);
+                twai_transmit(&TX_output, portMAX_DELAY);
+                ESP_LOGI(TAG,"Sent pending dtcs request");
+                break;
+            case TX_REQUEST_PERM_DTCS:
+                TX_output = req_msg_create(PERM_DTCS_REQ);
+                twai_transmit(&TX_output, portMAX_DELAY);
+                ESP_LOGI(TAG,"Sent perminate dtcs request");
+                break;
+            case TX_FLOW_CONTROL_RESPONSE:
+                TX_output = TWAI_Response_FC;
+                twai_transmit(&TX_output, portMAX_DELAY);
+                ESP_LOGI(TAG,"Sent flow control");
+                break;
+            case SERV_CLEAR_DTCS:
+                TX_output = TWAI_Clear_DTCS;
+                twai_transmit(&TX_output, portMAX_DELAY);
+                ESP_LOGI(TAG,"Sent DTCS reset request");
+                break;
+            default:
+                break;
         }
     }
     vTaskDelete(NULL);
 }
 
 //used to grab trouble code from TWAI network
-static void trouble_code_buff_task()
+static void Get_DTCS()
 {
-    xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
+    service_request_t current_serv;
     tx_task_action_t tx_action;
-    rx_task_action_t rx_action;
-    
-    //runs twice to first get the trouble code letter then number
-    for (int i = 0; i < NO_OF_ITERS; i ++){
-        ESP_ERROR_CHECK(twai_start());
-        ESP_LOGI(EXAMPLE_TAG, "Driver started");
+    int count = 0;
+    while(1){
+        xQueueReceive(service_queue,&current_serv,portMAX_DELAY);
+        switch (current_serv){
+            case SERV_CUR_DATA:
+                break;
+            case SERV_FREEZE_DATA:
+                break;
+            case SERV_STORED_DTCS:
+                tx_action = TX_REQUEST_STORED_DTCS;
+                xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
+              
+                xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
+                for (int i = 0; i < dtcs_bytes ; i+= 2){
+                    ESP_LOGI(TAG, "Trouble code 0x%02X 0x%02X", dtcs[i],dtcs[i + 1]);
+                }
+                TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
+                break;
+            case SERV_CLEAR_DTCS://UART file resets everything
+                dtcs = NULL;
+                dtcs_bytes = 0;
+                tx_action = SERV_CLEAR_DTCS;
+                xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
+                break;
+            case SERV_PENDING_DTCS:
+                tx_action = TX_REQUEST_PENDING_DTCS;
+                xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
 
-        //Start transmitting pings, and listen for ping response
-        tx_action = TX_SEND_PINGS;
-        rx_action = RX_RECEIVE_PING_RESP;
-        xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
-        xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
+                xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
+                count = 1;
+                for (int i = 0; i < dtcs_bytes; i+= 2){
+                    ESP_LOGI(TAG, "Diagnostic Trouble code %i is 0x%02X 0x%02X", count, dtcs[i],dtcs[i + 1]);
+                    count ++;
+                }
+                TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
+                vTaskDelay(pdMS_TO_TICKS(250));
+                tx_action = SERV_CLEAR_DTCS;
+                xQueueSend(service_queue, &tx_action, portMAX_DELAY);
+                break;
+            case SERV_PERM_DTCS:
+                tx_action = TX_REQUEST_PERM_DTCS;
+                xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
 
-        //Send Start command to slave, and receive data messages
-        ESP_LOGI(EXAMPLE_TAG, "Ping received");
-
-        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
-        tx_action = TX_SEND_START_CMD;
-        rx_action = RX_RECEIVE_DATA;
-        xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
-        xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
-
-        //Send Stop command to slave when enough data messages have been received. Wait for stop response
-        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
-        tx_action = TX_SEND_STOP_CMD;
-        rx_action = RX_RECEIVE_STOP_RESP;
-        xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
-        xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
-
-        xSemaphoreTake(Trouble_Code_Task_Sem, portMAX_DELAY);
-        ESP_ERROR_CHECK(twai_stop());
-        ESP_LOGI(EXAMPLE_TAG, "Driver stopped");
-        vTaskDelay(pdMS_TO_TICKS(ITER_DELAY_MS));
+                xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
+                count = 1;
+                for (int i = 0; i < dtcs_bytes; i+= 2){
+                    ESP_LOGI(TAG, "Diagnostic Trouble code %i is 0x%02X 0x%02X", count, dtcs[i],dtcs[i + 1]);
+                    count ++;
+                }
+                TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
+                break;
+            default:
+                break;
+        }
     }
-
-        //Stop TX and RX tasks
-        tx_action = TX_TASK_EXIT;
-        rx_action = RX_TASK_EXIT;
-        xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
-        xQueueSend(rx_task_queue, &rx_action, portMAX_DELAY);
-
-    //give trouble_code_buff_task done
-    xSemaphoreGive(done_sem);
-    vTaskDelete(NULL);
 }
 
 //grabs tc from slave/trainer
 void twai_TC_Get(){
     //Create tasks, queues, and semaphores
-    rx_task_queue = xQueueCreate(1, sizeof(rx_task_action_t));
     tx_task_queue = xQueueCreate(1, sizeof(tx_task_action_t));
-    Trouble_Code_Task_Sem = xSemaphoreCreateBinary();
-    stop_ping_sem = xSemaphoreCreateBinary();
-    done_sem = xSemaphoreCreateBinary();
-    xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(trouble_code_buff_task, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
+    TC_Grabbed_sem = xSemaphoreCreateBinary();
 
     //Install TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
-    ESP_LOGI(EXAMPLE_TAG, "Driver installed");
-    xSemaphoreGive(Trouble_Code_Task_Sem);              //start trouble code reading task
-    xSemaphoreTake(done_sem, portMAX_DELAY);    //Wait for completion
+    ESP_LOGI(TAG, "Driver installed");
 
-    //Uninstall TWAI driver
-    ESP_ERROR_CHECK(twai_driver_uninstall());
-    ESP_LOGI(EXAMPLE_TAG, "Driver uninstalled");
+    ESP_ERROR_CHECK(twai_start());
+    ESP_LOGI(TAG,"TWAI started.");
 
-    //Cleanup
-    vQueueDelete(rx_task_queue);
-    vQueueDelete(tx_task_queue);
-    vSemaphoreDelete(Trouble_Code_Task_Sem);
-    vSemaphoreDelete(stop_ping_sem);
-    vSemaphoreDelete(done_sem);
+    xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(Get_DTCS, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
-    TC_Code_set(trouble_code); //passing trouble_code to the main function
-    xSemaphoreGive(TC_Recieved_sem);
+    vTaskDelay(pdMS_TO_TICKS(50));
+    service_request_t serv = SERV_PENDING_DTCS;
+    xQueueSend(service_queue, &serv, portMAX_DELAY);
 }
