@@ -1,0 +1,4 @@
+# ignore build files
+
+GatewayV2/build
+Gateway_SlaveV2/build

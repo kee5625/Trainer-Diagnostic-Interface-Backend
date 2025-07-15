@@ -33,3 +33,9 @@ If using bt connect dispaly/app through bt.
 If the board does not automatically leave bootloader mode:
 1. Set IO0 pin to HIGH or remove from GND
 2. Press RESET/RST (EN) button. If button not present, manually connect the "EN" pin to GND and disconnect.
+
+
+# -------------------------------------------------------------BLE Setup --------------------------------------------------------------------------------
+1. Once cloned all files, add "ble.c" to CmakeLists and remove any BT_SPP related code
+2. Open menuconfig, disable Bluetooth Classic under bluedroid, enable BLE, and enable BLE ONLY in controller options
+3. Reconfigure, build, and pray
