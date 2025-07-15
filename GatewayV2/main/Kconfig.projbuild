@@ -58,3 +58,13 @@ menu "Example Configuration"
         help
             Defines stack size for UART echo example. Insufficient stack size can cause crash.
 endmenu
+
+menu "Trainer-Gateway"
+
+config TRAINER_DEVICE_NAME
+    string "BLE GAP device name"
+    default "Trainer-01"
+    help
+        Advertised name shown in BLE scans (change per board or via NVS).
+
+endmenu

@@ -111,6 +111,8 @@ static inline twai_message_t req_msg_create(uint8_t request){
     return msg;
 }
 
+
+
 static void twai_receive_task()
 {
     tx_task_action_t tx_response;

@@ -23,6 +23,6 @@ typedef enum {
 
 //funcitons
 void twai_TC_Get();
-
+void can_request_task(void *arg);
 
 #endif
