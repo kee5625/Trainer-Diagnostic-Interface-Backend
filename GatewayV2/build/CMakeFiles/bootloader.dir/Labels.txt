@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/CMakeFiles/bootloader
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/CMakeFiles/bootloader.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/CMakeFiles/bootloader-complete.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/ESP-IDF/Gatway_updates/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/CMakeFiles/bootloader
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/CMakeFiles/bootloader.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/CMakeFiles/bootloader-complete.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
