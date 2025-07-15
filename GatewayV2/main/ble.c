@@ -75,15 +75,6 @@ static esp_attr_value_t ctrl_attr_val = {
     .attr_value = (uint8_t *)ctrl_init_val,
 };
 
-// PROFILE STRUCT
-typedef struct {
-    esp_gatts_cb_t  gatts_cb;
-    uint16_t        gatts_if;
-    uint16_t        app_id;
-    uint16_t        conn_id;
-    uint16_t        service_hdl;
-    esp_gatt_srvc_id_t service_id;
-} trainer_profile_t;
 
 static void trainer_profile_cb(esp_gatts_cb_event_t, esp_gatt_if_t, esp_ble_gatts_cb_param_t *);
 

@@ -18,7 +18,6 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "driver/twai.h"
-#include "UART_SEND.h"
 #include "TWAI_OBD.h"
 
 #define RX_TASK_PRIO                    8       //Receiving task priority
