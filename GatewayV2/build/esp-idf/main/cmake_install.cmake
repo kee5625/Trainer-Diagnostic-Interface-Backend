@@ -1,4 +1,4 @@
-# Install script for directory: C:/ESP-IDF/Gatway_updates/GatewayV2/main
+# Install script for directory: C:/Users/krachamolla/TDIv2/Trainer Diagnostic interface/GatewayV2/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,6 +34,6 @@ endif()
 
 # Set path to fallback-tool for dependency-resolution.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "C:/ESP-IDF/ESP-IDF_tools/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32-elf-objdump.exe")
+  set(CMAKE_OBJDUMP "C:/Users/krachamolla/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32-elf-objdump.exe")
 endif()
 
