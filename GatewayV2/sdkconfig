@@ -425,7 +425,7 @@ CONFIG_EXAMPLE_TASK_STACK_SIZE=3072
 #
 # Trainer-Gateway
 #
-CONFIG_TRAINER_DEVICE_NAME="Trainer-01"
+CONFIG_TRAINER_DEVICE_NAME="Trainer-PowerSeat"
 # end of Trainer-Gateway
 
 #

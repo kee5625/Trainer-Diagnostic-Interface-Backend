@@ -13,19 +13,15 @@
 
 #include "esp_bt.h"
 #include "esp_gap_ble_api.h"
-#include "esp_gatts_api.h"
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
 
 #include "driver/gpio.h"
 
 #include "ble.h"
+#include "TC_ref.h"
+#include "esp_gatts_api.h"
 
-//can stuff
-#include "driver/twai.h"
-#include "freertos/semphr.h"
-#include "freertos/queue.h"
-#include "TWIA_TC.h"
 // -----------------------------------------------------------------------------
 // Configuration
 // -----------------------------------------------------------------------------
@@ -39,24 +35,24 @@ static const char *TAG = "PowerSeat";   //Log tag
 // Service handle count: svc + 3x(char + cccd) = 8
 #define TRAINER_NUM_HANDLES 8
 
-// CAN Globals
-static bool can_running       = false;
-static TaskHandle_t can_task  = NULL;
-static TaskHandle_t can_req_task = NULL;
-static TaskHandle_t ui_demo_task = NULL;
+/* ---------- logging helpers (common) ---------- */
+#define LOG_FRAME(dir, msg)                                                      \
+    ESP_LOGI(TAG,                                                                \
+        dir " id=0x%03X dlc=%d "                                                 \
+        "%02X %02X %02X %02X %02X %02X %02X %02X",                               \
+        (unsigned int)(msg).identifier, (msg).data_length_code,                  \
+        (msg).data[0], (msg).data[1], (msg).data[2], (msg).data[3],              \
+        (msg).data[4], (msg).data[5], (msg).data[6], (msg).data[7])
 
-/*  One-byte queue: every UI “Read DTC” click pushes a byte here  */
-QueueHandle_t req_q;
+#define LOG_BIN(label, val)  ESP_LOGI(TAG, label " = %d (0x%02X)", (val), (val))
 
-/* ---------- TWAI driver configuration (same as in TWIA_TC.c) ---------- */
-static const twai_general_config_t g_config =
-TWAI_GENERAL_CONFIG_DEFAULT(21, 22, TWAI_MODE_NORMAL);
-static const twai_timing_config_t  t_config = TWAI_TIMING_CONFIG_25KBITS();
-static const twai_filter_config_t  f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+//globals used by rest of firmware
+static bool            conn_active   = false;
+static bool            notify_on     = false;
+static esp_gatt_if_t   gatts_if_save = ESP_GATT_IF_NONE;
+static uint16_t        rx_cccd_hdl   = 0;
 
-// Forward Declarations
-static void can_setup_task(void *pv);
-static void can_teardown_task(void *pv);
+extern QueueHandle_t service_queue;
 
 // Atribute Handles
 uint8_t hdl_tx = 0;
@@ -137,60 +133,60 @@ static void gap_event_handler(esp_gap_ble_cb_event_t evt, esp_ble_gap_cb_param_t
     }
 }
 
-// SETUP CAN TASK
-static void can_setup_task(void *pv)
+/* Forward so Gateway-main can ask us to signal bytes */
+bool BLE_push_dtcs(const uint8_t *bytes, uint8_t len)
 {
-    ESP_LOGI(TAG, "Starting TWAI driver …");
-    esp_err_t err = twai_driver_install(&g_config, &t_config, &f_config);
-    if (err == ESP_OK) err = twai_start();
-    if (err == ESP_OK) {
-        can_running = true;
-        ESP_LOGI(TAG, "TWAI up and running");
-        if (!req_q) {                                   /* ① create queue once        */
-            req_q = xQueueCreate(4, sizeof(uint8_t));
-        }
+    if (!conn_active || !notify_on) return false;
 
-        if (can_req_task == NULL) {
-            BaseType_t ok = xTaskCreatePinnedToCore(
-                    can_request_task, "CAN_req", 4096, NULL,
-                    6, &can_req_task, tskNO_AFFINITY);
-
-            if (ok != pdPASS) {
-                ESP_LOGE(TAG, "‼  FAILED to create CAN_req task");
-                can_req_task = NULL;                
-            }
-        }
-
-        // if (ui_demo_task == NULL) {
-        //     BaseType_t ok = xTaskCreatePinnedToCore(
-        //             ui_task, "UI_demo", 4096, NULL,
-        //             5, &ui_demo_task, tskNO_AFFINITY);
-
-        //     if (ok != pdPASS) {
-        //         ESP_LOGE(TAG, "‼  FAILED to create UI_demo task");
-        //         ui_demo_task = NULL;
-        //     }
-        // }
-    } else {
-        ESP_LOGE(TAG, "TWAI start failed (%s)", esp_err_to_name(err));
+    /* Break long arrays into <20-byte MTU chunks; send as indications
+       so we get ACKs and the buffer doesn’t overrun. */
+    while (len) {
+        uint16_t part = (len > 20) ? 20 : len;
+        esp_ble_gatts_send_indicate(gatts_if_save,
+                                    /*conn_id*/ profile.conn_id,
+                                    /*attr_hdl*/ hdl_rx,
+                                    part,
+                                    (uint8_t*)bytes,
+                                    /*need_confirm*/ true);
+        bytes += part;
+        len   -= part;
     }
-    vTaskDelete(NULL);                     // one-shot task
+    return true;
 }
 
-// SHUTDOWN CAN TASK
-static void can_teardown_task(void *pv)
+void BLE_notify_clear(void)
 {
-    if (can_req_task) { vTaskDelete(can_req_task);  can_req_task = NULL; }
-    if (ui_demo_task)  { vTaskDelete(ui_demo_task); ui_demo_task  = NULL; }
-    if (req_q)         { vQueueDelete(req_q);       req_q         = NULL; }
-
-    ESP_LOGI(TAG, "Stopping TWAI …");
-    twai_stop();
-    twai_driver_uninstall();
-    can_running = false;
-    ESP_LOGI(TAG, "TWAI stopped");
-    vTaskDelete(NULL);
+    static const uint8_t ok = 0xCC;   /* arbitrary “clear done” flag */
+    BLE_push_dtcs(&ok, 1);
 }
+
+/* ────────────────────────────────────────────────────────────
+ *  1. Map BLE-writes → same service_queue the UART already uses
+ * ──────────────────────────────────────────────────────────── */
+
+static void handle_ui_cmd(uint8_t byte)
+{
+    /* Minimal protocol (expand as you like):
+     *   0x01  = “give me pending DTCs”
+     *   0x02  = “give me stored DTCs”
+     *   0x03  = “give me permanent DTCs”
+     *   0x04  = “clear codes”
+     */
+    
+    ESP_LOGI(TAG,"BLE cmd 0x%02X → queue", byte);
+    service_request_t s;
+    ESP_LOGI(TAG, "BLE cmd 0x%02X mapped to svc=%d", byte, s);
+    switch (byte) {
+        case 0x01: s = SERV_PENDING_DTCS; break;
+        case 0x02: s = SERV_STORED_DTCS;  break;
+        case 0x03: s = SERV_PERM_DTCS;    break;
+        case 0x04: s = SERV_CLEAR_DTCS;   break;
+        default:   return;                      /* ignore unknown op    */
+    }
+    if (service_queue) xQueueSend(service_queue, &s, 0);
+}
+
+        
 
 // -----------------------------------------------------------------------------
 // GATT Profile Callback
@@ -259,16 +255,23 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
             hdl_rx = param->add_char.attr_handle;
         else if (param->add_char.char_uuid.uuid.uuid16 == TRAINER_UUID_CTRL){
             hdl_ctrl = param->add_char.attr_handle;
-
-            esp_ble_gap_start_advertising(&adv_params); // start advertising after service is created
         }
+        break;
+    }
+    case ESP_GATTS_ADD_CHAR_DESCR_EVT: {
+        /* first descriptor we add is the CCCD for RX characteristic */
+        rx_cccd_hdl = param->add_char_descr.attr_handle;
+        /*start advertising*/
+        esp_ble_gap_start_advertising(&adv_params);
+        ESP_LOGI(TAG, "Advertising started");
         break;
     }
     // ───── Write to TX / CTRL ─────
     case ESP_GATTS_WRITE_EVT: {
         const uint8_t *d = param->write.value;
         uint16_t len = param->write.len;
-
+        
+        
         //Log event handler trigger
         ESP_LOGI(TAG, "WRITE_EVT handle=0x%04X, len=%u, need_rsp=%u",
                 param->write.handle, param->write.len, param->write.need_rsp);
@@ -276,22 +279,14 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         if(param->write.need_rsp){
             esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
         }
-        if(param->write.handle == hdl_tx){
-            // ✦ Handle request from client
-            ESP_LOG_BUFFER_HEX_LEVEL(TAG, d, len, ESP_LOG_DEBUG);
+        if (param->write.handle == hdl_tx) {
+            if (param->write.len) handle_ui_cmd(param->write.value[0]);
 
-            //Push request onto queue to start the CAN comm
-            if(req_q && len >= 1){
-                ESP_LOGI(TAG, "UI tick → pushing request");
-                uint8_t cmd = d[0];
-                xQueueSend(req_q, &cmd, 0);
-            }else{
-                ESP_LOGW(TAG, "req_q is not ready !!");
-            }   
-
-        }else if(param->write.handle == hdl_ctrl){
-            // ✦ Handle control commands (e.g. OTA, alias table update)
-        }
+        }else if (param->write.handle == rx_cccd_hdl && param->write.len >= 2) {
+            /* 0x0001 = notifications, 0x0002 = indications*/
+            uint16_t cfg = param->write.value[0] | (param->write.value[1] << 8);
+            notify_on = (cfg != 0);
+        }               
         break; }
 
     // ───── Read from CTRL (or RX if someone reads history) ─────
@@ -301,6 +296,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 
     // ───── Client configures notifications on RX ─────
     case ESP_GATTS_CONF_EVT:
+        if (param->conf.status == ESP_GATT_OK) notify_on = true;
         ESP_LOGI(TAG, "Client confirmed notify, status %d", param->conf.status);
         break;
 
@@ -308,24 +304,13 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
     case ESP_GATTS_CONNECT_EVT:
         profile.conn_id = param->connect.conn_id;
         ESP_LOGI(TAG, "Client connected (conn_id=%d)", profile.conn_id);
-
-        if (!can_running) {                    // prevent duplicates
-            xTaskCreatePinnedToCore(
-                can_setup_task,
-                "can_setup", 4096, NULL,       /* stack / arg */
-                9, &can_task,                  /* prio / handle */
-                tskNO_AFFINITY);               /* run on any core */
-        }
+        conn_active   = true;
+        gatts_if_save = gatts_if;   /* stash for later notifies */
+        /* … start CAN if you still do that here … */
         break;
     case ESP_GATTS_DISCONNECT_EVT:
         ESP_LOGI(TAG, "Client disconnected (reason 0x%02X)", param->disconnect.reason);
-
-        if (can_running) {
-            xTaskCreatePinnedToCore(
-                can_teardown_task,
-                "can_stop", 3072, NULL,
-                8, NULL, tskNO_AFFINITY);
-        }
+        conn_active = notify_on = false;
 
         esp_ble_gap_start_advertising(&adv_params);   // resume beaconing
         break;
@@ -351,7 +336,7 @@ static void gatts_event_handler(esp_gatts_cb_event_t evt, esp_gatt_if_t gatts_if
 // -----------------------------------------------------------------------------
 // Application entry point
 // -----------------------------------------------------------------------------
-void ble_connect()
+void BLE_init()
 {
     // 1. NVS & BLE controller init
     esp_log_level_set(TAG, ESP_LOG_DEBUG);

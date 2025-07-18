@@ -4,6 +4,7 @@
   "idf.toolsPathWin": "C:\\Users\\krachamolla\\.espressif",
   "idf.pythonInstallPath": "C:\\Users\\krachamolla\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
   "idf.flashType": "UART",
+  "idf.portWin": "COM14",
   "files.associations": {
     "*.inc": "cpp",
     "cstdint": "c",
@@ -21,6 +22,10 @@
     "array": "c",
     "string": "c",
     "string_view": "c",
-    "span": "c"
+    "span": "c",
+    "esp_gatts_api.h": "c",
+    "esp_gatt_common_api.h": "c",
+    "compare": "c",
+    "ble.h": "c"
   }
 }

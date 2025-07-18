@@ -26,7 +26,7 @@
 #include "TWIA_TC.h"
 #include "TC_ref.h"
 #include "TWAI_OBD.h"
-
+#include "ble.h"
 
 //twai driver setup
 #define PING_PERIOD_MS          250
@@ -36,12 +36,25 @@
 #define RX_TASK_PRIO            8
 #define TX_TASK_PRIO            9
 #define TROUBLE_CODE_TSK_PRIO   10
-#define TX_GPIO_NUM             14
-#define RX_GPIO_NUM             15
+#define TX_GPIO_NUM             21
+#define RX_GPIO_NUM             22
 #define TAG                     "GateWayV2"
 
+/* ---------- logging helpers (common) ---------- */
+#define LOG_FRAME(dir, msg)                                                      \
+    ESP_LOGI(TAG,                                                                \
+        dir " id=0x%03X dlc=%d "                                                 \
+        "%02X %02X %02X %02X %02X %02X %02X %02X",                               \
+        (unsigned int)(msg).identifier, (msg).data_length_code,                  \
+        (msg).data[0], (msg).data[1], (msg).data[2], (msg).data[3],              \
+        (msg).data[4], (msg).data[5], (msg).data[6], (msg).data[7])
+
+#define LOG_BIN(label, val)  ESP_LOGI(TAG, label " = %d (0x%02X)", (val), (val))
+
+
+
 //twai config setup
-static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
+static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_125KBITS();
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
 
@@ -123,6 +136,11 @@ static void twai_receive_task()
     int next_dtc = 4;
     while (1) {
         twai_receive(&TC_received,portMAX_DELAY);
+        LOG_FRAME("RX ", TC_received);
+        ESP_LOGI(TAG,"RX id=0x%03X  dlc=%d  %02X %02X %02X %02X %02X %02X %02X %02X",
+            (unsigned int)TC_received.identifier, TC_received.data_length_code,
+            TC_received.data[0],TC_received.data[1],TC_received.data[2],TC_received.data[3],
+            TC_received.data[4],TC_received.data[5],TC_received.data[6],TC_received.data[7]);
         if (TC_received.identifier == ID_ECU || TC_received.identifier == ID_ECU_Second){
             current_service = mode_find(TC_received,current_service);
             if (current_service == STORED_DTCS_RESP ||  current_service == PENDING_DTCS_RESP  || current_service == PERM_DTCS_RESP){
@@ -142,6 +160,7 @@ static void twai_receive_task()
                     //Getting next frame 
                     ESP_LOGI(TAG,"First frame of multi frame received.");
                     tx_response = TX_FLOW_CONTROL_RESPONSE;
+                    
                     xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
                 }else if (TC_received.data[0] >= MULT_FRAME_CON){
                     ESP_LOGI(TAG, "Consecutive frame %i received.", TC_received.data[0] - MULT_FRAME_CON);
@@ -181,6 +200,7 @@ static void twai_receive_task()
                     ESP_LOGE(TAG,"Unknown frame received: %i", TC_received.data[0]);
                 }
             }else if (current_service == CLEAR_DTCS_GOOD_RESP){
+                BLE_notify_clear();
                 ESP_LOGI(TAG, "DTCs reset successfully.");
             }else if (current_service == CLEAR_DTCS_BAD_RESP){
                 ESP_LOGE(TAG,"FAILED to rest DTCs. Possibly unsupported or bad request.");
@@ -197,6 +217,7 @@ static void twai_transmit_task()
     twai_message_t TX_output;
     while (1) {
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
+        ESP_LOGI(TAG, "Q←TX dequeue action=%d", action);
         switch(action){
             case TX_REQUEST_STORED_DTCS:
                 TX_output = req_msg_create(STORED_DTCS_REQ);
@@ -205,22 +226,30 @@ static void twai_transmit_task()
                 break;
             case TX_REQUEST_PENDING_DTCS:
                 TX_output = req_msg_create(PENDING_DTCS_REQ);
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent pending dtcs request");
+                esp_err_t e = twai_transmit(&TX_output, portMAX_DELAY);
+                LOG_FRAME("TX ", TX_output);
+                ESP_LOGI(TAG,"TX id=0x%03X %s  %02X %02X %02X %02X %02X %02X %02X %02X",
+                    (unsigned int)TX_output.identifier,
+                    esp_err_to_name(e),
+                    TX_output.data[0],TX_output.data[1],TX_output.data[2],TX_output.data[3],
+                    TX_output.data[4],TX_output.data[5],TX_output.data[6],TX_output.data[7]);
                 break;
             case TX_REQUEST_PERM_DTCS:
                 TX_output = req_msg_create(PERM_DTCS_REQ);
                 twai_transmit(&TX_output, portMAX_DELAY);
+                LOG_FRAME("TX ", TX_output);
                 ESP_LOGI(TAG,"Sent perminate dtcs request");
                 break;
             case TX_FLOW_CONTROL_RESPONSE:
                 TX_output = TWAI_Response_FC;
                 twai_transmit(&TX_output, portMAX_DELAY);
+                LOG_FRAME("TX ", TX_output);
                 ESP_LOGI(TAG,"Sent flow control");
                 break;
             case SERV_CLEAR_DTCS:
-                TX_output = TWAI_Clear_DTCS;
+                TX_output = TWAI_Clear_DTCS; 
                 twai_transmit(&TX_output, portMAX_DELAY);
+                LOG_FRAME("TX ", TX_output);
                 ESP_LOGI(TAG,"Sent DTCS reset request");
                 break;
             default:
@@ -245,6 +274,7 @@ static void Get_DTCS()
                 break;
             case SERV_STORED_DTCS:
                 tx_action = TX_REQUEST_STORED_DTCS;
+                ESP_LOGI(TAG, "Q→TX enqueue action=%d", tx_action);
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
               
                 xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
@@ -252,16 +282,19 @@ static void Get_DTCS()
                     ESP_LOGI(TAG, "Trouble code 0x%02X 0x%02X", dtcs[i],dtcs[i + 1]);
                 }
                 TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                BLE_push_dtcs(dtcs, dtcs_bytes);
                 xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
                 break;
             case SERV_CLEAR_DTCS://UART file resets everything
                 dtcs = NULL;
                 dtcs_bytes = 0;
                 tx_action = SERV_CLEAR_DTCS;
+                ESP_LOGI(TAG, "Q→TX enqueue action=%d", tx_action);
                 xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
                 break;
             case SERV_PENDING_DTCS:
                 tx_action = TX_REQUEST_PENDING_DTCS;
+                ESP_LOGI(TAG, "Q→TX enqueue action=%d", tx_action);
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
 
                 xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
@@ -271,13 +304,14 @@ static void Get_DTCS()
                     count ++;
                 }
                 TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                BLE_push_dtcs(dtcs, dtcs_bytes);
                 xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
                 vTaskDelay(pdMS_TO_TICKS(250));
-                tx_action = SERV_CLEAR_DTCS;
-                xQueueSend(service_queue, &tx_action, portMAX_DELAY);
+                
                 break;
             case SERV_PERM_DTCS:
                 tx_action = TX_REQUEST_PERM_DTCS;
+                ESP_LOGI(TAG, "Q→TX enqueue action=%d", tx_action);
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
 
                 xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
@@ -287,6 +321,7 @@ static void Get_DTCS()
                     count ++;
                 }
                 TC_Code_set(dtcs,dtcs_bytes); //passing trouble_code to the main function
+                BLE_push_dtcs(dtcs, dtcs_bytes);
                 xSemaphoreGive(TC_Recieved_sem); //set this to pass tc to uart after first go
                 break;
             default:
@@ -297,9 +332,11 @@ static void Get_DTCS()
 
 //grabs tc from slave/trainer
 void twai_TC_Get(){
+    bool debug = false;
     //Create tasks, queues, and semaphores
     tx_task_queue = xQueueCreate(1, sizeof(tx_task_action_t));
     TC_Grabbed_sem = xSemaphoreCreateBinary();
+
 
     //Install TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
@@ -312,7 +349,10 @@ void twai_TC_Get(){
     xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(Get_DTCS, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
-    vTaskDelay(pdMS_TO_TICKS(50));
-    service_request_t serv = SERV_PENDING_DTCS;
-    xQueueSend(service_queue, &serv, portMAX_DELAY);
+    if(debug){
+        vTaskDelay(pdMS_TO_TICKS(50));
+        service_request_t serv = SERV_PENDING_DTCS;
+        xQueueSend(service_queue, &serv, portMAX_DELAY);
+    }
+    
 }

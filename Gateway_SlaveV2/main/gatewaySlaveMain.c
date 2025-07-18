@@ -23,9 +23,19 @@
 #define RX_TASK_PRIO                    8       //Receiving task priority
 #define TX_TASK_PRIO                    9       //Sending task priority
 #define CTRL_TSK_PRIO                   10      //Control task priority
-#define TX_GPIO_NUM                     14
-#define RX_GPIO_NUM                     15
+#define TX_GPIO_NUM                     21
+#define RX_GPIO_NUM                     22
 #define TAG                             "ECM/Trainer"
+
+#define LOG_FRAME(dir, msg)                                                      \
+    ESP_LOGI(TAG,                                                                \
+        dir " id=0x%03X dlc=%d "                                                 \
+        "%02X %02X %02X %02X %02X %02X %02X %02X",                               \
+        (unsigned int)(msg).identifier, (msg).data_length_code,                  \
+        (msg).data[0], (msg).data[1], (msg).data[2], (msg).data[3],              \
+        (msg).data[4], (msg).data[5], (msg).data[6], (msg).data[7])
+
+#define LOG_BIN(var)  ESP_LOGI(TAG, #var " = %d (0x%02X)", (var), (var))
 
 typedef enum {
     TX_REQUEST_TC,
@@ -40,7 +50,7 @@ typedef enum {
 } rx_task_action_t;
 
 static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
-static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS(); //change! to 125k - 1M was at 25k
+static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_125KBITS(); //change! to 125k - 1M was at 25k
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
 static uint8_t stored_dtcs[6] = {0x03,0x04,0x02,0x00,0x04,0x00};
@@ -87,7 +97,6 @@ static twai_message_t TWAI_setup(uint8_t response){
     int bytes = 0;
     int start = 0;
     int temp = 0; //only used for math of consecutive frames
-    int con_frame = 4;
     uint8_t *dtcs_ptr = NULL;
     //setting which set of dtcs to send, responseonse, and finding size of dtcs list
     if (response == STORED_DTCS_REQ){
@@ -111,7 +120,6 @@ static twai_message_t TWAI_setup(uint8_t response){
     //setting frame type
     if (bytes <= 6){ //single frame
         start = 2;
-        con_frame = 0;
         message.data[0] = bytes;
         message.data[1] = response;
     }else if (CF_num == 0){ //first multi frame 
@@ -121,7 +129,6 @@ static twai_message_t TWAI_setup(uint8_t response){
         message.data[7] = 0x00; //padding only for dtcs
         bytes = 4;
         start = 3;
-        con_frame = 0;
     }else{ //next multi frame 
         bytes = (bytes - (CF_num * 6 - 2) >= 6) ? 6 : bytes - (CF_num  * 6 - 2);
         start = 1;
@@ -140,6 +147,7 @@ static twai_message_t TWAI_setup(uint8_t response){
         ESP_LOGE(TAG, "Unknown response! %i", response);
     }
     CF_num ++;
+    LOG_BIN(CF_num);
     return message;
 }
 
@@ -148,39 +156,48 @@ static void twai_receive_task(void *arg)
     twai_message_t tx_action;
     twai_message_t rx_action;
     uint8_t mode_req;
-    uint8_t last_mode_req;
     int num_bytes;
     xSemaphoreTake(start_sem,portMAX_DELAY);
     while (1) {
         if (twai_receive(&rx_action,portMAX_DELAY) == ESP_OK){
+            LOG_FRAME("RX ", rx_action);
             num_bytes = rx_action.data[0]; //number of bytes
             if (num_bytes == 0x01 ||num_bytes == 0x02){ //************I don't know what request will have more than two or one bytes but for now this is how I'm checking */
                 mode_req = rx_action.data[1]; //mode request
             }else if (num_bytes == MULT_FRAME_FLOW){
                 mode_req = (uint8_t) MULT_FRAME_FLOW;
             }else{  
-                mode_req = 999999; //unsupported
+                mode_req = 0xFF; //unsupported
             }
 
             switch(mode_req){
                 case STORED_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
+                    LOG_BIN(CF_num);
                     tx_action = TWAI_setup(mode_req);
                     ESP_LOGI(TAG,"Received stored dtcs request");
+                    ESP_LOGI(TAG, "Q→TX   enqueue frame %02X (CF_num=%d)",
+                        tx_action.data[0], CF_num);
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
                 case CLEAR_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
+                    LOG_BIN(CF_num);
                     tx_action = TWAI_setup(mode_req);
+                    ESP_LOGI(TAG, "Q→TX   enqueue frame %02X (CF_num=%d)",
+                        tx_action.data[0], CF_num);
                     ESP_LOGI(TAG,"Received clear dtcs request %i", tx_action.data[1]);
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
                 case PENDING_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
+                    LOG_BIN(CF_num);
                     tx_action = TWAI_setup(mode_req);
+                    ESP_LOGI(TAG, "Q→TX   enqueue frame %02X (CF_num=%d)",
+                        tx_action.data[0], CF_num);
                     ESP_LOGI(TAG,"Received pending dtcs request");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     for (int i = 4; i < sizeof(pending_dtcs); i += 6){
@@ -191,7 +208,10 @@ static void twai_receive_task(void *arg)
                 case PERM_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
+                    LOG_BIN(CF_num);
                     tx_action = TWAI_setup(mode_req);;
+                    ESP_LOGI(TAG, "Q→TX   enqueue frame %02X (CF_num=%d)",
+                        tx_action.data[0], CF_num);
                     ESP_LOGI(TAG,"Received perminate dtcs request");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
@@ -206,6 +226,7 @@ static void twai_receive_task(void *arg)
                         break;
                     }
                     frames_Before_FC = rx_action.data[1];
+                    LOG_BIN(frames_Before_FC);
                     ESP_LOGI(TAG, "Flow control frame received, ready to continue.");
                     xSemaphoreGive(FC_Frame_sem);
                     break;
@@ -214,7 +235,6 @@ static void twai_receive_task(void *arg)
                     //error frame because unsuported frame recieved 
                     break;
             }
-            last_mode_req = mode_req;
         }
     }
 }
@@ -225,8 +245,10 @@ static void twai_transmit_task(void *arg)
     twai_message_t action;
     while (1) {
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
+        ESP_LOGI(TAG, "Q←TX   dequeue frame %02X", action.data[0]);
         ESP_LOGI(TAG,"Transmitting");
-        twai_transmit(&action, portMAX_DELAY);
+        esp_err_t e = twai_transmit(&action, portMAX_DELAY);
+        LOG_FRAME("TX ", action);
         if (action.data[0] == MULT_FRAME_FIRST){
             ESP_LOGI(TAG,"First frame of multi-frame message sent.");
             start = 3;
@@ -249,25 +271,22 @@ static void twai_transmit_task(void *arg)
 
 void app_main(void)
 {    
+    esp_log_level_set("twai", ESP_LOG_DEBUG);
     //Install TWAI driver, trigger tasks to start
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(TAG, "Driver installed");
-
-
     ESP_ERROR_CHECK(twai_start());
     ESP_LOGI(TAG,"TWAI started.");
 
-
-    //Create semaphores and tasks
     tx_task_queue = xQueueCreate(20, sizeof(twai_message_t));
-    TC_sent_sem  = xSemaphoreCreateBinary();
-    FC_Frame_sem = xSemaphoreCreateBinary();
-    start_sem = xSemaphoreCreateBinary();
-    xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
-   
+    TC_sent_sem   = xSemaphoreCreateBinary();
+    FC_Frame_sem  = xSemaphoreCreateBinary();
+    start_sem     = xSemaphoreCreateBinary();
+    xTaskCreatePinnedToCore(twai_receive_task,  "TWAI_rx",  4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx",  4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
+
+    // 2) Let the receive task actually start listening
     xSemaphoreGive(start_sem);
     xSemaphoreTake(TC_sent_sem, portMAX_DELAY);    //Wait for tasks to complete
-
-    UART_Start();
+   
 }
