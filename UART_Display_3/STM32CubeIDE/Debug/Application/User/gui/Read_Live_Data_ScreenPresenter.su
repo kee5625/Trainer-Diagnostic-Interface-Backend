@@ -1,4 +1,4 @@
-../../TouchGFX/gui/include/gui/model/ModelListener.hpp:15:18:virtual void ModelListener::updateTextBox(const char*)	0	static
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:16:18:virtual void ModelListener::set_dtcs(char**, int)	0	static
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:28:13:Read_Live_Data_ScreenPresenter::~Read_Live_Data_ScreenPresenter()	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.cpp:10:6:virtual void Read_Live_Data_ScreenPresenter::activate()	0	static
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:28:13:virtual Read_Live_Data_ScreenPresenter::~Read_Live_Data_ScreenPresenter()	8	static

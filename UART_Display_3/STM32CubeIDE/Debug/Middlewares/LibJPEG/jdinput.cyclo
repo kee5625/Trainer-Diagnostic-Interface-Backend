@@ -1,6 +1,9 @@
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:47:1:jpeg_core_output_dimensions	17
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:208:1:initial_setup	41
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:388:1:per_scan_setup	10
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:487:1:latch_quant_tables	6
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:521:1:start_input_pass	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:538:1:finish_input_pass	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:559:1:consume_markers	14
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:619:1:reset_input_controller	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:521:1:start_input_pass	33
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:559:1:consume_markers	46
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:47:1:jpeg_core_output_dimensions	18
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdinput.c:641:1:jinit_input_controller	1

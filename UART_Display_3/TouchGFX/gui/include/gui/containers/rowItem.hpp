@@ -1,9 +1,9 @@
 #ifndef ROWITEM_HPP
 #define ROWITEM_HPP
 
-#include <gui_generated/containers/rowItemBase.hpp>
+//#include <gui_generated/containers/rowItemBase.hpp>
 
-class rowItem : public rowItemBase
+class rowItem
 {
 public:
     rowItem();

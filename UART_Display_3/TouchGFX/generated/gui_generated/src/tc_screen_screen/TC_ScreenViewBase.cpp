@@ -7,7 +7,8 @@
 #include <texts/TextKeysAndLanguages.hpp>
 
 TC_ScreenViewBase::TC_ScreenViewBase() :
-    buttonCallback(this, &TC_ScreenViewBase::buttonCallbackHandler)
+    updateItemCallback(this, &TC_ScreenViewBase::updateItemCallbackHandler),
+    flexButtonCallback(this, &TC_ScreenViewBase::flexButtonCallbackHandler)
 {
     __background.setPosition(0, 0, 480, 272);
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
@@ -22,31 +23,84 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     ATech_Logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(ATech_Logo);
 
-    TC_Button.setXY(27, 166);
-    TC_Button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID));
-    TC_Button.setLabelText(touchgfx::TypedText(T___SINGLEUSE_JHO3));
-    TC_Button.setLabelColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    TC_Button.setLabelColorPressed(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    TC_Button.setAction(buttonCallback);
-    add(TC_Button);
+    DTCS_.setPosition(0, 59, 480, 213);
+    DTCS_.setHorizontal(false);
+    DTCS_.setCircular(false);
+    DTCS_.setEasingEquation(touchgfx::EasingEquations::backEaseOut);
+    DTCS_.setSwipeAcceleration(10);
+    DTCS_.setDragAcceleration(10);
+    DTCS_.setNumberOfItems(3);
+    DTCS_.setPadding(0, 0);
+    DTCS_.setSnapping(false);
+    DTCS_.setOvershootPercentage(75);
+    DTCS_.setDrawableSize(136, 0);
+    DTCS_.setDrawables(DTCS_ListItems, updateItemCallback);
+    DTCS_.setVisible(false);
+    add(DTCS_);
 
-    TC_TextBox.setPosition(0, 92, 480, 54);
-    TC_TextBox.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    TC_TextBox.setLinespacing(0);
-    Unicode::snprintf(TC_TextBoxBuffer, TC_TEXTBOX_SIZE, "%s", touchgfx::TypedText(T_TC_TEXTBOX_BUFFER).getText());
-    TC_TextBox.setWildcard(TC_TextBoxBuffer);
-    TC_TextBox.setTypedText(touchgfx::TypedText(T___SINGLEUSE_6VCK));
-    TC_TextBox.setVisible(false);
-    add(TC_TextBox);
+    Pending_dtcs_button.setBoxWithBorderPosition(0, 0, 152, 50);
+    Pending_dtcs_button.setBorderSize(2);
+    Pending_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
+    Pending_dtcs_button.setText(TypedText(T___SINGLEUSE_DYU8));
+    Pending_dtcs_button.setTextPosition(0, 12, 152, 50);
+    Pending_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Pending_dtcs_button.setPosition(169, 93, 152, 50);
+    add(Pending_dtcs_button);
 
-    Erase_TC_Button.setXY(272, 166);
-    Erase_TC_Button.setBitmaps(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID), touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_BUTTON_REGULAR_HEIGHT_50_SMALL_ROUND_DISABLED_ID));
-    Erase_TC_Button.setLabelText(touchgfx::TypedText(T_ERASE_TC_TEXT));
-    Erase_TC_Button.setLabelColor(touchgfx::Color::getColorFromRGB(247, 0, 0));
-    Erase_TC_Button.setLabelColorPressed(touchgfx::Color::getColorFromRGB(255, 0, 0));
-    Erase_TC_Button.setVisible(false);
-    Erase_TC_Button.setAction(buttonCallback);
-    add(Erase_TC_Button);
+    Stored_dtcs_button.setBoxWithBorderPosition(0, 0, 152, 50);
+    Stored_dtcs_button.setBorderSize(2);
+    Stored_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
+    Stored_dtcs_button.setText(TypedText(T___SINGLEUSE_81ML));
+    Stored_dtcs_button.setTextPosition(0, 12, 152, 50);
+    Stored_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Stored_dtcs_button.setAction(flexButtonCallback);
+    Stored_dtcs_button.setPosition(17, 93, 152, 50);
+    add(Stored_dtcs_button);
+
+    Perm_dtcs_button.setBoxWithBorderPosition(0, 0, 152, 50);
+    Perm_dtcs_button.setBorderSize(2);
+    Perm_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
+    Perm_dtcs_button.setText(TypedText(T___SINGLEUSE_LHAN));
+    Perm_dtcs_button.setTextPosition(0, 11, 152, 50);
+    Perm_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Perm_dtcs_button.setPosition(320, 93, 152, 50);
+    add(Perm_dtcs_button);
+
+    Clear_DTCS_button.setBoxWithBorderPosition(0, 0, 114, 59);
+    Clear_DTCS_button.setBorderSize(3);
+    Clear_DTCS_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
+    Clear_DTCS_button.setText(TypedText(T___SINGLEUSE_VJLJ));
+    Clear_DTCS_button.setTextPosition(0, 15, 114, 59);
+    Clear_DTCS_button.setTextColors(touchgfx::Color::getColorFromRGB(0, 0, 0), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Clear_DTCS_button.setVisible(false);
+    Clear_DTCS_button.setAction(flexButtonCallback);
+    Clear_DTCS_button.setPosition(245, 0, 114, 59);
+    add(Clear_DTCS_button);
+
+    back_button.setBoxWithBorderPosition(0, 0, 58, 59);
+    back_button.setBorderSize(2);
+    back_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    back_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_NAVIGATION_ARROW_BACK_55_55_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_NAVIGATION_ARROW_BACK_55_55_E8F6FB_SVG_ID));
+    back_button.setIconXY(2, 2);
+    back_button.setAction(flexButtonCallback);
+    back_button.setPosition(0, 0, 58, 59);
+    add(back_button);
+
+    loading_TB.setXY(182, 136);
+    loading_TB.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    loading_TB.setLinespacing(0);
+    loading_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_W4O2));
+    loading_TB.setVisible(false);
+    add(loading_TB);
+
+    LD_Button.setBoxWithBorderPosition(0, 0, 58, 59);
+    LD_Button.setBorderSize(2);
+    LD_Button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    LD_Button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID));
+    LD_Button.setIconXY(5, 4);
+    LD_Button.setAction(flexButtonCallback);
+    LD_Button.setPosition(58, 0, 58, 59);
+    add(LD_Button);
 }
 
 TC_ScreenViewBase::~TC_ScreenViewBase()
@@ -56,30 +110,70 @@ TC_ScreenViewBase::~TC_ScreenViewBase()
 
 void TC_ScreenViewBase::setupScreen()
 {
-
+    DTCS_.initialize();
+    for (int i = 0; i < DTCS_ListItems.getNumberOfDrawables(); i++)
+    {
+        DTCS_ListItems[i].initialize();
+    }
 }
 
-void TC_ScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
+void TC_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src)
 {
-    if (&src == &TC_Button)
-    {
-        //Show_TC
-        //When TC_Button clicked show TC_TextBox
-        //Show TC_TextBox
-        TC_TextBox.setVisible(true);
-        TC_TextBox.invalidate();
-    
-        //Show_Erase_TC_Button
-        //When Show_TC completed show Erase_TC_Button
-        //Show Erase_TC_Button
-        Erase_TC_Button.setVisible(true);
-        Erase_TC_Button.invalidate();
-    }
-    if (&src == &Erase_TC_Button)
+    if (&src == &Clear_DTCS_button)
     {
         //Erase_Change_Screen
-        //When Erase_TC_Button clicked change screen to Home_Screen
+        //When Clear_DTCS_button clicked change screen to Home_Screen
         //Go to Home_Screen with screen transition towards East
         application().gotoHome_ScreenScreenWipeTransitionEast();
+    }
+    if (&src == &Stored_dtcs_button)
+    {
+        //Show_DTCs_list
+        //When Stored_dtcs_button clicked show DTCS_
+        //Show DTCS_
+        DTCS_.setVisible(true);
+        DTCS_.invalidate();
+    
+        //hide_stored_button
+        //When Show_DTCs_list completed hide Stored_dtcs_button
+        //Hide Stored_dtcs_button
+        Stored_dtcs_button.setVisible(false);
+        Stored_dtcs_button.invalidate();
+    
+    
+        //hide_pending_button
+        //When Show_DTCs_list completed hide Pending_dtcs_button
+        //Hide Pending_dtcs_button
+        Pending_dtcs_button.setVisible(false);
+        Pending_dtcs_button.invalidate();
+    
+    
+        //hide_perm_button
+        //When Show_DTCs_list completed hide Perm_dtcs_button
+        //Hide Perm_dtcs_button
+        Perm_dtcs_button.setVisible(false);
+        Perm_dtcs_button.invalidate();
+    }
+    if (&src == &LD_Button)
+    {
+        //LD_change_screen
+        //When LD_Button clicked change screen to Read_Live_Data_Screen
+        //Go to Read_Live_Data_Screen with screen transition towards East
+        application().gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
+    }
+    if (&src == &back_button)
+    {
+        //Interaction1
+        //When back_button clicked change screen to Home_Screen
+        //Go to Home_Screen with screen transition towards East
+        application().gotoHome_ScreenScreenWipeTransitionEast();
+    }
+}
+
+void TC_ScreenViewBase::updateItemCallbackHandler(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex)
+{
+    if (items == &DTCS_ListItems)
+    {
+        DTCS_UpdateItem(DTCS_ListItems[containerIndex], itemIndex);
     }
 }

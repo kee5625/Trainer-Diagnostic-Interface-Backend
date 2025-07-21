@@ -82,33 +82,27 @@ static void uart_monitor_rx(){
                     for(;;){
                         // Data received; read from UART
                         uart_read_bytes(ECHO_UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
-                        ESP_LOGI(TAG,"%X", rx_data);
-                        switch ((rx_data >>3) & 0x0F){
-                            case UART_Start_cmd:
-                                ESP_LOGI(TAG,"Start command received.");
-                                break;
-                            case UART_Received_cmd:
-                                ESP_LOGI(TAG,"Received command received.");
-                                break;
-                            case UART_TC_Reset_cmd:
-                                break;
-                            case UART_end_of_cmd:
-                                break;
-                            case UART_Read_live_cmd:
-                                break;
-                            case UART_TC_Received_cmd:
-                                ESP_LOGI(TAG,"TC received cmd sent.");
-                                break;
-                            default:
-                                trouble_code[count] = (char)rx_data;
-                                count ++;
-                                if ( rx_data == '\n'){
-                                    trouble_code[5] = '\0';
-                                    ESP_LOGI(TAG,"Trouble Code: %s", trouble_code);
-                                    count = 0;
-                                    break;
-                                }
-                        }
+                        ESP_LOGI(TAG,"BYTE %i: 0x%02X",count, rx_data);
+                        count ++;
+                        // switch ((rx_data >>3) & 0x0F){
+                        //     case UART_Start_cmd:
+                        //         ESP_LOGI(TAG,"Start command received.");
+                        //         break;
+                        //     case UART_Received_cmd:
+                        //         ESP_LOGI(TAG,"Received command received.");
+                        //         break;
+                        //     case UART_TC_Reset_cmd:
+                        //         break;
+                        //     case UART_end_of_cmd:
+                        //         break;
+                        //     case UART_Read_live_cmd:
+                        //         break;
+                        //     case UART_TC_Received_cmd:
+                        //         ESP_LOGI(TAG,"TC received cmd sent.");
+                        //         break;
+                        //     default:
+                        //         ESP_LOGI(TAG,"BYTE: 0x%02X", rx_data);
+                        // }
                         break;
                     }
                     break;
@@ -127,10 +121,9 @@ static void new_tc_task()
     uart_config_t uart_config = {
         .baud_rate = ECHO_UART_BAUD_RATE,
         .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
+        .parity    = UART_PARITY_EVEN,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .source_clk = UART_SCLK_DEFAULT,
     };
     int intr_alloc_flags = 0;
 
@@ -138,7 +131,7 @@ static void new_tc_task()
     intr_alloc_flags = ESP_INTR_FLAG_IRAM;
 #endif
 
-    ESP_ERROR_CHECK(uart_driver_install(ECHO_UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 1, &uart_queue, intr_alloc_flags));
+    ESP_ERROR_CHECK(uart_driver_install(ECHO_UART_PORT_NUM, BUF_SIZE, BUF_SIZE, 10, &uart_queue, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(ECHO_UART_PORT_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(ECHO_UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
 

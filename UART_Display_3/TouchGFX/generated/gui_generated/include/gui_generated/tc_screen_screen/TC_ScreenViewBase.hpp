@@ -9,8 +9,12 @@
 #include <gui/tc_screen_screen/TC_ScreenPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
-#include <touchgfx/widgets/ButtonWithLabel.hpp>
-#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/containers/scrollers/ScrollList.hpp>
+#include <gui/containers/rowItem_dtcs.hpp>
+#include <touchgfx/containers/buttons/Buttons.hpp>
+#include <touchgfx/EasingEquations.hpp>
+#include <touchgfx/mixins/FadeAnimator.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 
 class TC_ScreenViewBase : public touchgfx::View<TC_ScreenPresenter>
 {
@@ -18,6 +22,11 @@ public:
     TC_ScreenViewBase();
     virtual ~TC_ScreenViewBase();
     virtual void setupScreen();
+
+    virtual void DTCS_UpdateItem(rowItem_dtcs& item, int16_t itemIndex)
+    {
+        // Override and implement this function in TC_Screen
+    }
 
 protected:
     FrontendApplication& application() {
@@ -30,27 +39,29 @@ protected:
     touchgfx::Box __background;
     touchgfx::Box gray_background;
     touchgfx::ScalableImage ATech_Logo;
-    touchgfx::ButtonWithLabel TC_Button;
-    touchgfx::TextAreaWithOneWildcard TC_TextBox;
-    touchgfx::ButtonWithLabel Erase_TC_Button;
-
-    /*
-     * Wildcard Buffers
-     */
-    static const uint16_t TC_TEXTBOX_SIZE = 10;
-    touchgfx::Unicode::UnicodeChar TC_TextBoxBuffer[TC_TEXTBOX_SIZE];
+    touchgfx::ScrollList DTCS_;
+    touchgfx::DrawableListItems<rowItem_dtcs, 3> DTCS_ListItems;
+    touchgfx::FadeAnimator< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  > Pending_dtcs_button;
+    touchgfx::FadeAnimator< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  > Stored_dtcs_button;
+    touchgfx::FadeAnimator< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  > Perm_dtcs_button;
+    touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  Clear_DTCS_button;
+    touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  back_button;
+    touchgfx::FadeAnimator< touchgfx::TextArea > loading_TB;
+    touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  LD_Button;
 
 private:
 
     /*
      * Callback Declarations
      */
-    touchgfx::Callback<TC_ScreenViewBase, const touchgfx::AbstractButton&> buttonCallback;
+    touchgfx::Callback<TC_ScreenViewBase, touchgfx::DrawableListItemsInterface*, int16_t, int16_t> updateItemCallback;
+    touchgfx::Callback<TC_ScreenViewBase, const touchgfx::AbstractButtonContainer&> flexButtonCallback;
 
     /*
      * Callback Handler Declarations
      */
-    void buttonCallbackHandler(const touchgfx::AbstractButton& src);
+    void updateItemCallbackHandler(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex);
+    void flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src);
 
 };
 

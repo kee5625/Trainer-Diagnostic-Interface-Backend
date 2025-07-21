@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "Gateway_Slave",
-    "project_version":    "3d9135e-dirty",
+    "project_version":    "63a997c-dirty",
     "project_path":       "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2",
     "idf_path":           "C:/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build",

@@ -113,7 +113,7 @@ static twai_message_t TWAI_setup(uint8_t response){
     if (bytes <= 6){ //single frame
         start = 2;
         con_frame = 0;
-        message.data[0] = bytes;
+        message.data[0] = bytes + 2;
         message.data[1] = response;
     }else if (CF_num == 0){ //first multi frame 
         message.data[0] = MULT_FRAME_FIRST;
@@ -234,6 +234,8 @@ static void twai_transmit_task(void *arg)
         }else if (action.data[0] >= MULT_FRAME_CON){
             ESP_LOGI(TAG,"Consecutive frame number %i sent.", action.data[0] - MULT_FRAME_CON);
             start = 1;
+        }else if (action.data[1] == CLEAR_DTCS_GOOD_RESP){
+            ESP_LOGI(TAG,"Sent good DTCs clear response.");
         }else if (action.data[0] <= SINGLE_FRAME){
             ESP_LOGI(TAG,"Single frame sent.");
             start = 2;
@@ -267,8 +269,6 @@ void app_main(void)
     xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
    
-    xSemaphoreGive(start_sem);
-    xSemaphoreTake(TC_sent_sem, portMAX_DELAY);    //Wait for tasks to complete
-
     UART_Start();
+    xSemaphoreGive(start_sem);
 }

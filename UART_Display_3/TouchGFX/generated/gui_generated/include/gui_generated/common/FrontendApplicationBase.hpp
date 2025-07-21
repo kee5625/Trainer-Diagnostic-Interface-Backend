@@ -31,6 +31,8 @@ public:
     // Read_Live_Data_Screen
     void gotoRead_Live_Data_ScreenScreenNoTransition();
 
+    void gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
+
 protected:
     touchgfx::Callback<FrontendApplicationBase> transitionCallback;
     FrontendHeap& frontendHeap;
@@ -46,6 +48,8 @@ protected:
 
     // Read_Live_Data_Screen
     void gotoRead_Live_Data_ScreenScreenNoTransitionImpl();
+
+    void gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl();
 };
 
 #endif // FRONTENDAPPLICATIONBASE_HPP

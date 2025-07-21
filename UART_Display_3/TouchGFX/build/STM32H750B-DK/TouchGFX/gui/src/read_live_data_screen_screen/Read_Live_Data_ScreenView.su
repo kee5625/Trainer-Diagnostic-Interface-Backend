@@ -1,9 +1,0 @@
-Screen.hpp:104:18:virtual void touchgfx::Screen::afterTransition()	0	static
-Screen.hpp:144:18:virtual void touchgfx::Screen::handleTickEvent()	0	static
-Screen.hpp:154:18:virtual void touchgfx::Screen::handleKeyEvent(uint8_t)	0	static
-Read_Live_Data_ScreenViewBase.hpp:22:18:virtual void Read_Live_Data_ScreenViewBase::scrollList1UpdateItem(rowItem&, int16_t)	0	static
-Read_Live_Data_ScreenView.cpp:13:6:virtual void Read_Live_Data_ScreenView::tearDownScreen()	0	static
-Read_Live_Data_ScreenView.hpp:11:13:Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	8	static
-Read_Live_Data_ScreenView.hpp:11:13:virtual Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	8	static
-Read_Live_Data_ScreenView.cpp:3:1:Read_Live_Data_ScreenView::Read_Live_Data_ScreenView()	8	static
-Read_Live_Data_ScreenView.cpp:8:6:virtual void Read_Live_Data_ScreenView::setupScreen()	0	static

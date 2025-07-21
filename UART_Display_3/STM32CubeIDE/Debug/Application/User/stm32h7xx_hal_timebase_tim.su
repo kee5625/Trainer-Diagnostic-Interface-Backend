@@ -1,3 +1,3 @@
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:42:19:HAL_InitTick	56	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:114:6:HAL_SuspendTick	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:126:6:HAL_ResumeTick	0	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:42:19:HAL_InitTick	72	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:114:6:HAL_SuspendTick	4	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Core/Src/stm32h7xx_hal_timebase_tim.c:126:6:HAL_ResumeTick	4	static

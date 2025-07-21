@@ -197,21 +197,6 @@
               "Green": 255,
               "Blue": 255
             }
-          },
-          {
-            "Type": "TextArea",
-            "Name": "TC_not_loaded",
-            "X": 169,
-            "Y": 94,
-            "Width": 143,
-            "Height": 24,
-            "Visible": false,
-            "TextId": "__SingleUse_KXSK",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 255
-            },
-            "AutoSize": true
           }
         ],
         "Interactions": [
@@ -266,92 +251,414 @@
             "ScalingAlgorithm": "Nearest-neighbor"
           },
           {
-            "Type": "ButtonWithLabel",
-            "Name": "TC_Button",
-            "X": 27,
-            "Y": 166,
-            "Width": 175,
+            "Type": "ScrollList",
+            "Name": "DTCS_",
+            "Y": 59,
+            "Width": 480,
+            "Height": 213,
+            "Visible": false,
+            "ItemTemplateName": "rowItem_dtcs",
+            "NumberofItems": 3,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Pending_dtcs_button",
+            "X": 169,
+            "Y": 93,
+            "Width": 152,
             "Height": 50,
-            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
-            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
-            "TextId": "__SingleUse_JHO3",
-            "ReleasedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
             },
-            "PressedColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 12,
+                "TextId": "__SingleUse_DYU8",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                },
+                "ColorPressed": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Stored_dtcs_button",
+            "X": 17,
+            "Y": 93,
+            "Width": 152,
+            "Height": 50,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
             },
-            "TextRotation": "0"
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 12,
+                "TextId": "__SingleUse_81ML",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                },
+                "ColorPressed": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Perm_dtcs_button",
+            "X": 320,
+            "Y": 93,
+            "Width": 152,
+            "Height": 50,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 11,
+                "TextId": "__SingleUse_LHAN",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                },
+                "ColorPressed": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Clear_DTCS_button",
+            "X": 245,
+            "Width": 114,
+            "Height": 59,
+            "Visible": false,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 15,
+                "TextId": "__SingleUse_VJLJ",
+                "TextRotation": "0",
+                "ColorPressed": {
+                  "Red": 10,
+                  "Green": 10,
+                  "Blue": 10
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 114,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "back_button",
+            "Width": 58,
+            "Height": 59,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 2,
+                "Y": 2,
+                "IconReleased": "__generated\\icon_theme_images_navigation_arrow_back_55_55_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_navigation_arrow_back_55_55_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 58,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
           },
           {
             "Type": "TextArea",
-            "Name": "TC_TextBox",
-            "Y": 92,
-            "Width": 480,
-            "Height": 54,
+            "Name": "loading_TB",
+            "X": 182,
+            "Y": 136,
+            "Width": 126,
+            "Height": 24,
             "Visible": false,
-            "LockPosition": true,
-            "TextId": "__SingleUse_6VCK",
+            "TextId": "__SingleUse_W4O2",
             "TextRotation": "0",
-            "Wildcard1": {
-              "TextId": "TC_TextBox_Buffer",
-              "UseBuffer": true,
-              "BufferSize": 10
-            }
+            "AutoSize": true,
+            "Fadeable": true
           },
           {
-            "Type": "ButtonWithLabel",
-            "Name": "Erase_TC_Button",
-            "X": 272,
-            "Y": 166,
-            "Width": 175,
-            "Height": 50,
-            "Visible": false,
-            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
-            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_small_round_disabled.png",
-            "TextId": "Erase_TC_Text",
-            "ReleasedColor": {
-              "Red": 247
+            "Type": "FlexButton",
+            "Name": "LD_Button",
+            "X": 58,
+            "Width": 58,
+            "Height": 59,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
             },
-            "PressedColor": {
-              "Red": 255
-            },
-            "TextRotation": "0"
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 5,
+                "Y": 4,
+                "IconReleased": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 58,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
           }
         ],
         "Interactions": [
           {
-            "InteractionName": "Show_TC",
-            "HasCompletedTrigger": true,
-            "Trigger": {
-              "Type": "TriggerClicked",
-              "TriggerComponent": "TC_Button"
-            },
-            "Action": {
-              "Type": "ActionShow",
-              "ActionComponent": "TC_TextBox"
-            }
-          },
-          {
-            "InteractionName": "Show_Erase_TC_Button",
-            "Trigger": {
-              "Type": "TriggerInteractionCompleted",
-              "InteractionToTriggerOn": "Show_TC"
-            },
-            "Action": {
-              "Type": "ActionShow",
-              "ActionComponent": "Erase_TC_Button"
-            }
-          },
-          {
             "InteractionName": "Erase_Change_Screen",
             "Trigger": {
               "Type": "TriggerClicked",
-              "TriggerComponent": "Erase_TC_Button"
+              "TriggerComponent": "Clear_DTCS_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          },
+          {
+            "InteractionName": "Show_DTCs_list",
+            "HasCompletedTrigger": true,
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Stored_dtcs_button"
+            },
+            "Action": {
+              "Type": "ActionShow",
+              "ActionComponent": "DTCS_"
+            }
+          },
+          {
+            "InteractionName": "hide_stored_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Stored_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "hide_pending_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Pending_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "hide_perm_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Perm_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "LD_change_screen",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "LD_Button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Read_Live_Data_Screen"
+            }
+          },
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "back_button"
             },
             "Action": {
               "Type": "ActionGotoScreen",
@@ -391,7 +698,7 @@
             "Y": 59,
             "Width": 480,
             "Height": 213,
-            "ItemTemplateName": "rowItem",
+            "ItemTemplateName": "rowItem_RLD",
             "NumberofItems": 59,
             "Easing": "Back",
             "EasingOption": "Out",
@@ -402,23 +709,22 @@
           {
             "Type": "FlexButton",
             "Name": "home_button",
-            "Width": 48,
-            "Height": 35,
+            "Width": 62,
+            "Height": 59,
             "ButtonTrigger": {
               "Type": "ClickButtonTrigger"
             },
             "ButtonStyles": [
               {
                 "Type": "IconButtonStyle",
-                "X": 8,
-                "Y": 1,
-                "IconReleased": "__generated\\icon_theme_images_action_home_filled_33_33_E8F6FB.svg.png",
-                "IconPressed": "__generated\\icon_theme_images_action_home_filled_33_33_E8F6FB.svg.png"
+                "X": 2,
+                "IconReleased": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png"
               },
               {
                 "Type": "BoxWithBorderButtonStyle",
-                "Width": 48,
-                "Height": 35,
+                "Width": 62,
+                "Height": 59,
                 "LockToFlexButtonSize": true,
                 "BorderSize": 3,
                 "ColorReleased": {
@@ -461,7 +767,7 @@
     ],
     "CustomContainerDefinitions": [
       {
-        "Name": "rowItem",
+        "Name": "rowItem_RLD",
         "Width": 480,
         "Height": 36,
         "Components": [
@@ -543,6 +849,42 @@
                 }
               }
             ]
+          }
+        ],
+        "Interactions": []
+      },
+      {
+        "Name": "rowItem_dtcs",
+        "Width": 480,
+        "Height": 136,
+        "Components": [
+          {
+            "Type": "TextArea",
+            "Name": "dtcs_TB",
+            "X": 44,
+            "Width": 183,
+            "Height": 50,
+            "TextId": "__SingleUse_FNEY",
+            "TextRotation": "0",
+            "Wildcard1": {
+              "TextId": "__SingleUse_40UU",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "dtcs_Desc_TB",
+            "Y": 50,
+            "Width": 480,
+            "Height": 86,
+            "TextId": "__SingleUse_WCDW",
+            "TextRotation": "0",
+            "Wildcard1": {
+              "TextId": "__SingleUse_LYMN",
+              "UseBuffer": true,
+              "BufferSize": 64
+            }
           }
         ],
         "Interactions": []

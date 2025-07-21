@@ -16,12 +16,3 @@ void Home_ScreenPresenter::deactivate()
 {
 
 }
-
-bool Home_ScreenPresenter::TC_Ready(){
-	return model->TC_Status();
-}
-
-void Home_ScreenPresenter::updateTextBox(const char * newText){
-	//does nothing no tc textbox in this screen
-	//funciton is usless because there is no text box that needs updated on this screen
-}

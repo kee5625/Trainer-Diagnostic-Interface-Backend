@@ -1,9 +1,7 @@
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:16:18:virtual void ModelListener::set_dtcs(char**, int)	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:Home_ScreenPresenter::~Home_ScreenPresenter()	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp:10:6:virtual void Home_ScreenPresenter::activate()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp:24:6:virtual void Home_ScreenPresenter::updateTextBox(const char*)	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:virtual Home_ScreenPresenter::~Home_ScreenPresenter()	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:virtual void* Home_ScreenPresenter::_ZThn4_N20Home_ScreenPresenterD1Ev()	1
-../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:30:10:virtual void Home_ScreenPresenter::_ZThn4_N20Home_ScreenPresenter13updateTextBoxEPKc(const char*)	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:virtual void* Home_ScreenPresenter::_ZThn4_N20Home_ScreenPresenterD0Ev()	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp:4:1:Home_ScreenPresenter::Home_ScreenPresenter(Home_ScreenView&)	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp:20:6:bool Home_ScreenPresenter::TC_Ready()	1

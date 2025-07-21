@@ -8,9 +8,11 @@ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:501:19:HAL_UARTEx_DisableStopMode	3
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:520:19:HAL_UARTEx_EnableFifoMode	2
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:561:19:HAL_UARTEx_DisableFifoMode	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:607:19:HAL_UARTEx_SetTxFifoThreshold	3
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:656:19:HAL_UARTEx_SetRxFifoThreshold	3
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:713:19:HAL_UARTEx_ReceiveToIdle	24
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:836:19:HAL_UARTEx_ReceiveToIdle_IT	7
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:893:19:HAL_UARTEx_ReceiveToIdle_DMA	8
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:607:19:HAL_UARTEx_SetTxFifoThreshold	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:656:19:HAL_UARTEx_SetRxFifoThreshold	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:713:19:HAL_UARTEx_ReceiveToIdle	20
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:836:19:HAL_UARTEx_ReceiveToIdle_IT	6
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:893:19:HAL_UARTEx_ReceiveToIdle_DMA	7
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:961:29:HAL_UARTEx_GetRxEventType	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:985:13:UARTEx_Wakeup_AddressConfig	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c:1003:13:UARTEx_SetNbDataToProcess	2

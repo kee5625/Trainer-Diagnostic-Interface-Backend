@@ -17,6 +17,7 @@ typedef enum {
     TX_REQUEST_STORED_DTCS,
     TX_REQUEST_PENDING_DTCS,
     TX_REQUEST_PERM_DTCS,
+    TX_RESET_DTCs,
     TX_FLOW_CONTROL_RESPONSE,
     TX_TASK_EXIT,
 } tx_task_action_t;

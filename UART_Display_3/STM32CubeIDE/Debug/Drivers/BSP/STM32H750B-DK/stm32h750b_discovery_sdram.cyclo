@@ -1,5 +1,7 @@
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:110:9:BSP_SDRAM_Init	4
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:165:9:BSP_SDRAM_DeInit	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:192:26:MX_SDRAM_BANK2_Init	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:110:9:BSP_SDRAM_Init	3
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:306:9:BSP_SDRAM_SendCmd	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:192:26:MX_SDRAM_BANK2_Init	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:306:9:BSP_SDRAM_SendCmd	3
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:331:6:BSP_SDRAM_IRQHandler	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:348:13:SDRAM_MspInit	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c:441:13:SDRAM_MspDeInit	1

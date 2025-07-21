@@ -31,7 +31,10 @@
     <ClCompile Include="..\..\gui\src\read_live_data_screen_screen\Read_Live_Data_ScreenView.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.cpp"/>
     <ClCompile Include="..\..\gui\src\containers\rowItem.cpp"/>
-    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItemBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\containers\rowItem_dtcs.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_dtcsBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\containers\rowItem_RLD.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_RLDBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xml"/>
@@ -192,7 +195,10 @@
     <ClInclude Include="..\..\gui\include\gui\read_live_data_screen_screen\Read_Live_Data_ScreenView.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\read_live_data_screen_screen\Read_Live_Data_ScreenViewBase.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\containers\rowItem.hpp"/>
-    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItemBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\containers\rowItem_dtcs.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_dtcsBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\containers\rowItem_RLD.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_RLDBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

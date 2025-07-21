@@ -58,4 +58,4 @@ Box.hpp:33:5:touchgfx::Box::Box()	8	static
 TextArea.hpp:43:5:touchgfx::TextArea::TextArea()	8	static
 IconButtonStyle.hpp:47:5:touchgfx::IconButtonStyle<T>::IconButtonStyle() [with T = touchgfx::TextButtonStyle<touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger> >]	32	static
 TextButtonStyle.hpp:67:10:void touchgfx::TextButtonStyle<T>::setText(touchgfx::TypedText) [with T = touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>]	40	static
-Home_ScreenViewBase.cpp:9:1:Home_ScreenViewBase::Home_ScreenViewBase()	104	static
+Home_ScreenViewBase.cpp:9:1:Home_ScreenViewBase::Home_ScreenViewBase()	112	static

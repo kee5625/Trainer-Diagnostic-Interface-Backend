@@ -2,6 +2,8 @@
 #define MODEL_HPP
 
 #include <gui/model/ModelListener.hpp>
+#include <vector>
+#include "UART_COMMS.hpp"
 
 class Model
 {
@@ -15,16 +17,17 @@ public:
 
     void tick();
 
-    void TC_Set(const char* str);
-    void TC_Give();
-    bool TC_Status();
-    void reset_TC();
-
+    void dtcs_Set(char** str, int dtcs_size);
+    bool Get_DTCs_Status();
+    void Model_Set_Service(uart_comms_t ser);
+    int dtcs_num_get();
+    char** dtcs_get();
 
 protected:
     ModelListener* modelListener;
-    const char * data;
-    bool TC_Ready = false;
+    char ** dtcs_list_model;
+    int dtcs_num_model = 0;
+    bool DTCs_Ready = false;
 };
 
 #endif // MODEL_HPP

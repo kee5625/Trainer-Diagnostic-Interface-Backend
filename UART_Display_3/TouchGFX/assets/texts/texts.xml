@@ -6,6 +6,33 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
+      <Text Id="__SingleUse_W4O2" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Loading DTCs...</Translation>
+      </Text>
+      <Text Id="__SingleUse_40UU" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">DTCS!</Translation>
+      </Text>
+      <Text Id="__SingleUse_LYMN" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Diagnostic Trouble Code description and/or potential cause.</Translation>
+      </Text>
+      <Text Id="__SingleUse_WCDW" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">&lt;%s&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_FNEY" Alignment="Left" TypographyId="larger">
+        <Translation Language="GB">&lt;%s&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_LHAN" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Perminate Codes</Translation>
+      </Text>
+      <Text Id="__SingleUse_81ML" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Stored Codes</Translation>
+      </Text>
+      <Text Id="__SingleUse_VJLJ" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Clear Codes</Translation>
+      </Text>
+      <Text Id="__SingleUse_DYU8" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">Pending Codes</Translation>
+      </Text>
       <Text Id="__SingleUse_R4U0" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">Value&#10;</Translation>
       </Text>
@@ -27,17 +54,8 @@
       <Text Id="__SingleUse_VXGB" Alignment="Center" TypographyId="smller">
         <Translation Language="GB">Live Data</Translation>
       </Text>
-      <Text Id="__SingleUse_KXSK" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">No trouble code!</Translation>
-      </Text>
       <Text Id="Erase_TC_Text" Alignment="Center" TypographyId="Default">
-        <Translation Language="GB">Erase Code</Translation>
-      </Text>
-      <Text Id="__SingleUse_JHO3" Alignment="Center" TypographyId="Default">
-        <Translation Language="GB">Trouble Code</Translation>
-      </Text>
-      <Text Id="__SingleUse_6VCK" Alignment="Center" TypographyId="Default">
-        <Translation Language="GB"> Trouble Code: &lt;%s&gt;</Translation>
+        <Translation Language="GB">Erase Codes</Translation>
       </Text>
       <Text Id="TC_TextBox_Buffer" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">xxxxx</Translation>
@@ -47,7 +65,7 @@
   <Typographies>
     <Typography Id="Default" Font="calibri.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
     <Typography Id="smller" Font="verdana.ttf" Size="15" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
-    <Typography Id="larger" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="larger" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
     <Typography Id="belowNormal" Font="verdana.ttf" Size="17" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
   </Typographies>
 </TextDatabase>

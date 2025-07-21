@@ -36,13 +36,13 @@ Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase() :
     RLD_Options.setDrawables(RLD_OptionsListItems, updateItemCallback);
     add(RLD_Options);
 
-    home_button.setBoxWithBorderPosition(0, 0, 48, 35);
+    home_button.setBoxWithBorderPosition(0, 0, 62, 59);
     home_button.setBorderSize(3);
     home_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
-    home_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_ACTION_HOME_FILLED_33_33_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_ACTION_HOME_FILLED_33_33_E8F6FB_SVG_ID));
-    home_button.setIconXY(8, 1);
+    home_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_ACTION_HOME_FILLED_60_60_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_ACTION_HOME_FILLED_60_60_E8F6FB_SVG_ID));
+    home_button.setIconXY(2, 0);
     home_button.setAction(flexButtonCallback);
-    home_button.setPosition(0, 0, 48, 35);
+    home_button.setPosition(0, 0, 62, 59);
     add(home_button);
 }
 

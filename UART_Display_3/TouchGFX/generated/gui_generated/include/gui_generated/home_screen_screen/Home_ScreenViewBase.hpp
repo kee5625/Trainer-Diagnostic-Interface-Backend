@@ -39,7 +39,6 @@ protected:
     uint8_t qrBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
     uint8_t qrScratchBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
     touchgfx::QRCode qrCode1;
-    touchgfx::TextArea TC_not_loaded;
 
 private:
 

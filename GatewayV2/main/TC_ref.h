@@ -11,7 +11,7 @@
 #define tc_size 5
 
 typedef enum {
-    SERV_CUR_DATA       = 1,
+    SERV_LD_DATA       = 1,
     SERV_FREEZE_DATA    = 2,
     SERV_STORED_DTCS    = 3,
     SERV_CLEAR_DTCS     = 4,
@@ -27,12 +27,14 @@ typedef enum {
 
 extern SemaphoreHandle_t TC_Recieved_sem;
 extern SemaphoreHandle_t TWAI_GRAB_TC_sem;
+extern SemaphoreHandle_t DTCS_Loaded_sem;
 extern QueueHandle_t service_queue;
 
 void TC_Code_set(uint8_t *codes, int num_codes);
 void DTCS_reset();
-uint8_t *get_dtcs_flat();
-uint8_t get_num_dtcs();
+void set_serv(service_request_t req);
+uint8_t *get_dtcs();
+uint8_t get_dtcs_bytes();
 
 
 #endif

@@ -1,8 +1,9 @@
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:31:1:jpeg_CreateDecompress	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:31:1:jpeg_CreateDecompress	5
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:92:1:jpeg_destroy_decompress	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:104:1:jpeg_abort_decompress	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:242:1:jpeg_read_header	25
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:288:1:jpeg_consume_input	21
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:335:1:jpeg_input_complete	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:350:1:jpeg_has_multiple_scans	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:370:1:jpeg_finish_decompress	8
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:115:1:default_decompress_parms	18
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:242:1:jpeg_read_header	8
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:288:1:jpeg_consume_input	6
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:335:1:jpeg_input_complete	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:350:1:jpeg_has_multiple_scans	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdapimin.c:370:1:jpeg_finish_decompress	9

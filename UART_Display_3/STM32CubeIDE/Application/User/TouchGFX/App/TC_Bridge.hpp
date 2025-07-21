@@ -8,16 +8,16 @@
 #ifndef APPLICATION_USER_TOUCHGFX_APP_TC_BRIDGE_HPP_
 #define APPLICATION_USER_TOUCHGFX_APP_TC_BRIDGE_HPP_
 
-
+#include "UART_COMMS.hpp"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-void TC_GUI_Pass(const char* data); // Function to call from C
-void Logic_Reset_TC();
-void UART_REST_TC();
+void DTCs_GUI_Pass(const char* data, int size); // Function to call from C
+void UART_REST_DTCs();
+void UART_Set_Service(uart_comms_t ser); //sets service for UART
 
 #ifdef __cplusplus
 }

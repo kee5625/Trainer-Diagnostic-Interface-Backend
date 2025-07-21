@@ -1,4 +1,6 @@
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:78:1:start_pass_prep	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:128:1:pre_process_data	18
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:197:1:pre_process_context	16
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:318:1:jinit_c_prep_controller	14
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:106:1:expand_bottom_edge	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:128:1:pre_process_data	10
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:197:1:pre_process_context	12
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:269:1:create_context_buffer	3
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jcprepct.c:318:1:jinit_c_prep_controller	4

@@ -27,10 +27,6 @@ public:
 
     virtual ~Home_ScreenPresenter() {}
 
-    void updateTextBox(const char * newText);
-
-    bool TC_Ready();
-
 private:
     Home_ScreenPresenter();
 

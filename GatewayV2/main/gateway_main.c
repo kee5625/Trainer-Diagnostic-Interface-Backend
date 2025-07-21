@@ -24,7 +24,6 @@
 #include "time.h"
 #include "sys/time.h"
 
-#include "C:\ESP-IDF\Gateway_Slave\main\trouble_codes.c"
 #include "BT_SPP_TC.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
@@ -34,43 +33,60 @@
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
 
 
-static uint8_t (*dtcs)[2];
-static uint8_t num_dtcs;
+static uint8_t *dtcs;
+static uint8_t dtcs_bytes;
 SemaphoreHandle_t TC_Recieved_sem;
 SemaphoreHandle_t TWAI_GRAB_TC_sem;
+SemaphoreHandle_t DTCS_Loaded_sem;
 QueueHandle_t service_queue;
 
 
 void DTCS_reset(){
     dtcs = NULL;
-    num_dtcs = 0;
+    dtcs_bytes = 0;
 }
 
-void TC_Code_set(uint8_t *codes, int num_codes){
-    dtcs = malloc(num_codes);
-    num_dtcs = num_codes;
+void TC_Code_set(uint8_t *codes, int codes_bytes){
+    dtcs = pvPortMalloc(codes_bytes);
+    dtcs_bytes = codes_bytes;
     if (codes != NULL){
-        memcpy(dtcs,codes,num_codes);
+        memcpy(dtcs,codes,codes_bytes);
     }else{
         dtcs = NULL;
+        dtcs_bytes = 0;
     }
 }
 
-uint8_t *get_dtcs_flat(){ //Made to have 1 D pointer to all values that can send through UART
+void set_serv(service_request_t req){
+    
+    switch(req){
+        case SERV_LD_DATA:
+        case SERV_FREEZE_DATA:
+        case SERV_STORED_DTCS:
+        case SERV_CLEAR_DTCS:
+            DTCS_reset();
+        case SERV_PENDING_DTCS:
+        case SERV_PERM_DTCS:
+            xQueueSend(service_queue, &req, portMAX_DELAY);
+            xSemaphoreTake(DTCS_Loaded_sem, portMAX_DELAY);
+            
+        default:
+            break;
+    }
+}
+
+uint8_t *get_dtcs(){ //Made to have 1 D pointer to all values that can send through UART
     return (uint8_t *)dtcs;
 }
 
-uint8_t get_num_dtcs(){
-    return num_dtcs;
+uint8_t get_dtcs_bytes(){
+    return dtcs_bytes;
 }
 
 void app_main(void)
 {  
     service_queue = xQueueCreate(3, sizeof(service_request_t));
-    TWAI_GRAB_TC_sem = xSemaphoreCreateBinary();
-    TC_Recieved_sem = xSemaphoreCreateBinary();
+    DTCS_Loaded_sem = xSemaphoreCreateBinary();
     twai_TC_Get();
-    xSemaphoreTake(TC_Recieved_sem, portMAX_DELAY);
-    //start and running UART to send trouble code over uart
     UART_INIT();
 }

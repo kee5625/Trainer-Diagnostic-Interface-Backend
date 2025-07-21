@@ -66,13 +66,6 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     qrCode1.setScale(5);
     qrCode1.convertStringToQRCode("https://www.atechtraining.com/products/automobile/power-seat-system");
     add(qrCode1);
-
-    TC_not_loaded.setXY(169, 94);
-    TC_not_loaded.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
-    TC_not_loaded.setLinespacing(0);
-    TC_not_loaded.setTypedText(touchgfx::TypedText(T___SINGLEUSE_KXSK));
-    TC_not_loaded.setVisible(false);
-    add(TC_not_loaded);
 }
 
 Home_ScreenViewBase::~Home_ScreenViewBase()

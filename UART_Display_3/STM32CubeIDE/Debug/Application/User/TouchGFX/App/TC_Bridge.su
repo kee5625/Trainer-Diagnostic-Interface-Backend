@@ -1,3 +1,2 @@
-../Application/User/TouchGFX/App/TC_Bridge.cpp:14:6:void setModelInstance(Model*)	0	static
-../Application/User/TouchGFX/App/TC_Bridge.cpp:19:6:void TC_GUI_Pass(const char*)	0	static
-../Application/User/TouchGFX/App/TC_Bridge.cpp:27:6:void Logic_Reset_TC()	0	static
+../Application/User/TouchGFX/App/TC_Bridge.cpp:20:6:void setModelInstance(Model*)	0	static
+../Application/User/TouchGFX/App/TC_Bridge.cpp:26:6:void DTCs_GUI_Pass(const char*, int)	40	static

@@ -84,3 +84,14 @@ void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransitionImpl()
 {
     touchgfx::makeTransition<Read_Live_Data_ScreenView, Read_Live_Data_ScreenPresenter, touchgfx::NoTransition, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }
+
+void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEast()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl()
+{
+    touchgfx::makeTransition<Read_Live_Data_ScreenView, Read_Live_Data_ScreenPresenter, touchgfx::WipeTransition<EAST>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}

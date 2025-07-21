@@ -62,6 +62,6 @@ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_re
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:994:10:ft5336_g_mode	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1005:10:ft5336_pwr_mode	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1016:10:ft5336_firm_id	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1027:10:ft5336_chip_id	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1027:10:ft5336_chip_id	2
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1048:10:ft5336_release_code_id	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/Components/ft5336/ft5336_reg.c:1059:10:ft5336_state	1

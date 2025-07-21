@@ -7,7 +7,6 @@ C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Hom
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:357:8:virtual touchgfx::Callback<Home_ScreenView, const touchgfx::AbstractButtonContainer&>::~Callback()	8	static
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenView.hpp:12:13:Home_ScreenView::~Home_ScreenView()	8	static
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenView.hpp:12:13:virtual Home_ScreenView::~Home_ScreenView()	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp:24:6:void Home_ScreenView::read_dtcs_button_pressed(const touchgfx::AbstractButtonContainer&)	16	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp:5:1:Home_ScreenView::Home_ScreenView()	8	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp:9:6:virtual void Home_ScreenView::setupScreen()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp:21:6:virtual void Home_ScreenView::handleTickEvent()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp:32:6:void Home_ScreenView::read_tc_button_pressed(const touchgfx::AbstractButtonContainer&)	16	static
