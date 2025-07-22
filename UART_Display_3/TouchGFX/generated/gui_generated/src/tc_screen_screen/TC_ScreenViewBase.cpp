@@ -14,9 +14,9 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    gray_background.setPosition(0, 0, 480, 272);
-    gray_background.setColor(touchgfx::Color::getColorFromRGB(145, 144, 144));
-    add(gray_background);
+    white_background.setPosition(0, 0, 480, 272);
+    white_background.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    add(white_background);
 
     ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
     ATech_Logo.setPosition(359, 0, 121, 59);
@@ -68,7 +68,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
 
     Clear_DTCS_button.setBoxWithBorderPosition(0, 0, 114, 59);
     Clear_DTCS_button.setBorderSize(3);
-    Clear_DTCS_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
+    Clear_DTCS_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(0, 51, 102));
     Clear_DTCS_button.setText(TypedText(T___SINGLEUSE_VJLJ));
     Clear_DTCS_button.setTextPosition(0, 15, 114, 59);
     Clear_DTCS_button.setTextColors(touchgfx::Color::getColorFromRGB(0, 0, 0), touchgfx::Color::getColorFromRGB(10, 10, 10));
@@ -79,23 +79,26 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
 
     back_button.setBoxWithBorderPosition(0, 0, 58, 59);
     back_button.setBorderSize(2);
-    back_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    back_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
     back_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_NAVIGATION_ARROW_BACK_55_55_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_NAVIGATION_ARROW_BACK_55_55_E8F6FB_SVG_ID));
     back_button.setIconXY(2, 2);
     back_button.setAction(flexButtonCallback);
     back_button.setPosition(0, 0, 58, 59);
     add(back_button);
 
-    loading_TB.setXY(182, 136);
-    loading_TB.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    loading_TB.setLinespacing(0);
-    loading_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_W4O2));
-    loading_TB.setVisible(false);
-    add(loading_TB);
+    status_TB.setXY(182, 136);
+    status_TB.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    status_TB.setLinespacing(0);
+    Unicode::snprintf(status_TBBuffer, STATUS_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_S0ZG).getText());
+    status_TB.setWildcard(status_TBBuffer);
+    status_TB.resizeToCurrentText();
+    status_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_W4O2));
+    status_TB.setVisible(false);
+    add(status_TB);
 
     LD_Button.setBoxWithBorderPosition(0, 0, 58, 59);
     LD_Button.setBorderSize(2);
-    LD_Button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    LD_Button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
     LD_Button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_MAPS_DIRECTIONS_CAR_50_50_E8F6FB_SVG_ID));
     LD_Button.setIconXY(5, 4);
     LD_Button.setAction(flexButtonCallback);

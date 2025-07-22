@@ -25,7 +25,7 @@
 
 //global static
 static char *dtcs_list = NULL; 	   				//list of all DTCs(each DTC is 5 characters long)
-static int dtcs_size = 0;		   				//total size of DTC list
+static int dtcs_size = -1;		   				//total size of DTC list
 static int cur_dtcs_list_size = 0; 				//tracks current size for re-alloc
 static uint8_t rx_data;            				//raw UART bytes
 static bool retry_last = false;    				//used for retry command
@@ -120,6 +120,40 @@ static void dtcs_conv_add(uint8_t first_byte, uint8_t second_byte) {
     dtcs_list[cur_dtcs_list_size - 1] = '\0';
 }
 
+static int Read_Codes(int last_byte){
+	uint8_t byte;
+
+	if (dtcs_size == -1){
+		dtcs_size = rx_data;
+		last_byte = -999;
+		byte = UART_DTC_Received_cmd;
+		HAL_UART_Receive_IT(&huart1,&rx_data, 1);
+		osMessageQueuePut(send_task_queue, &byte, 0, 0);
+	}else if (last_byte == -999 && is_valid_frame(rx_data) && ((rx_data>>3) & 0x0F) == UART_DTCs_End_cmd){
+		osSemaphoreRelease(blink_sem); //for testing: shows DTCs are ready
+		DTCs_GUI_Pass(dtcs_list,dtcs_size);
+		last_byte = -1;
+	}else{
+		if(last_byte >= 0){
+			dtcs_conv_add((uint8_t) last_byte, rx_data); //converts and adds to global static DTCs list
+			byte = UART_DTC_Received_cmd;
+			osMessageQueuePut(send_task_queue, &byte, 0, 0);
+			last_byte = -999;
+		}else{
+			last_byte = rx_data;
+		}
+		HAL_UART_Receive_IT(&huart1,&rx_data, 1);
+	}
+	return last_byte;
+}
+
+static void Live_Data(){
+
+}
+
+static void Freeze_Data(){
+
+}
 
 /**
  * UART Callback funcitons
@@ -172,7 +206,7 @@ static void UART_TX(){
 			HAL_UART_Transmit_IT(&huart1, &byte,1);
 			///////////////////////////////////////////////////////////////////////////////////////////
 			if (tx_action == UART_DTCs_Reset_cmd ) osDelay(pdMS_TO_TICKS(200));
-			if (tx_action == UART_Start_cmd && dtcs_size == 0 ) {
+			if (tx_action == UART_Start_cmd && dtcs_size == -1 ) {
 				ticks = osKernelGetTickFreq() * 1.5;
 			}else{
 				ticks = osWaitForever;
@@ -198,24 +232,24 @@ static void UART_RX(){
 	int last_byte = -999;
 	uart_comms_t rx_action;
 	osStatus_t rx_Queue_Get;
-	bool DTCs_code_rx = false; //expecting DTCs
+	bool Serve_code_rx = false; //expecting DTCs
 
 	while(1){
 		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_data, NULL,osWaitForever);
 		if(rx_Queue_Get == osOK){
-			if (!DTCs_code_rx){
+			if (!Serve_code_rx){
 				if (is_valid_frame(rx_data)){
-					rx_action = ((rx_data>>3) & 0x0F); // Call back only to prevent overlapping receives or writes
+					rx_action = ((rx_data>>3) & 0x0F);
 				}else{
 					rx_action = UART_Retry_cmd;
 				}
 			}else{
-				rx_action = UART_DTCs_Receiving; // set after receiving received command from start command
+				rx_action = UART_SERVICE_RUNNING;
 			}
 
 			switch (rx_action){
 			case UART_Received_cmd:
-				DTCs_code_rx = true;
+				Serve_code_rx = true;
 				byte = curr_service;
 				HAL_UART_Receive_IT(&huart1,&rx_data,1);
 				osMessageQueuePut(send_task_queue, &byte, 0, osWaitForever);
@@ -224,27 +258,16 @@ static void UART_RX(){
 				retry_last = true;
 				HAL_UART_Receive_IT(&huart1,&rx_data,1);
 				break;
-			case UART_DTCs_Receiving:
-				if (dtcs_size == 0){
-					dtcs_size = rx_data;
-					last_byte = -999;
-					byte = UART_DTCs_Received_cmd;
-					HAL_UART_Receive_IT(&huart1,&rx_data, 1);
-					osMessageQueuePut(send_task_queue, &byte, 0, 0);
-				}else if (last_byte == -999 && is_valid_frame(rx_data) && ((rx_data>>3) & 0x0F) == UART_DTCs_End_cmd){
-					DTCs_code_rx = false;
-					osSemaphoreRelease(blink_sem); //for testing: shows DTCs are ready
-					DTCs_GUI_Pass(dtcs_list,dtcs_size);
-				}else{
-					if(last_byte >= 0){
-						dtcs_conv_add((uint8_t) last_byte, rx_data); //converts and adds to global static DTCs list
-						byte = UART_DTCs_Received_cmd;
-						osMessageQueuePut(send_task_queue, &byte, 0, 0);
-						last_byte = -999;
-					}else{
-						last_byte = rx_data;
-					}
-					HAL_UART_Receive_IT(&huart1,&rx_data, 1);
+			case UART_SERVICE_RUNNING:
+				if (curr_service == UART_DTCs_REQ_STORED_cmd || curr_service == UART_DTCs_REQ_PENDING_cmd || curr_service == UART_DTCs_REQ_PERM_cmd){
+					last_byte = Read_Codes(last_byte);
+					if (last_byte == -1) Serve_code_rx = false; //All DTCs grabbed
+				}else if (curr_service == UART_DTCs_REQ_LD_cmd){
+					Live_Data();
+					Serve_code_rx = false;
+				}else if (curr_service == UART_DTCs_REQ_FFD_cmd){
+					Freeze_Data();
+					Serve_code_rx = false;
 				}
 				break;
 			default:
@@ -264,7 +287,7 @@ void UART_Set_Service(uart_comms_t ser){
 	curr_service = ser;
 	vPortFree(dtcs_list);
 	dtcs_list = NULL;
-	dtcs_size = 0;
+	dtcs_size = -1;
 	cur_dtcs_list_size = 0;
 	retry_last = false;
 

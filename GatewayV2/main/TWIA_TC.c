@@ -50,10 +50,11 @@ static const twai_message_t TWAI_Request_msg = {
     .ss = 0,                // Not single shot
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
+    .flags = TWAI_MSG_FLAG_NONE,
     // Message ID and payload
-    .identifier = ID_DT,
+    .identifier = ID_DT_ECUs,
     .data_length_code = 8,
-    .data = {0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+    .data = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
     //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
 };
 
@@ -65,7 +66,7 @@ static const twai_message_t TWAI_Clear_DTCS = {
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_DT,
+    .identifier = ID_DT_ECUs,
     .data_length_code = 8,
     .data = {0x01, CLEAR_DTCS_REQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
     //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
@@ -80,7 +81,7 @@ static const twai_message_t TWAI_Response_FC = { //only after FF unless ECU send
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_DT,
+    .identifier = ID_DT_ECUs,
     .data_length_code = 8,
     .data = {MULT_FRAME_FLOW, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 };
@@ -93,7 +94,7 @@ static uint8_t *dtcs;
 static int dtcs_bytes = 0;
 
 //returns index of mode response
-static inline uint8_t mode_find(twai_message_t msg, uint8_t last_service){
+static inline uint8_t mode_identify(twai_message_t msg, uint8_t last_service){
     if (msg.data[0] <= SINGLE_FRAME){ 
         return msg.data[1];
     }else if (msg.data[0] == MULT_FRAME_FIRST){ 
@@ -108,99 +109,183 @@ static inline twai_message_t req_msg_create(uint8_t request){
     return msg;
 }
 
+static inline twai_message_t PID_MSG_REQ(uint8_t request, uint8_t PID){
+    twai_message_t msg = TWAI_Request_msg;
+    msg.data[1] = request;
+    msg.data[2] = PID;
+    return msg;
+}
+
+static int DTC_Frame_Reading(twai_message_t data, int num_bytes, int next_dtc){
+    tx_task_action_t tx_response;
+    // ESP_LOGI(TAG,"ID: %li",data.identifier);
+    // for (int i = 0; i < 8; i++){
+    //     ESP_LOGI(TAG,"Data %i: %i", i , data.data[i]);
+    // }
+    if (data.data[0] == MULT_FRAME_FIRST){
+        //setting num DTCs
+        num_bytes = data.data[1];
+        dtcs_bytes = num_bytes - 1;
+        dtcs = pvPortMalloc(dtcs_bytes);
+
+        //grabing first two DTCS
+        for (int i = 0; i < 4; i += 2){ 
+            dtcs[i] = data.data[i + 3];
+            dtcs[i + 1] = data.data[i + 4];
+        }
+
+        //setting  up for next frame
+        num_bytes -= 5;                                             //note: num_bytes only count data bytes and mode byte
+        
+        //Getting next frame 
+        ESP_LOGI(TAG,"First frame of multi frame received.");
+        tx_response = TX_FLOW_CONTROL_RESPONSE;
+        xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
+    }else if (data.data[0] >= MULT_FRAME_CON){
+
+        //setting number of bytes expected in current frame
+        int cur_bytes = (num_bytes >= 6) ? 6 : num_bytes;
+
+        //grab DTCs
+        for (int i = 0; i < cur_bytes; i += 2){
+            dtcs[i + next_dtc] = data.data[i + 1];
+            dtcs[i + next_dtc + 1] = data.data[i + 2];
+        }
+        //set num bytes 
+        if (num_bytes >= 6){
+            num_bytes -= 6;
+        }else{
+            num_bytes = 0;
+        }
+        ESP_LOGI(TAG,"Consecutive frame received successfully.");
+    }else if (data.data[0] <= SINGLE_FRAME){ //single frame
+        //grab num_bytes
+        num_bytes = data.data[0] - 2;
+        dtcs_bytes = num_bytes;
+        dtcs = pvPortMalloc(dtcs_bytes);
+
+        //grab DTCs
+        for (int i = 0; i < num_bytes; i += 2){     
+            dtcs[i] = data.data[i + 2];
+            dtcs[i+ 1] = data.data[i + 3];
+        }
+        
+        num_bytes = 0;
+        ESP_LOGI(TAG,"SF received.");
+    }else{
+        ESP_LOGE(TAG,"Unknown frame received: %i", data.data[0]);
+    }
+    
+    return num_bytes;
+}
+
+static void Live_Data_Get(twai_message_t data, int num_bytes, int next_dtc){
+    tx_task_action_t tx_response;
+    // ESP_LOGI(TAG,"ID: %li",data.identifier);
+    // for (int i = 0; i < 8; i++){
+    //     ESP_LOGI(TAG,"Data %i: %i", i , data.data[i]);
+    // }
+    if (data.data[0] == MULT_FRAME_FIRST){
+        //setting num DTCs
+        num_bytes = data.data[1];
+        dtcs_bytes = num_bytes - 1;
+        dtcs = pvPortMalloc(dtcs_bytes);
+
+        //grabing first two DTCS
+        for (int i = 0; i < 4; i += 2){ 
+            dtcs[i] = data.data[i + 3];
+            dtcs[i + 1] = data.data[i + 4];
+        }
+
+        //setting  up for next frame
+        num_bytes -= 5;                                             //note: num_bytes only count data bytes and mode byte
+        
+        //Getting next frame 
+        ESP_LOGI(TAG,"First frame of multi frame received.");
+        tx_response = TX_FLOW_CONTROL_RESPONSE;
+        xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
+    }else if (data.data[0] >= MULT_FRAME_CON){
+
+        //setting number of bytes expected in current frame
+        int cur_bytes = (num_bytes >= 6) ? 6 : num_bytes;
+
+        //grab DTCs
+        for (int i = 0; i < cur_bytes; i += 2){
+            dtcs[i + next_dtc] = data.data[i + 1];
+            dtcs[i + next_dtc + 1] = data.data[i + 2];
+        }
+        //set num bytes 
+        if (num_bytes >= 6){
+            num_bytes -= 6;
+        }else{
+            num_bytes = 0;
+        }
+        ESP_LOGI(TAG,"Consecutive frame received successfully.");
+    }else if (data.data[0] <= SINGLE_FRAME){ //single frame
+        //grab num_bytes
+        num_bytes = data.data[0] - 2;
+        dtcs_bytes = num_bytes;
+        dtcs = pvPortMalloc(dtcs_bytes);
+
+        //grab DTCs
+        for (int i = 0; i < num_bytes; i += 2){     
+            dtcs[i] = data.data[i + 2];
+            dtcs[i+ 1] = data.data[i + 3];
+        }
+        
+        num_bytes = 0;
+        ESP_LOGI(TAG,"SF received.");
+    }else{
+        ESP_LOGE(TAG,"Unknown frame received: %i", data.data[0]);
+    }
+    return num_bytes;
+}
+
 static void twai_receive_task()
 {
     tx_task_action_t tx_response;
     uint8_t num_bytes = 0;
-    uint8_t num_frames = 0;
+    uint8_t temp_bytes = 0;
     uint8_t current_service = STORED_DTCS_RESP;
-    twai_message_t TC_received;
+    twai_message_t TX_Data;
     esp_err_t rec_successful;
     int next_dtc = 4;
     while (1) {
-        rec_successful = twai_receive(&TC_received,portMAX_DELAY);
+        rec_successful = twai_receive(&TX_Data,portMAX_DELAY);
         if (rec_successful == ESP_OK){ 
-            if (TC_received.identifier == ID_ECU || TC_received.identifier == ID_ECU_Second){ 
-                current_service = mode_find(TC_received,current_service);
+            if (TX_Data.identifier >= ID_ECU && TX_Data.identifier <= ID_ECU_Second){ 
+                current_service = mode_identify(TX_Data,current_service);
                 if (current_service == STORED_DTCS_RESP ||  current_service == PENDING_DTCS_RESP  || current_service == PERM_DTCS_RESP){
-                    
-                    if (TC_received.data[0] == MULT_FRAME_FIRST){
-                        
-                        //setting num DTCs
-                        num_bytes = TC_received.data[1];
-                        dtcs_bytes = num_bytes - 1;
-                        dtcs = pvPortMalloc(dtcs_bytes);
-
-                        //grabing first two DTCS
-                        for (int i = 0; i < 4; i += 2){ 
-                            dtcs[i] = TC_received.data[i + 3];
-                            dtcs[i + 1] = TC_received.data[i + 4];
-                        }
-
-                        //setting  up for next frame
-                        num_bytes -= 5;                                             //note: num_bytes only count data bytes and mode byte
-                        num_frames = ceil( (double) num_bytes / 6.0);               //note: DTCs are not split between frames and every CF passes 6 bytes DTCs
-                       
-                        //Getting next frame 
-                        ESP_LOGI(TAG,"First frame of multi frame received.");
-                        tx_response = TX_FLOW_CONTROL_RESPONSE;
-                        xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
-                    }else if (TC_received.data[0] >= MULT_FRAME_CON){
-
-                        //setting number of bytes expected in current frame
-                        int cur_bytes = (num_bytes >= 6) ? 6 : num_bytes;
-
-                        //grab DTCs
-                        for (int i = 0; i < cur_bytes; i += 2){
-                            dtcs[i + next_dtc] = TC_received.data[i + 1];
-                            dtcs[i + next_dtc + 1] = TC_received.data[i + 2];
-                        }
-                        //set num bytes 
-                        if (num_bytes >= 6){
-                            next_dtc += 6;
-                            num_bytes -= 6;
-                        }else{
-                            next_dtc += num_bytes;
-                        }
-                        ESP_LOGI(TAG,"Consecutive frame received successfully.");
-                        //last frame check
-                        num_frames --;
-                        if (num_frames == 0){
-                            num_bytes = 0;
-                            next_dtc = 4;
-                            xSemaphoreGive(TC_Grabbed_sem);
-                        }
-                    }else if (TC_received.data[0] <= SINGLE_FRAME){ //single frame
-                        //grab num_bytes
-                        num_bytes = TC_received.data[0] - 2;
-                        dtcs_bytes = num_bytes;
-                        dtcs = pvPortMalloc(dtcs_bytes);
-
-                        //grab DTCs
-                        for (int i = 0; i < num_bytes; i += 2){     
-                            dtcs[i] = TC_received.data[i + 2];
-                            dtcs[i+ 1] = TC_received.data[i + 3];
-                        }
-                       
-                        num_bytes = 0;
-                        ESP_LOGI(TAG,"SF received.");
+                    temp_bytes = num_bytes;
+                    num_bytes = DTC_Frame_Reading(TX_Data,num_bytes,next_dtc);//------------------------------------------------------note: Different functions read frames differently
+                    if (num_bytes == 0){
+                        next_dtc = 4;
                         xSemaphoreGive(TC_Grabbed_sem);
-
-                    }else{
-                        ESP_LOGE(TAG,"Unknown frame received: %i", TC_received.data[0]);
+                    }else if (temp_bytes != 0){
+                        next_dtc += temp_bytes - num_bytes;
                     }
                 }else if (current_service == CLEAR_DTCS_GOOD_RESP){
                     ESP_LOGI(TAG, "DTCs reset successfully.");
                     xSemaphoreGive(DTCS_Loaded_sem);
                 }else if (current_service == CLEAR_DTCS_BAD_RESP){
                     ESP_LOGE(TAG,"FAILED to rest DTCs. Possibly unsupported or bad request.");
+                }else if (current_service == SHOW_LIVE_DATA_RESP){
+                    ESP_LOGI(TAG,"TX_output rx: ID: %li, Data length: %i", TX_Data.identifier,TX_Data.data_length_code);
+                    for (int i = 0; i < 8; i++){
+                        ESP_LOGI(TAG,"rx Data %i: 0x%02X",i, TX_Data.data[i]);
+                    }
+                    xSemaphoreGive(TC_Grabbed_sem);
+                }else if (current_service == SHOW_FREEZE_FRAME_RESP){
+
+                }else{
+                    ESP_LOGI(TAG,"TX_output rx: ID: %li, Data length: %i", TX_Data.identifier,TX_Data.data_length_code);
+                    for (int i = 0; i < 8; i++){
+                        ESP_LOGI(TAG,"rx Data %i: 0x%02X",i, TX_Data.data[i]);
+                    }
                 }
             }else{
-                ESP_LOGI(TAG,"Wrong identifier.");
+                // ESP_LOGI(TAG,"Wrong identifier. ID: %li", TX_Data.identifier);
             }
-        }else if (rec_successful == ESP_ERR_TIMEOUT){ //not called ever
-            xQueueSend(tx_task_queue, &tx_response,portMAX_DELAY);
-            ESP_LOGE(TAG,"Timeout...trying again.");
         }
     }
 }
@@ -212,6 +297,11 @@ static void twai_transmit_task()
     while (1) {
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
         switch(action){
+            case TX_REQUEST_LD:
+                
+                // TX_output = PID_MSG_REQ(SHOW_LIVE_DATA_REQ, );
+                twai_transmit(&TX_output, portMAX_DELAY);
+                break;
             case TX_REQUEST_STORED_DTCS:
                 TX_output = req_msg_create(STORED_DTCS_REQ);
                 twai_transmit(&TX_output, portMAX_DELAY);
@@ -244,7 +334,7 @@ static void twai_transmit_task()
 }
 
 //used to grab trouble code from TWAI network
-static void Get_DTCS()
+static void TWAI_Services()
 {
     service_request_t current_serv;
     tx_task_action_t tx_action;
@@ -253,6 +343,10 @@ static void Get_DTCS()
         xQueueReceive(service_queue,&current_serv,portMAX_DELAY);
         switch (current_serv){
             case SERV_LD_DATA:
+                tx_action = SERV_LD_DATA;
+                xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
+
+                xSemaphoreTake(TC_Grabbed_sem,portMAX_DELAY);
                 break;
             case SERV_FREEZE_DATA:
                 break;
@@ -320,7 +414,9 @@ void twai_TC_Get(){
 
     xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(Get_DTCS, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(TWAI_Services, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
-    vTaskDelay(pdMS_TO_TICKS(50));
+    vTaskDelay(pdMS_TO_TICKS(75));
+    // service_request_t current_serv = SERV_LD_DATA;
+    // xQueueSend(service_queue,&current_serv,portMAX_DELAY);
 }

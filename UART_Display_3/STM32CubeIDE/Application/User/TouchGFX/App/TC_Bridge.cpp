@@ -25,9 +25,9 @@ void setModelInstance(Model* model)
 //codes comes in with every code being 5 digit with only one \0 at the end
 void DTCs_GUI_Pass(const char* codes, int num_codes)
 {
-	char **temp;
+	char **temp = NULL;
 	temp = static_cast<char **>(pvPortMalloc(sizeof(char*) * num_codes));
-	if (!temp) return;
+	if (!temp && num_codes != 0) return;
     if (modelInstance)
     {
     	for (int i = 0; i < num_codes; i ++){

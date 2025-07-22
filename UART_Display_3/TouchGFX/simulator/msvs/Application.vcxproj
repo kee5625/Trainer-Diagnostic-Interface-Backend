@@ -35,6 +35,9 @@
     <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_dtcsBase.cpp"/>
     <ClCompile Include="..\..\gui\src\containers\rowItem_RLD.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_RLDBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\freeze_frame_data_screen\Freeze_Frame_DataViewBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xml"/>
@@ -199,6 +202,9 @@
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_dtcsBase.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\containers\rowItem_RLD.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_RLDBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\freeze_frame_data_screen\Freeze_Frame_DataViewBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

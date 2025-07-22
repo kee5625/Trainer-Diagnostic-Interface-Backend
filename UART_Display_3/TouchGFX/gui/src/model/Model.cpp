@@ -26,7 +26,7 @@ void Model::dtcs_Set(char** str, int dtcs_size)
 	}
 	vPortFree(dtcs_list_model);
 	dtcs_list_model = static_cast<char **>(pvPortMalloc(sizeof(char*) * dtcs_size));
-	if (!dtcs_list_model) return;
+	if (!dtcs_list_model && dtcs_size != 0) return;
 
 	//deep copy, model will hold dtcs for presenter to grab
 	for (int j = 0; j < dtcs_size; j ++) {

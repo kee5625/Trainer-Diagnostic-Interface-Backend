@@ -33,6 +33,9 @@ public:
 
     void gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
 
+    // Freeze_Frame_Data
+    void gotoFreeze_Frame_DataScreenWipeTransitionEast();
+
 protected:
     touchgfx::Callback<FrontendApplicationBase> transitionCallback;
     FrontendHeap& frontendHeap;
@@ -50,6 +53,9 @@ protected:
     void gotoRead_Live_Data_ScreenScreenNoTransitionImpl();
 
     void gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl();
+
+    // Freeze_Frame_Data
+    void gotoFreeze_Frame_DataScreenWipeTransitionEastImpl();
 };
 
 #endif // FRONTENDAPPLICATIONBASE_HPP

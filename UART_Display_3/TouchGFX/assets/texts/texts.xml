@@ -6,8 +6,14 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="__SingleUse_W4O2" Alignment="Left" TypographyId="Default">
+      <Text Id="__SingleUse_S0ZG" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">Loading DTCs...</Translation>
+      </Text>
+      <Text Id="__SingleUse_WYQT" Alignment="Center" TypographyId="smller">
+        <Translation Language="GB">Freeze Data</Translation>
+      </Text>
+      <Text Id="__SingleUse_W4O2" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_40UU" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">DTCS!</Translation>
@@ -66,6 +72,5 @@
     <Typography Id="Default" Font="calibri.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
     <Typography Id="smller" Font="verdana.ttf" Size="15" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="larger" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
-    <Typography Id="belowNormal" Font="verdana.ttf" Size="17" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9,a-z,A-Z,(-." />
   </Typographies>
 </TextDatabase>

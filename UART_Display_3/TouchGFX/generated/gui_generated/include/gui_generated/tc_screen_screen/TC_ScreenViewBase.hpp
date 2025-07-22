@@ -14,7 +14,7 @@
 #include <touchgfx/containers/buttons/Buttons.hpp>
 #include <touchgfx/EasingEquations.hpp>
 #include <touchgfx/mixins/FadeAnimator.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 
 class TC_ScreenViewBase : public touchgfx::View<TC_ScreenPresenter>
 {
@@ -37,7 +37,7 @@ protected:
      * Member Declarations
      */
     touchgfx::Box __background;
-    touchgfx::Box gray_background;
+    touchgfx::Box white_background;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::ScrollList DTCS_;
     touchgfx::DrawableListItems<rowItem_dtcs, 3> DTCS_ListItems;
@@ -46,8 +46,14 @@ protected:
     touchgfx::FadeAnimator< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  > Perm_dtcs_button;
     touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  Clear_DTCS_button;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  back_button;
-    touchgfx::FadeAnimator< touchgfx::TextArea > loading_TB;
+    touchgfx::FadeAnimator< touchgfx::TextAreaWithOneWildcard > status_TB;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  LD_Button;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t STATUS_TB_SIZE = 25;
+    touchgfx::Unicode::UnicodeChar status_TBBuffer[STATUS_TB_SIZE];
 
 private:
 

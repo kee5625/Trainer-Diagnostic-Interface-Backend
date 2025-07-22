@@ -49,7 +49,7 @@
           {
             "Type": "FlexButton",
             "Name": "Read_live_data_Start_button",
-            "X": 87,
+            "X": 63,
             "Y": 136,
             "Width": 97,
             "Height": 64,
@@ -109,8 +109,68 @@
           },
           {
             "Type": "FlexButton",
+            "Name": "Freeze_Frame_Button",
+            "X": 192,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 24,
+                "IconReleased": "__generated\\icon_theme_images_editor_insert_drive_file_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_editor_insert_drive_file_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_WYQT",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
             "Name": "Read_TC_Start_button",
-            "X": 311,
+            "X": 322,
             "Y": 136,
             "Width": 97,
             "Height": 64,
@@ -183,20 +243,6 @@
               "Blue": 255
             },
             "AutoSize": true
-          },
-          {
-            "Type": "QRCode",
-            "Name": "qrCode1",
-            "Width": 105,
-            "Height": 105,
-            "QRVersion": 1,
-            "Scale": 5,
-            "Text": "https://www.atechtraining.com/products/automobile/power-seat-system",
-            "BackgroundColor": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            }
           }
         ],
         "Interactions": [
@@ -224,6 +270,19 @@
               "ScreenTransitionType": "ScreenTransitionNone",
               "ActionComponent": "Read_Live_Data_Screen"
             }
+          },
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Freeze_Frame_Button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Freeze_Frame_Data"
+            }
           }
         ]
       },
@@ -232,13 +291,13 @@
         "Components": [
           {
             "Type": "Box",
-            "Name": "gray_background",
+            "Name": "white_background",
             "Width": 480,
             "Height": 272,
             "Color": {
-              "Red": 145,
-              "Green": 144,
-              "Blue": 144
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
             }
           },
           {
@@ -466,19 +525,16 @@
                   "Blue": 124
                 },
                 "ColorPressed": {
-                  "Red": 157,
-                  "Green": 161,
-                  "Blue": 162
+                  "Green": 102,
+                  "Blue": 153
                 },
                 "ColorBorderReleased": {
-                  "Red": 157,
-                  "Green": 161,
-                  "Blue": 162
+                  "Green": 51,
+                  "Blue": 102
                 },
                 "ColorBorderPressed": {
-                  "Red": 157,
-                  "Green": 161,
-                  "Blue": 162
+                  "Green": 51,
+                  "Blue": 102
                 }
               }
             ]
@@ -506,8 +562,8 @@
                 "LockToFlexButtonSize": true,
                 "BorderSize": 2,
                 "ColorReleased": {
-                  "Green": 102,
-                  "Blue": 153
+                  "Green": 69,
+                  "Blue": 124
                 },
                 "ColorPressed": {
                   "Green": 153,
@@ -527,7 +583,7 @@
           },
           {
             "Type": "TextArea",
-            "Name": "loading_TB",
+            "Name": "status_TB",
             "X": 182,
             "Y": 136,
             "Width": 126,
@@ -536,6 +592,11 @@
             "TextId": "__SingleUse_W4O2",
             "TextRotation": "0",
             "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_S0ZG",
+              "UseBuffer": true,
+              "BufferSize": 25
+            },
             "Fadeable": true
           },
           {
@@ -562,8 +623,8 @@
                 "LockToFlexButtonSize": true,
                 "BorderSize": 2,
                 "ColorReleased": {
-                  "Green": 102,
-                  "Blue": 153
+                  "Green": 69,
+                  "Blue": 124
                 },
                 "ColorPressed": {
                   "Green": 153,
@@ -677,6 +738,7 @@
             "Name": "blue_background",
             "Width": 480,
             "Height": 272,
+            "LockPosition": true,
             "Color": {
               "Red": 8,
               "Green": 14,
@@ -689,6 +751,7 @@
             "X": 359,
             "Width": 121,
             "Height": 59,
+            "LockPosition": true,
             "Filename": "images.png",
             "ScalingAlgorithm": "Nearest-neighbor"
           },
@@ -711,6 +774,7 @@
             "Name": "home_button",
             "Width": 62,
             "Height": 59,
+            "LockPosition": true,
             "ButtonTrigger": {
               "Type": "ClickButtonTrigger"
             },
@@ -751,6 +815,104 @@
         "Interactions": [
           {
             "InteractionName": "home_Button_int",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "home_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Freeze_Frame_Data",
+        "Components": [
+          {
+            "Type": "ScrollList",
+            "Name": "RLD_Options",
+            "Y": 59,
+            "Width": 480,
+            "Height": 213,
+            "ItemTemplateName": "rowItem_RLD",
+            "NumberofItems": 10,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
+          },
+          {
+            "Type": "Box",
+            "Name": "blue_background",
+            "Width": 480,
+            "Height": 272,
+            "LockPosition": true,
+            "Color": {
+              "Red": 8,
+              "Green": 14,
+              "Blue": 87
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "LockPosition": true,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "home_button",
+            "Width": 62,
+            "Height": 59,
+            "LockPosition": true,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 2,
+                "IconReleased": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 62,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "home_button_int",
             "Trigger": {
               "Type": "TriggerClicked",
               "TriggerComponent": "home_button"
@@ -859,6 +1021,28 @@
         "Height": 136,
         "Components": [
           {
+            "Type": "Box",
+            "Name": "box1",
+            "Y": 50,
+            "Width": 480,
+            "Height": 86,
+            "Color": {
+              "Green": 69,
+              "Blue": 124
+            }
+          },
+          {
+            "Type": "Box",
+            "Name": "box1_1",
+            "Width": 480,
+            "Height": 50,
+            "Color": {
+              "Red": 157,
+              "Green": 161,
+              "Blue": 162
+            }
+          },
+          {
             "Type": "TextArea",
             "Name": "dtcs_TB",
             "X": 44,
@@ -883,7 +1067,7 @@
             "Wildcard1": {
               "TextId": "__SingleUse_LYMN",
               "UseBuffer": true,
-              "BufferSize": 64
+              "BufferSize": 128
             }
           }
         ],

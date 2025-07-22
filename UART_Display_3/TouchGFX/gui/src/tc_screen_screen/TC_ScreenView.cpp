@@ -11,11 +11,41 @@ extern "C" {
 
 int tick_count = 0;
 
+
+static const DTCEntry dtc_table[] = {
+   		{"P0304", "Misfire in cylinder 4"},
+   		{"P0200", "Injector Circuit/Open"},
+		{"P0480", "Cooling Fan 1 Control Circuit"},
+   		{"P0481", "Cooling Fan 2 Control Circuit"},
+   		{"P0482", "Cooling Fan 2 Control Circuit"},
+		{"P0483", "Cooling Fan Rationality Check"},
+		{"P0484", "Cooling Fan Circuit Over-Current"},
+		{"P0485", "Cooling Fan Power/Ground Circuit"},
+		{"P0495", "Fan Speed Too High"},
+		{"P0496", "Fan Speed Too Low"},
+		{"P01C1", "Fuel Rail Pressure Sensor Circuit High (Bank 2)."},
+};
+
 TC_ScreenView::TC_ScreenView()
     : myButtonCallback(this, &TC_ScreenView::onMyButtonPressed),
 	  wr_Update_Item_CB(this, &TC_ScreenView::Update_Item_CB)
 {}
 
+
+const char *TC_ScreenView::DTC_Desc_Grab(char *DTC){
+	for (int i = 0; i < (int)(sizeof(dtc_table) / sizeof(dtc_table[0])); i ++){
+		if (strcmp(DTC,dtc_table[i].code) == 0)
+			return dtc_table[i].desc;
+	}
+
+	switch (DTC[0]){
+		case 'P': return "Power train problem. If more detail was expected try pressing the back button then requesting codes again.";
+		case 'C': return "Chassis  problem. If more detail was expected try pressing the back button then requesting codes again.";
+		case 'B': return "Body problem. If more detail was expected try pressing the back button then requesting codes again.";
+		case 'U': return "Network problem. If more detail was expected try pressing the back button then requesting codes again.";
+		default : return "Unknown problem. Press back button and then try reading codes again.";
+	}
+}
 
 void TC_ScreenView::Select_Phase_Set(){
 
@@ -31,9 +61,9 @@ void TC_ScreenView::Select_Phase_Set(){
 		Perm_dtcs_button.setVisible(true);
 		Perm_dtcs_button.invalidate();
 
-		//hide loading_TB
-		loading_TB.setVisible(false);
-		loading_TB.invalidate();
+		//hide status_TB
+		status_TB.setVisible(false);
+		status_TB.invalidate();
 
 		//hide Clear_DTCs_button
 		Clear_DTCS_button.setVisible(false);
@@ -46,12 +76,12 @@ void TC_ScreenView::Select_Phase_Set(){
 		DTCS_.setVisible(false);
 		DTCS_.invalidate();
 
-		screen_Phase = select_Phase;
+		screen_Phase = Phase::select;
 }
 
 void TC_ScreenView::setupScreen()
 {
-	screen_Phase = select_Phase;
+	screen_Phase = Phase::select;
     TC_ScreenViewBase::setupScreen();
     Pending_dtcs_button.setAction(myButtonCallback);
     Stored_dtcs_button.setAction(myButtonCallback);
@@ -61,26 +91,33 @@ void TC_ScreenView::setupScreen()
 	back_button.setAction(myButtonCallback);
 	DTCS_.setNumberOfItems(presenter->get_Num_DTCs());
 	DTCS_.setDrawables(DTCS_ListItems, wr_Update_Item_CB);
+
 }
 
-void TC_ScreenView::handleTickEvent(){ // @suppress("Member declaration not found")
+void TC_ScreenView::handleTickEvent(){
 	//at least 3 sec wait and DTC ready(tick_count reset when loading box = visible)
-	if (pendingDTCUpdate && tick_count >= 90 && screen_Phase == loading_Phase){
-		screen_Phase = dispaly_Phase;
-		tick_count = 0;
-		pendingDTCUpdate = false;
 
-		loading_TB.setVisible(false);
-		loading_TB.invalidate();
-
-		DTCS_.setNumberOfItems(presenter->get_Num_DTCs());
-
-		//Show_DTCs_list
-		DTCS_.setVisible(true);
+	if (pendingDTCUpdate && tick_count >= 60 && (screen_Phase == Phase::loading || screen_Phase == Phase::no_dtcs)){
+		int dtcs_num = presenter->get_Num_DTCs();
+		if (dtcs_num != 0){
+			screen_Phase = Phase::display;
+			status_TB.setVisible(false);
+			status_TB.invalidate();
+			pendingDTCUpdate = false;
+			DTCS_.setVisible(true);//Show_DTCs_list
+			Clear_DTCS_button.setVisible(true);//show clear DTCs option
+		}else if (screen_Phase != Phase::no_dtcs){
+			screen_Phase = Phase::no_dtcs;
+			tick_count = -30;
+			Unicode::strncpy(status_TBBuffer, "No DTCs", sizeof("No DTCs."));
+		}else{
+			status_TB.setVisible(false);
+			status_TB.invalidate();
+			Unicode::strncpy(status_TBBuffer, "loading...", sizeof("loading..."));
+			pendingDTCUpdate = false;
+			Select_Phase_Set();
+		}
 		touchgfx::Application::getInstance()->invalidate();
-
-		Clear_DTCS_button.setVisible(true);
-		Clear_DTCS_button.invalidate();
 	}
 	tick_count++;
 }
@@ -96,11 +133,10 @@ void TC_ScreenView::DTCs_Loaded(){
 	pendingDTCUpdate = true;
 }
 
-void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& source)
-{
+void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& source){
 
 	if (&source != &Clear_DTCS_button && &source != &LD_Button && &source != &back_button){
-		screen_Phase = loading_Phase;
+		screen_Phase = Phase::loading;
 		//hide_stored_button
 		Stored_dtcs_button.setVisible(false);
 		Stored_dtcs_button.invalidate();
@@ -113,14 +149,9 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& s
 		Perm_dtcs_button.setVisible(false);
 		Perm_dtcs_button.invalidate();
 
-		loading_TB.setVisible(true);
-		loading_TB.invalidate();
+		status_TB.setVisible(true);
+		status_TB.invalidate();
 		tick_count = 0; //loading text counter
-
-		//making sure buttons can't be pressed until code loaded.
-//		clear_DTCS_Button.setAction();
-//		back_button.setAction();
-//		LD_Button.setAction();
 	}
 
     if (&source == &Pending_dtcs_button){
@@ -137,7 +168,7 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& s
     	if (&source == &Clear_DTCS_button) presenter->Pres_Set_Service(UART_DTCs_Reset_cmd);
 	}
     if (&source == &back_button){
-    	if (screen_Phase == select_Phase){
+    	if (screen_Phase == Phase::select){
     		application().gotoHome_ScreenScreenWipeTransitionEast();
     	}else{
     		Select_Phase_Set();
@@ -152,6 +183,7 @@ void TC_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface* items, 
 	{
 		strcpy(temp,presenter->GetDtcs(itemIndex));
 		DTCS_ListItems[containerIndex].dtcs_set(static_cast<const char *>(temp));
+		DTCS_ListItems[containerIndex].dtcs_Desc_set(static_cast<const char *>(DTC_Desc_Grab(temp)));
 		DTCS_UpdateItem(DTCS_ListItems[containerIndex], itemIndex);
 	}
 }

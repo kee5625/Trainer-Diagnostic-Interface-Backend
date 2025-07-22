@@ -80,9 +80,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TwoWildcardTextButtonStyle.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/WildcardTextButtonStyle.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/QRCode.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp \
- ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/utils/qrcodegen.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp \
  ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/tc_screen_screen/TC_ScreenViewBase.hpp \
@@ -98,6 +95,9 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp \
  ../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp \
+ ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp \
+ ../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp \
+ ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/GPIO.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CWRVectorRenderer.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainterColor.hpp \
@@ -112,6 +112,7 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Cell.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CanvasWidget.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterARGB8888.hpp \
+ ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainterARGB8888.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterARGB8888LinearGradient.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterRGB565.hpp \
@@ -261,9 +262,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/TwoWildcardTextButtonStyle.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/WildcardTextButtonStyle.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/QRCode.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp:
-../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/utils/qrcodegen.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/AbstractButton.hpp:
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenView.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/tc_screen_screen/TC_ScreenViewBase.hpp:
@@ -279,6 +277,9 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:
 ../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp:
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:
+../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp:
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/GPIO.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CWRVectorRenderer.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainterColor.hpp:
@@ -293,6 +294,7 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/canvas_widget_renderer/Cell.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/CanvasWidget.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterARGB8888.hpp:
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Color.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainterARGB8888.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterARGB8888LinearGradient.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/PainterRGB565.hpp:

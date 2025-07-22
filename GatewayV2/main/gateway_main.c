@@ -63,7 +63,7 @@ void set_serv(service_request_t req){
         case SERV_LD_DATA:
         case SERV_FREEZE_DATA:
         case SERV_STORED_DTCS:
-        case SERV_CLEAR_DTCS:
+        case SERV_CLEAR_DTCS: //intentional fall through
             DTCS_reset();
         case SERV_PENDING_DTCS:
         case SERV_PERM_DTCS:

@@ -46,7 +46,8 @@ static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
 static uint8_t stored_dtcs[6] = {0x03,0x04,0x02,0x00,0x04,0x00};
 static uint8_t pending_dtcs[12] = {0x03,0x04,0x02,0x00,0x04,0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00};
-static uint8_t perminate_dtcs[4] = {0x09, 0x00, 0x0A,0x00};
+// static uint8_t perminate_dtcs[4] = {0x09, 0x00, 0x0A,0x00};
+static uint8_t perminate_dtcs[0];
 static int CF_num = 0; 
 static int frames_Before_FC = 0;
 static QueueHandle_t tx_task_queue;
@@ -155,7 +156,7 @@ static void twai_receive_task(void *arg)
     while (1) {
         if (twai_receive(&rx_action,portMAX_DELAY) == ESP_OK){
             num_bytes = rx_action.data[0]; //number of bytes
-            if (num_bytes == 0x01 ||num_bytes == 0x02){ //************I don't know what request will have more than two or one bytes but for now this is how I'm checking */
+            if (num_bytes == 0x01 ||num_bytes == 0x02){ // 1 byte is most request but some will need 2 bytes
                 mode_req = rx_action.data[1]; //mode request
             }else if (num_bytes == MULT_FRAME_FLOW){
                 mode_req = (uint8_t) MULT_FRAME_FLOW;

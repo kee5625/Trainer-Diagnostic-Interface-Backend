@@ -1,0 +1,7 @@
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:16:18:virtual void ModelListener::set_dtcs(char**, int)	0	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:28:13:Freeze_Frame_DataPresenter::~Freeze_Frame_DataPresenter()	0	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataPresenter.cpp:10:6:virtual void Freeze_Frame_DataPresenter::activate()	0	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:28:13:virtual Freeze_Frame_DataPresenter::~Freeze_Frame_DataPresenter()	8	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:28:13:virtual void* Freeze_Frame_DataPresenter::_ZThn4_N26Freeze_Frame_DataPresenterD1Ev()	0	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:28:13:virtual void* Freeze_Frame_DataPresenter::_ZThn4_N26Freeze_Frame_DataPresenterD0Ev()	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataPresenter.cpp:4:1:Freeze_Frame_DataPresenter::Freeze_Frame_DataPresenter(Freeze_Frame_DataView&)	4	static

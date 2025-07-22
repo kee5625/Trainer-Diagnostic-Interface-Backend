@@ -220,6 +220,18 @@
     <Filter Include="Source Files\generated\gui_generated\read_live_data_screen_screen">
       <UniqueIdentifier>2ED03089-0637-8B9A-E101-6DB9141FB309</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\freeze_frame_data_screen">
+      <UniqueIdentifier>A3636094-30AB-3FA2-66FA-639A46B00292</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\freeze_frame_data_screen">
+      <UniqueIdentifier>ABBA7A49-2251-4C7A-2065-18DCF6A4B691</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\freeze_frame_data_screen">
+      <UniqueIdentifier>D318944D-3E37-BD01-AAFF-4E81AE0596C2</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\freeze_frame_data_screen">
+      <UniqueIdentifier>9095828D-5ACF-78F8-8730-63CE72B10815</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -293,6 +305,15 @@
     </ClCompile>
     <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_RLDBase.cpp">
       <Filter>Source Files\generated\gui_generated\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataPresenter.cpp">
+      <Filter>Source Files\gui\freeze_frame_data_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataView.cpp">
+      <Filter>Source Files\gui\freeze_frame_data_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\freeze_frame_data_screen\Freeze_Frame_DataViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\freeze_frame_data_screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -777,6 +798,15 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_RLDBase.hpp">
       <Filter>Header Files\generated\gui_generated\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataPresenter.hpp">
+      <Filter>Header Files\gui\freeze_frame_data_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataView.hpp">
+      <Filter>Header Files\gui\freeze_frame_data_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\freeze_frame_data_screen\Freeze_Frame_DataViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\freeze_frame_data_screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

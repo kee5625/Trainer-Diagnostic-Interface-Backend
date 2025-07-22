@@ -11,7 +11,6 @@
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
-#include <touchgfx/widgets/QRCode.hpp>
 
 class Home_ScreenViewBase : public touchgfx::View<Home_ScreenPresenter>
 {
@@ -34,11 +33,9 @@ protected:
     touchgfx::Box blue_box;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_live_data_Start_button;
+    touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Freeze_Frame_Button;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_TC_Start_button;
     touchgfx::TextArea Trainer_Name;
-    uint8_t qrBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
-    uint8_t qrScratchBuffer_qrCode1[QRCODE_BUFFER_SIZE(1)];
-    touchgfx::QRCode qrCode1;
 
 private:
 

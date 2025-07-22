@@ -14,12 +14,14 @@
 
 //TWAI action type setup
 typedef enum {
-    TX_REQUEST_STORED_DTCS,
-    TX_REQUEST_PENDING_DTCS,
-    TX_REQUEST_PERM_DTCS,
-    TX_RESET_DTCs,
-    TX_FLOW_CONTROL_RESPONSE,
-    TX_TASK_EXIT,
+    TX_REQUEST_LD                       = 1,
+    TX_REQUEST_FFD                      = 2,
+    TX_REQUEST_STORED_DTCS              = 3,
+    TX_REQUEST_PENDING_DTCS             = 4,
+    TX_REQUEST_PERM_DTCS                = 5,
+    TX_RESET_DTCs                       = 6,
+    TX_FLOW_CONTROL_RESPONSE            = 7,
+    TX_TASK_EXIT                        = 8,
 } tx_task_action_t;
 
 //funcitons

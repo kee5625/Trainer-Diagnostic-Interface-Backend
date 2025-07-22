@@ -69,8 +69,9 @@ static void UART_TX(){
                 temp_byte = uart_byte_setup(UART_Received_cmd);
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 break;
-            case UART_DTCs_next_cmd:
+            case UART_DTC_next_cmd:
                 //sending two bytes for one dtcs
+                if (num_bytes_dtcs == 0) break; //don't send if twai failure
                 uart_flush(UART_PORT_NUM);
                 uart_write_bytes(UART_PORT_NUM, &dtcs[dtcs_sent], 1);
                 uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
@@ -151,7 +152,7 @@ static void UART_RX(){
                         ESP_LOGI(TAG,"Stored DTCs request received.");
                         action = UART_DTCs_Num_cmd;
                         xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                        action = UART_DTCs_next_cmd;
+                        action = UART_DTC_next_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
                     case UART_DTCs_REQ_PENDING_cmd:
@@ -163,7 +164,7 @@ static void UART_RX(){
                         ESP_LOGI(TAG,"Pending DTCs request received.");
                         action = UART_DTCs_Num_cmd;
                         xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                        action = UART_DTCs_next_cmd;
+                        action = UART_DTC_next_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
                     case UART_DTCs_REQ_PERM_cmd:
@@ -175,19 +176,18 @@ static void UART_RX(){
                         ESP_LOGI(TAG,"Perminate DTCs request received.");
                         action = UART_DTCs_Num_cmd;
                         xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                        action = UART_DTCs_next_cmd;
+                        action = UART_DTC_next_cmd;
                         xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
-                    case UART_DTCs_Received_cmd:
+                    case UART_DTC_Received_cmd:
                         ESP_LOGI(TAG,"DTC sent successfully.");
                         if (num_bytes_dtcs >= dtcs_sent + 2){
-                            action = UART_DTCs_next_cmd;
-                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                            action = UART_DTC_next_cmd;
                         }else{
                             dtcs_sent = 0;
                             action = UART_DTCs_End_cmd;
-                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         }
+                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                         break;
                     case UART_DTCs_Reset_cmd:
                         ESP_LOGI(TAG,"Reseting DTCs.");

@@ -1,0 +1,9 @@
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:104:18:virtual void touchgfx::Screen::afterTransition()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:144:18:virtual void touchgfx::Screen::handleTickEvent()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:154:18:virtual void touchgfx::Screen::handleKeyEvent(uint8_t)	0	static
+../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp:23:18:virtual void Freeze_Frame_DataViewBase::RLD_OptionsUpdateItem(rowItem_RLD&, int16_t)	0	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataView.cpp:13:6:virtual void Freeze_Frame_DataView::tearDownScreen()	0	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:11:13:Freeze_Frame_DataView::~Freeze_Frame_DataView()	8	static
+../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:11:13:virtual Freeze_Frame_DataView::~Freeze_Frame_DataView()	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataView.cpp:3:1:Freeze_Frame_DataView::Freeze_Frame_DataView()	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataView.cpp:8:6:virtual void Freeze_Frame_DataView::setupScreen()	0	static

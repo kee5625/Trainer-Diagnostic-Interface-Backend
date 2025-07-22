@@ -9,7 +9,6 @@ Home_ScreenView::Home_ScreenView()
 void Home_ScreenView::setupScreen()
 {
     Home_ScreenViewBase::setupScreen();
-    qrCode1.setVisible(true);
     Read_TC_Start_button.setAction(wr_TC_Button_Pressed);
 }
 

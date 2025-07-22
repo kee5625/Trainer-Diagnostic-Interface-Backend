@@ -13,6 +13,6 @@
 ../../TouchGFX/gui/include/gui/containers/rowItem_dtcs.hpp:10:13:rowItem_dtcs::~rowItem_dtcs()	8	static
 ../../TouchGFX/gui/include/gui/containers/rowItem_dtcs.hpp:10:13:virtual rowItem_dtcs::~rowItem_dtcs()	8	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:9:1:rowItem_dtcs::rowItem_dtcs()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:20:6:void rowItem_dtcs::dtcs_Desc_set(const char*)	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:25:6:void rowItem_dtcs::dtcs_set(const char*)	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:15:6:virtual void rowItem_dtcs::initialize()	0	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:19:6:void rowItem_dtcs::dtcs_Desc_set(const char*)	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:25:6:void rowItem_dtcs::dtcs_set(const char*)	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:14:6:virtual void rowItem_dtcs::initialize()	0	static

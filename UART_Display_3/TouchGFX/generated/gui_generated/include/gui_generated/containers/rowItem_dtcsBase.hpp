@@ -6,6 +6,7 @@
 
 #include <gui/common/FrontendApplication.hpp>
 #include <touchgfx/containers/Container.hpp>
+#include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 
 class rowItem_dtcsBase : public touchgfx::Container
@@ -23,6 +24,8 @@ protected:
     /*
      * Member Declarations
      */
+    touchgfx::Box box1;
+    touchgfx::Box box1_1;
     touchgfx::TextAreaWithOneWildcard dtcs_TB;
     touchgfx::TextAreaWithOneWildcard dtcs_Desc_TB;
 
@@ -31,7 +34,7 @@ protected:
      */
     static const uint16_t DTCS_TB_SIZE = 10;
     touchgfx::Unicode::UnicodeChar dtcs_TBBuffer[DTCS_TB_SIZE];
-    static const uint16_t DTCS_DESC_TB_SIZE = 64;
+    static const uint16_t DTCS_DESC_TB_SIZE = 128;
     touchgfx::Unicode::UnicodeChar dtcs_Desc_TBBuffer[DTCS_DESC_TB_SIZE];
 
 private:

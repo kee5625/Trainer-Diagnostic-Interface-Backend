@@ -3,4 +3,4 @@ C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextD
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:62:24:const touchgfx::Font** TypedTextDatabase::getFonts()	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:67:23:const touchgfx::Font* TypedTextDatabase::setFont(touchgfx::FontId, const touchgfx::Font*)	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:74:6:void TypedTextDatabase::resetFont(touchgfx::FontId)	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:92:1:cpp)	8	static
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:89:1:cpp)	8	static

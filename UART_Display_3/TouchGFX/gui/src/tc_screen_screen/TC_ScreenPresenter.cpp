@@ -12,10 +12,10 @@ TC_ScreenPresenter::TC_ScreenPresenter(TC_ScreenView& v)
 
 }
 
-void TC_ScreenPresenter::set_dtcs(char ** dtcs_model, int dtcs_num_model){ // @suppress("Member declaration not found")
+void TC_ScreenPresenter::set_dtcs(char ** dtcs_model, int dtcs_num_model){
 	dtcs_num = dtcs_num_model;
 	dtcs_list = static_cast<char**>(pvPortMalloc(sizeof(char*) * dtcs_num));
-	if (!dtcs_list) return;
+	if (!dtcs_list && dtcs_num_model != 0) return;
 
 	char** source = dtcs_model;
 
@@ -30,9 +30,9 @@ void TC_ScreenPresenter::set_dtcs(char ** dtcs_model, int dtcs_num_model){ // @s
 
 	    if (!dtcs_list[i]) {
 			for (int j = 0; j < i; j++) {
-				vPortFree(dtcs_list[j]); // @suppress("Invalid arguments")
+				vPortFree(dtcs_list[j]);
 			}
-			vPortFree(dtcs_list); // @suppress("Invalid arguments")
+			vPortFree(dtcs_list);
 			dtcs_list = nullptr;
 			dtcs_num = 0;
 			return;
@@ -41,15 +41,15 @@ void TC_ScreenPresenter::set_dtcs(char ** dtcs_model, int dtcs_num_model){ // @s
 	view.DTCs_Loaded();
 }
 
-void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t ser){ // @suppress("Member declaration not found")
+void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t ser){
 	if (ser == UART_DTCs_Reset_cmd){
 		for (int i = 0; i < dtcs_num; i ++){
-			vPortFree(dtcs_list[i]); // @suppress("Invalid arguments")
+			vPortFree(dtcs_list[i]);
 		}
-		vPortFree(dtcs_list); // @suppress("Invalid arguments")
+		vPortFree(dtcs_list);
 		dtcs_num = 0;
 	}
-	model->Model_Set_Service(ser); // @suppress("Method cannot be resolved")
+	model->Model_Set_Service(ser);
 }
 
 void TC_ScreenPresenter::activate()
