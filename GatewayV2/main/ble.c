@@ -53,6 +53,7 @@ static esp_gatt_if_t   gatts_if_save = ESP_GATT_IF_NONE;
 static uint16_t        rx_cccd_hdl   = 0;
 
 extern QueueHandle_t service_queue;
+extern bool stream_on_master;
 
 // Atribute Handles
 uint8_t hdl_tx = 0;
@@ -175,14 +176,20 @@ static void handle_ui_cmd(uint8_t byte)
     
     ESP_LOGI(TAG,"BLE cmd 0x%02X → queue", byte);
     service_request_t s;
-    ESP_LOGI(TAG, "BLE cmd 0x%02X mapped to svc=%d", byte, s);
+    
     switch (byte) {
         case 0x01: s = SERV_PENDING_DTCS; break;
         case 0x02: s = SERV_STORED_DTCS;  break;
         case 0x03: s = SERV_PERM_DTCS;    break;
         case 0x04: s = SERV_CLEAR_DTCS;   break;
+        case 0x05: s = SERV_CUR_DATA;     break;    //one time "Get Data"
+        case 0x06:
+            stream_on_master = !stream_on_master;
+            ESP_LOGI(TAG, "Live stream %s", stream_on_master?"ON":"OFF");
+            return;
         default:   return;                      /* ignore unknown op    */
     }
+    ESP_LOGI(TAG, "BLE cmd 0x%02X mapped to svc=%d", byte, s);
     if (service_queue) xQueueSend(service_queue, &s, 0);
 }
 
@@ -318,6 +325,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         break;
     }
 }
+
 
 // -----------------------------------------------------------------------------
 //                           GATT dispatcher (1 profile)

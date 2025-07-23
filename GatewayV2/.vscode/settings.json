@@ -26,6 +26,8 @@
     "esp_gatts_api.h": "c",
     "esp_gatt_common_api.h": "c",
     "compare": "c",
-    "ble.h": "c"
+    "ble.h": "c",
+    "chrono": "c",
+    "twai_tc_can.h": "c"
   }
 }
