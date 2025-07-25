@@ -23,7 +23,7 @@
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
 
-bool stream_on_master = false;
+volatile bool stream_on_master = false;
 
 static uint8_t *dtcs;
 static uint8_t dtcs_bytes;

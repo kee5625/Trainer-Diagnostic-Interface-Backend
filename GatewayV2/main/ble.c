@@ -174,7 +174,7 @@ static void handle_ui_cmd(uint8_t byte)
      *   0x04  = “clear codes”
      */
     
-    ESP_LOGI(TAG,"BLE cmd 0x%02X → queue", byte);
+    ESP_LOGI(TAG,"[BLE] cmd 0x%02X → enqueue service_queue", byte);
     service_request_t s;
     
     switch (byte) {
@@ -182,7 +182,7 @@ static void handle_ui_cmd(uint8_t byte)
         case 0x02: s = SERV_STORED_DTCS;  break;
         case 0x03: s = SERV_PERM_DTCS;    break;
         case 0x04: s = SERV_CLEAR_DTCS;   break;
-        case 0x05: s = SERV_CUR_DATA;     break;    //one time "Get Data"
+        case 0x05: s = SERV_LD_DATA;     break;    //one time "Get Data"
         case 0x06:
             stream_on_master = !stream_on_master;
             ESP_LOGI(TAG, "Live stream %s", stream_on_master?"ON":"OFF");
@@ -190,7 +190,12 @@ static void handle_ui_cmd(uint8_t byte)
         default:   return;                      /* ignore unknown op    */
     }
     ESP_LOGI(TAG, "BLE cmd 0x%02X mapped to svc=%d", byte, s);
-    if (service_queue) xQueueSend(service_queue, &s, 0);
+    if (service_queue) {
+       // block until the service task picks it up
+       BaseType_t res = xQueueSend(service_queue, &s, pdMS_TO_TICKS(100));
+       ESP_LOGI(TAG, "[BLE] xQueueSend(service_queue) → %s",
+          res == pdPASS ? "OK" : (res == errQUEUE_FULL ? "FULL" : "ERR"));
+   }
 }
 
         
@@ -280,7 +285,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         
         
         //Log event handler trigger
-        ESP_LOGI(TAG, "WRITE_EVT handle=0x%04X, len=%u, need_rsp=%u",
+        ESP_LOGI(TAG, "[BLE] WRITE_EVT handle=0x%04X, len=%u, need_rsp=%u",
                 param->write.handle, param->write.len, param->write.need_rsp);
 
         if(param->write.need_rsp){
@@ -318,7 +323,8 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
     case ESP_GATTS_DISCONNECT_EVT:
         ESP_LOGI(TAG, "Client disconnected (reason 0x%02X)", param->disconnect.reason);
         conn_active = notify_on = false;
-
+        stream_on_master = false;
+        ESP_LOGI(TAG, "[BLE] Reset stream_on_master=%d", stream_on_master);
         esp_ble_gap_start_advertising(&adv_params);   // resume beaconing
         break;
     default:

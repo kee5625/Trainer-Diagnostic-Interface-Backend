@@ -37,7 +37,11 @@ static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 static uint8_t stored_dtcs[6] = {0x03,0x04,0x02,0x00,0x04,0x00};
 static uint8_t pending_dtcs[12] = {0x03,0x04,0x02,0x00,0x04,0x00, 0x05, 0x00, 0x06, 0x00, 0x07, 0x00};
 static uint8_t perminate_dtcs[4] = {0x09, 0x00, 0x0A,0x00};
-//static uint8_t perminate_dtcs[0];
+static uint8_t live_data[6];
+static const uint8_t TEST_IGNITIONS[]    = { 0, 1 };
+static const uint8_t TEST_SEAT_ADJ[]     = { 0, 2, 4, 1, 3 };
+static const uint8_t TEST_LUMBAR_ADJ[]   = { 0, 1, 2, 3, 4 };
+
 static int CF_num = 0; 
 static int frames_Before_FC = 0;
 static QueueHandle_t tx_task_queue;
@@ -69,6 +73,24 @@ static inline twai_message_t TWAI_Clear_DTCS(){ //good and bad response not impl
     }
     return msg;
 }
+static uint8_t read_ignition(void)     { return 1;   /* ON=1, OFF=0 */ }
+static uint8_t read_seat_adjuster(void) { return 2;   /* UP=2 */ }
+static uint8_t read_lumbar_adjuster(void){ return 3;   /* LEFT=3 */ }
+
+static void refresh_live_data(void) {
+    static size_t idx = 0;
+    // cycle idx through 0…n−1
+    idx = (idx + 1) % 5;  
+
+    live_data[0] = 0xA0;
+    live_data[1] = TEST_IGNITIONS[idx % (sizeof(TEST_IGNITIONS)/1)];
+
+    live_data[2] = 0xA1;
+    live_data[3] = TEST_SEAT_ADJ[idx];
+
+    live_data[4] = 0xA2;
+    live_data[5] = TEST_LUMBAR_ADJ[(idx+2) % (sizeof(TEST_LUMBAR_ADJ)/1)];
+}
 
 /**
  * Function Description: Passed the desired request from TWAI_OBD.h this will create a corret frame for it. To send a multi frame message call
@@ -98,6 +120,12 @@ static twai_message_t TWAI_setup(uint8_t response){
         ESP_LOGI(TAG,"%i", response);
         message = TWAI_Clear_DTCS();
         return message;
+    }
+    else if (response == SHOW_LIVE_DATA_REQ) {
+        response = SHOW_LIVE_DATA_RESP;
+        refresh_live_data();
+        bytes = sizeof(live_data);
+        dtcs_ptr = live_data;
     }
 
     //setting frame type
@@ -135,6 +163,10 @@ static twai_message_t TWAI_setup(uint8_t response){
     return message;
 }
 
+
+
+
+
 static void twai_receive_task(void *arg)
 {   
     twai_message_t tx_action;
@@ -146,7 +178,7 @@ static void twai_receive_task(void *arg)
     while (1) {
         if (twai_receive(&rx_action,portMAX_DELAY) == ESP_OK){
             num_bytes = rx_action.data[0]; //number of bytes
-            if (num_bytes == 0x01 ||num_bytes == 0x02){ // 1 byte is most request but some will need 2 bytes
+            if (num_bytes > 0 && num_bytes <= SINGLE_FRAME){ // 1 byte is most request but some will need 2 bytes
                 mode_req = rx_action.data[1]; //mode request
             }else if (num_bytes == MULT_FRAME_FLOW){
                 mode_req = (uint8_t) MULT_FRAME_FLOW;
@@ -213,6 +245,20 @@ static void twai_receive_task(void *arg)
                     frames_Before_FC = rx_action.data[1];
                     ESP_LOGI(TAG, "Flow control frame received, ready to continue.");
                     xSemaphoreGive(FC_Frame_sem);
+                    break;
+                case SHOW_LIVE_DATA_REQ:
+                    frames_Before_FC = 0;
+                    CF_num = 0;
+                    refresh_live_data();
+                    /* enqueue first multi-frame (or single, if <6 bytes) */
+                    tx_action = TWAI_setup(mode_req);
+                    xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
+                    /* enquue additional CFs*/
+                    while((CF_num - 1) * 6 < sizeof(live_data)){
+                        tx_action = TWAI_setup(mode_req);
+                        xQueueSend(tx_task_queue, &tx_action, portMAX_DELAY);
+                    }
+                    ESP_LOGI(TAG, "Responding to live data request");
                     break;
                 default:
                     ESP_LOGI(TAG, "UNKNOWN COMMAND: %i %i",rx_action.data[0], rx_action.data[1]);
