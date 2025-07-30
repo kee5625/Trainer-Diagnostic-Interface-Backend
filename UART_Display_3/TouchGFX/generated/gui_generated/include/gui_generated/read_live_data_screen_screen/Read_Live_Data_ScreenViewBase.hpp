@@ -10,7 +10,7 @@
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/containers/scrollers/ScrollList.hpp>
-#include <gui/containers/rowItem_RLD.hpp>
+#include <gui/containers/rowItem_Data.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
 
 class Read_Live_Data_ScreenViewBase : public touchgfx::View<Read_Live_Data_ScreenPresenter>
@@ -20,7 +20,7 @@ public:
     virtual ~Read_Live_Data_ScreenViewBase();
     virtual void setupScreen();
 
-    virtual void RLD_OptionsUpdateItem(rowItem_RLD& item, int16_t itemIndex)
+    virtual void dataUpdateItem(rowItem_Data& item, int16_t itemIndex)
     {
         // Override and implement this function in Read_Live_Data_Screen
     }
@@ -36,8 +36,8 @@ protected:
     touchgfx::Box __background;
     touchgfx::Box blue_background;
     touchgfx::ScalableImage ATech_Logo;
-    touchgfx::ScrollList RLD_Options;
-    touchgfx::DrawableListItems<rowItem_RLD, 7> RLD_OptionsListItems;
+    touchgfx::ScrollList data;
+    touchgfx::DrawableListItems<rowItem_Data, 7> dataListItems;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  home_button;
 
 private:

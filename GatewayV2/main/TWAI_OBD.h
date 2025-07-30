@@ -6,8 +6,8 @@
 #define MULT_FRAME_CON          0x20  //first consecutive frame will be 0x21 then 0x22...
 #define MULT_FRAME_FLOW         0x30  //Flow contorl frame for multi CAN Frame msg
 #define SERVICE_PID_TC          0x43  //service/mode to grab TC
-#define ID_DT_ECM               0x7E0 //From tester to all ECUs0x7DF
-#define ID_DT_ECUs              0x7DF //From teseter to engine ECU only
+#define ID_DT_ECM               0x7E0 //From teseter to ECM only
+#define ID_DT_ECUs              0x7DF //From tester to all ECUs
 #define ID_ECU                  0x7E8 //lower end of ECU responses
 #define ID_ECU_Second           0x7EF //upper end of ECU responses
 

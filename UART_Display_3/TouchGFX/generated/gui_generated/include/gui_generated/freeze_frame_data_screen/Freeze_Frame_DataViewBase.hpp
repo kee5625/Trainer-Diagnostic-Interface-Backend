@@ -9,7 +9,7 @@
 #include <gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/containers/scrollers/ScrollList.hpp>
-#include <gui/containers/rowItem_RLD.hpp>
+#include <gui/containers/rowItem_Data.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
 
@@ -20,7 +20,7 @@ public:
     virtual ~Freeze_Frame_DataViewBase();
     virtual void setupScreen();
 
-    virtual void RLD_OptionsUpdateItem(rowItem_RLD& item, int16_t itemIndex)
+    virtual void Freeze_dataUpdateItem(rowItem_Data& item, int16_t itemIndex)
     {
         // Override and implement this function in Freeze_Frame_Data
     }
@@ -34,9 +34,9 @@ protected:
      * Member Declarations
      */
     touchgfx::Box __background;
-    touchgfx::ScrollList RLD_Options;
-    touchgfx::DrawableListItems<rowItem_RLD, 7> RLD_OptionsListItems;
     touchgfx::Box blue_background;
+    touchgfx::ScrollList Freeze_data;
+    touchgfx::DrawableListItems<rowItem_Data, 7> Freeze_dataListItems;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  home_button;
 

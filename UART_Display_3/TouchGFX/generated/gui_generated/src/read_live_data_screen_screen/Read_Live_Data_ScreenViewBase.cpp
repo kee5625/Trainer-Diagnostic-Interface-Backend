@@ -22,19 +22,19 @@ Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase() :
     ATech_Logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(ATech_Logo);
 
-    RLD_Options.setPosition(0, 59, 480, 213);
-    RLD_Options.setHorizontal(false);
-    RLD_Options.setCircular(false);
-    RLD_Options.setEasingEquation(touchgfx::EasingEquations::backEaseOut);
-    RLD_Options.setSwipeAcceleration(10);
-    RLD_Options.setDragAcceleration(10);
-    RLD_Options.setNumberOfItems(59);
-    RLD_Options.setPadding(0, 0);
-    RLD_Options.setSnapping(false);
-    RLD_Options.setOvershootPercentage(75);
-    RLD_Options.setDrawableSize(36, 0);
-    RLD_Options.setDrawables(RLD_OptionsListItems, updateItemCallback);
-    add(RLD_Options);
+    data.setPosition(0, 59, 480, 213);
+    data.setHorizontal(false);
+    data.setCircular(false);
+    data.setEasingEquation(touchgfx::EasingEquations::backEaseOut);
+    data.setSwipeAcceleration(10);
+    data.setDragAcceleration(10);
+    data.setNumberOfItems(0);
+    data.setPadding(0, 0);
+    data.setSnapping(false);
+    data.setOvershootPercentage(75);
+    data.setDrawableSize(36, 0);
+    data.setDrawables(dataListItems, updateItemCallback);
+    add(data);
 
     home_button.setBoxWithBorderPosition(0, 0, 62, 59);
     home_button.setBorderSize(3);
@@ -53,10 +53,10 @@ Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()
 
 void Read_Live_Data_ScreenViewBase::setupScreen()
 {
-    RLD_Options.initialize();
-    for (int i = 0; i < RLD_OptionsListItems.getNumberOfDrawables(); i++)
+    data.initialize();
+    for (int i = 0; i < dataListItems.getNumberOfDrawables(); i++)
     {
-        RLD_OptionsListItems[i].initialize();
+        dataListItems[i].initialize();
     }
 }
 
@@ -73,8 +73,8 @@ void Read_Live_Data_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::Ab
 
 void Read_Live_Data_ScreenViewBase::updateItemCallbackHandler(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex)
 {
-    if (items == &RLD_OptionsListItems)
+    if (items == &dataListItems)
     {
-        RLD_OptionsUpdateItem(RLD_OptionsListItems[containerIndex], itemIndex);
+        dataUpdateItem(dataListItems[containerIndex], itemIndex);
     }
 }

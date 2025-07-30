@@ -14,7 +14,8 @@
 
 //TWAI action type setup
 typedef enum {
-    TX_REQUEST_LD                       = 1,
+    TX_REQUEST_PIDS                     = 0,
+    TX_REQUEST_DATA                     = 1,
     TX_REQUEST_FFD                      = 2,
     TX_REQUEST_STORED_DTCS              = 3,
     TX_REQUEST_PENDING_DTCS             = 4,
@@ -25,7 +26,7 @@ typedef enum {
 } tx_task_action_t;
 
 //funcitons
-void twai_TC_Get();
+void TWAI_INIT();
 
 
 #endif

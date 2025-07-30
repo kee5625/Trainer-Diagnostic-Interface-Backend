@@ -10,15 +10,15 @@ rowItem_dtcsBase::rowItem_dtcsBase()
     setWidth(480);
     setHeight(136);
     box1.setPosition(0, 50, 480, 86);
-    box1.setColor(touchgfx::Color::getColorFromRGB(0, 69, 124));
+    box1.setColor(touchgfx::Color::getColorFromRGB(0, 14, 122));
     add(box1);
 
     box1_1.setPosition(0, 0, 480, 50);
-    box1_1.setColor(touchgfx::Color::getColorFromRGB(157, 161, 162));
+    box1_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(box1_1);
 
     dtcs_TB.setPosition(44, 0, 183, 50);
-    dtcs_TB.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    dtcs_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     dtcs_TB.setLinespacing(0);
     Unicode::snprintf(dtcs_TBBuffer, DTCS_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_40UU).getText());
     dtcs_TB.setWildcard(dtcs_TBBuffer);
@@ -26,7 +26,7 @@ rowItem_dtcsBase::rowItem_dtcsBase()
     add(dtcs_TB);
 
     dtcs_Desc_TB.setPosition(0, 50, 480, 86);
-    dtcs_Desc_TB.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    dtcs_Desc_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     dtcs_Desc_TB.setLinespacing(0);
     Unicode::snprintf(dtcs_Desc_TBBuffer, DTCS_DESC_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_LYMN).getText());
     dtcs_Desc_TB.setWildcard(dtcs_Desc_TBBuffer);

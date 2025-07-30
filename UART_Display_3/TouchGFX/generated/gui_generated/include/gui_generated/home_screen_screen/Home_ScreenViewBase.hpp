@@ -33,7 +33,7 @@ protected:
     touchgfx::Box blue_box;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_live_data_Start_button;
-    touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Freeze_Frame_Button;
+    touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  freeze_data_button;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_TC_Start_button;
     touchgfx::TextArea Trainer_Name;
 

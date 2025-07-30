@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "gatewayv1",
-    "project_version":    "fb43499-dirty",
+    "project_version":    "0cb9ee8-dirty",
     "project_path":       "C:/ESP-IDF/Gatway_updates/GatewayV2",
     "idf_path":           "C:/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "C:/ESP-IDF/Gatway_updates/GatewayV2/build",

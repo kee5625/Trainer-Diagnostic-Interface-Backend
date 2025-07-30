@@ -32,12 +32,14 @@
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
 
-
+//static copies
 static uint8_t *dtcs;
 static uint8_t dtcs_bytes;
-SemaphoreHandle_t TC_Recieved_sem;
-SemaphoreHandle_t TWAI_GRAB_TC_sem;
-SemaphoreHandle_t DTCS_Loaded_sem;
+static uint8_t supported_Bitmask[7][4];
+
+uint8_t req_PID = 0;
+
+SemaphoreHandle_t TWAI_DONE_sem;
 QueueHandle_t service_queue;
 
 
@@ -46,7 +48,7 @@ void DTCS_reset(){
     dtcs_bytes = 0;
 }
 
-void TC_Code_set(uint8_t *codes, int codes_bytes){
+void Set_DTCs(uint8_t *codes, int codes_bytes){
     dtcs = pvPortMalloc(codes_bytes);
     dtcs_bytes = codes_bytes;
     if (codes != NULL){
@@ -57,10 +59,25 @@ void TC_Code_set(uint8_t *codes, int codes_bytes){
     }
 }
 
-void set_serv(service_request_t req){
+//
+void Set_Req_PID(int PID){
+    req_PID = PID;
+}
+
+void Set_PID_Bitmask(uint8_t bitmask[7][4]){
+    memcpy(supported_Bitmask, bitmask, sizeof(supported_Bitmask));
+}
+
+void Set_PID_Value(uint8_t *data,int num_bytes){
+    UART_PID_VALUE(data,num_bytes);
+}
+
+//controlls TWAI based on req
+void Set_TWAI_Serv(service_request_t req){
     
     switch(req){
-        case SERV_LD_DATA:
+        case SERV_PIDS:
+        case SERV_DATA:
         case SERV_FREEZE_DATA:
         case SERV_STORED_DTCS:
         case SERV_CLEAR_DTCS: //intentional fall through
@@ -68,11 +85,16 @@ void set_serv(service_request_t req){
         case SERV_PENDING_DTCS:
         case SERV_PERM_DTCS:
             xQueueSend(service_queue, &req, portMAX_DELAY);
-            xSemaphoreTake(DTCS_Loaded_sem, portMAX_DELAY);
-            
+            xSemaphoreTake(TWAI_DONE_sem, portMAX_DELAY);
+        
         default:
             break;
     }
+}
+
+
+uint8_t *get_bitmask_row(int row){
+    return supported_Bitmask[row]; //single row of bitmask
 }
 
 uint8_t *get_dtcs(){ //Made to have 1 D pointer to all values that can send through UART
@@ -80,13 +102,17 @@ uint8_t *get_dtcs(){ //Made to have 1 D pointer to all values that can send thro
 }
 
 uint8_t get_dtcs_bytes(){
-    return dtcs_bytes;
+    return dtcs_bytes; //total number of bytes for all dtcs (1 dtcs = 2 bytes)
+}
+
+uint8_t get_Req_PID(){
+    return req_PID;
 }
 
 void app_main(void)
 {  
     service_queue = xQueueCreate(3, sizeof(service_request_t));
-    DTCS_Loaded_sem = xSemaphoreCreateBinary();
-    twai_TC_Get();
+    TWAI_DONE_sem = xSemaphoreCreateBinary();
+    TWAI_INIT();
     UART_INIT();
 }

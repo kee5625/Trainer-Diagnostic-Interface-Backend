@@ -52,8 +52,8 @@ Application/User/gui/Freeze_Frame_DataPresenter.o: \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollBase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/EasingEquations.hpp \
- ../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp \
- ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp \
+ ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp \
+ ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
@@ -129,8 +129,8 @@ Application/User/gui/Freeze_Frame_DataPresenter.o: \
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/ScrollBase.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/EasingEquations.hpp:
-../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp:
-../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp:
+../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:
+../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:

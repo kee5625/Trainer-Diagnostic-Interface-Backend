@@ -13,23 +13,23 @@ Freeze_Frame_DataViewBase::Freeze_Frame_DataViewBase() :
     __background.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(__background);
 
-    RLD_Options.setPosition(0, 59, 480, 213);
-    RLD_Options.setHorizontal(false);
-    RLD_Options.setCircular(false);
-    RLD_Options.setEasingEquation(touchgfx::EasingEquations::backEaseOut);
-    RLD_Options.setSwipeAcceleration(10);
-    RLD_Options.setDragAcceleration(10);
-    RLD_Options.setNumberOfItems(10);
-    RLD_Options.setPadding(0, 0);
-    RLD_Options.setSnapping(false);
-    RLD_Options.setOvershootPercentage(75);
-    RLD_Options.setDrawableSize(36, 0);
-    RLD_Options.setDrawables(RLD_OptionsListItems, updateItemCallback);
-    add(RLD_Options);
-
     blue_background.setPosition(0, 0, 480, 272);
     blue_background.setColor(touchgfx::Color::getColorFromRGB(8, 14, 87));
     add(blue_background);
+
+    Freeze_data.setPosition(0, 59, 480, 213);
+    Freeze_data.setHorizontal(false);
+    Freeze_data.setCircular(false);
+    Freeze_data.setEasingEquation(touchgfx::EasingEquations::backEaseOut);
+    Freeze_data.setSwipeAcceleration(10);
+    Freeze_data.setDragAcceleration(10);
+    Freeze_data.setNumberOfItems(10);
+    Freeze_data.setPadding(0, 0);
+    Freeze_data.setSnapping(false);
+    Freeze_data.setOvershootPercentage(75);
+    Freeze_data.setDrawableSize(36, 0);
+    Freeze_data.setDrawables(Freeze_dataListItems, updateItemCallback);
+    add(Freeze_data);
 
     ATech_Logo.setBitmap(touchgfx::Bitmap(BITMAP_IMAGES_ID));
     ATech_Logo.setPosition(359, 0, 121, 59);
@@ -53,10 +53,10 @@ Freeze_Frame_DataViewBase::~Freeze_Frame_DataViewBase()
 
 void Freeze_Frame_DataViewBase::setupScreen()
 {
-    RLD_Options.initialize();
-    for (int i = 0; i < RLD_OptionsListItems.getNumberOfDrawables(); i++)
+    Freeze_data.initialize();
+    for (int i = 0; i < Freeze_dataListItems.getNumberOfDrawables(); i++)
     {
-        RLD_OptionsListItems[i].initialize();
+        Freeze_dataListItems[i].initialize();
     }
 }
 
@@ -73,8 +73,8 @@ void Freeze_Frame_DataViewBase::flexButtonCallbackHandler(const touchgfx::Abstra
 
 void Freeze_Frame_DataViewBase::updateItemCallbackHandler(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex)
 {
-    if (items == &RLD_OptionsListItems)
+    if (items == &Freeze_dataListItems)
     {
-        RLD_OptionsUpdateItem(RLD_OptionsListItems[containerIndex], itemIndex);
+        Freeze_dataUpdateItem(Freeze_dataListItems[containerIndex], itemIndex);
     }
 }

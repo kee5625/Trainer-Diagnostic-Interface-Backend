@@ -1,2 +1,3 @@
 ../Application/User/TouchGFX/App/TC_Bridge.cpp:20:6:void setModelInstance(Model*)	0	static
-../Application/User/TouchGFX/App/TC_Bridge.cpp:26:6:void DTCs_GUI_Pass(const char*, int)	40	static
+../Application/User/TouchGFX/App/TC_Bridge.cpp:28:6:void DTCs_GUI_Pass(const char*, int)	40	static
+../Application/User/TouchGFX/App/TC_Bridge.cpp:52:6:void GUI_Set_PIDs(int, uint8_t*, uint8_t (*)[4], int)	24	static

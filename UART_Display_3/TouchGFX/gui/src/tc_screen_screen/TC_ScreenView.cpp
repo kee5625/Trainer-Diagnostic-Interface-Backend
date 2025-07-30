@@ -23,7 +23,10 @@ static const DTCEntry dtc_table[] = {
 		{"P0485", "Cooling Fan Power/Ground Circuit"},
 		{"P0495", "Fan Speed Too High"},
 		{"P0496", "Fan Speed Too Low"},
+		{"P01C1", "Fuel Rail Pressure Sensor Circuit Low (Bank 2)."},
 		{"P01C1", "Fuel Rail Pressure Sensor Circuit High (Bank 2)."},
+		{"P02C0", "Cylinder 10 Injector Restricted."},
+		{"C33C1", "Unknown Chassis code."},
 };
 
 TC_ScreenView::TC_ScreenView()
@@ -77,6 +80,7 @@ void TC_ScreenView::Select_Phase_Set(){
 		DTCS_.invalidate();
 
 		screen_Phase = Phase::select;
+		Unicode::strncpy(status_TBBuffer, "Loading...", sizeof("Loading..."));
 }
 
 void TC_ScreenView::setupScreen()
@@ -113,7 +117,6 @@ void TC_ScreenView::handleTickEvent(){
 		}else{
 			status_TB.setVisible(false);
 			status_TB.invalidate();
-			Unicode::strncpy(status_TBBuffer, "loading...", sizeof("loading..."));
 			pendingDTCUpdate = false;
 			Select_Phase_Set();
 		}

@@ -191,7 +191,7 @@ int main(void)
   GUITaskHandle = osThreadNew(TouchGFX_Task, NULL, &GUITask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  UARTHandle = osThreadNew(Get_TC_USART, NULL, &UARTTask_attributes);
+  UARTHandle = osThreadNew(UART_INIT, NULL, &UARTTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

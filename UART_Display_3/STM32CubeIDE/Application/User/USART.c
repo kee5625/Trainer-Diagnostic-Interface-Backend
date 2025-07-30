@@ -6,6 +6,7 @@
  */
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 #include "main.h"
 #include <stdbool.h>
 #include <ctype.h>
@@ -16,22 +17,40 @@
 #include "blinking.h"
 #include "..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp"
 #include "UART_COMMS.hpp"
+#include "PIDs_Library.hpp"
 
+//padding for uart commands
 #define uart_start_pad 1
 #define uart_end_pad 6
+
+//other macros
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
 #define HEXCHAR(n) ((n) < 10 ? ('0' + (n)) : ('A' + (n) - 10))
 
-//global static
+//general globals
+static uint8_t rx_byte;
+static bool retry_last = false;    				//used for retry command
+uart_comms_t cur_service;						//marks current service being request(GUI sets)
+static uint32_t TX_ticks = osWaitForever;       //used to ping start commands
+
+//DTCs globals
 static char *dtcs_list = NULL; 	   				//list of all DTCs(each DTC is 5 characters long)
 static int dtcs_size = -1;		   				//total size of DTC list
-static int cur_dtcs_list_size = 0; 				//tracks current size for re-alloc
-static uint8_t rx_data;            				//raw UART bytes
-static bool retry_last = false;    				//used for retry command
-uart_comms_t curr_service;		   				//marks current service being request(GUI sets)
-static osMessageQueueId_t  send_task_queue;
-static osMessageQueueId_t  receive_task_queue;
+static int cur_dtcs_list_size = 0; 				//tracks current size for re-alloc for DTCs list
+
+//PID data globals
+static uint8_t cur_pid = -1;
+static uint8_t pid_bitmask[7][4];
+static uint8_t *PID_VALUE;
+static int pid_bytes = -1; 						//number of bytes expected for cur_pid
+
+//RTOS globals
+static osSemaphoreId_t SERV_DONE_sem;
+static osMessageQueueId_t send_task_queue;
+static osMessageQueueId_t receive_task_queue;
+static osMessageQueueId_t control_queue;
+
 
 //thread setup
 osThreadId_t send_handle;
@@ -46,6 +65,12 @@ const osThreadAttr_t receiveTask_attributes = {
   .stack_size = 1024,
   .priority = (osPriority_t) osPriorityRealtime,
 };
+osThreadId_t control_handle;
+const osThreadAttr_t controlTask_attributes = {
+  .name = "controlTask",
+  .stack_size = 512,
+  .priority = (osPriority_t) osPriorityLow,
+};
 osThreadId_t blink_handle;
 const osThreadAttr_t blinkTask_attributes = {
   .name = "blinkTask",
@@ -53,16 +78,41 @@ const osThreadAttr_t blinkTask_attributes = {
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
 
-//padding added for error checking on commands
+
+//adds byte padding
 static inline uint8_t uart_byte_setup(uart_comms_t command){
 		return     ((uart_start_pad & 0x01) << 7) |
 				   ((command & 0x0F) << 3) |
 				   ((uart_end_pad & 0x07) << 0);
 }
 
-//returns true if command is valid
+//returns true if command has valid padding
 static inline bool is_valid_frame(uint8_t byte){
 	return ((byte >> 7) & uart_start_pad) && ((byte & 0x07) & uart_end_pad);
+}
+
+static inline bool Sum_Check(uint8_t localSum, uint8_t externalSum){
+	uint8_t rx_data;
+	if (~localSum == externalSum){
+		//failed checksum retrying
+		HAL_UART_Receive_IT(&huart1,&rx_data,1);
+		uint8_t byte = UART_Start_cmd;
+		osMessageQueuePut(send_task_queue, &byte, 0, 0);
+		return false;
+	}
+	return true;
+}
+
+static inline void UART_Reset(){
+
+	HAL_UART_Abort(&huart1);
+
+	__HAL_UART_CLEAR_OREFLAG(&huart1);
+	__HAL_UART_CLEAR_PEFLAG(&huart1);
+	__HAL_UART_CLEAR_FEFLAG(&huart1);
+	__HAL_UART_CLEAR_NEFLAG(&huart1);
+
+	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
 }
 
 void init_error_check(void *ptr){
@@ -89,7 +139,7 @@ void *freertos_realloc(void* old_ptr, size_t old_size, size_t new_size){
  * Function Description: Converts read in bytes into trouble codes and then adds them
  * to the static global dtcs_list
  */
-static void dtcs_conv_add(uint8_t first_byte, uint8_t second_byte) {
+static void DTC_Decode(uint8_t first_byte, uint8_t second_byte) {
     char dtcs_con[6];  // Fixed-size stack buffer
 
     // Determine the prefix letter
@@ -105,6 +155,7 @@ static void dtcs_conv_add(uint8_t first_byte, uint8_t second_byte) {
     dtcs_con[4] = HEXCHAR(second_byte & 0x0F);
     dtcs_con[5] = '\0';
 
+    //setting list size
     if (!dtcs_list) {
         dtcs_list = (char *)pvPortMalloc(1);
         if (!dtcs_list) return;
@@ -124,50 +175,127 @@ static int Read_Codes(int last_byte){
 	uint8_t byte;
 
 	if (dtcs_size == -1){
-		dtcs_size = rx_data;
+		dtcs_size = rx_byte;
 		last_byte = -999;
 		byte = UART_DTC_Received_cmd;
-		HAL_UART_Receive_IT(&huart1,&rx_data, 1);
+		HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 		osMessageQueuePut(send_task_queue, &byte, 0, 0);
-	}else if (last_byte == -999 && is_valid_frame(rx_data) && ((rx_data>>3) & 0x0F) == UART_DTCs_End_cmd){
+	}else if (last_byte == -999 && is_valid_frame(rx_byte) && ((rx_byte>>3) & 0x0F) == UART_DTCs_End_cmd){
 		osSemaphoreRelease(blink_sem); //for testing: shows DTCs are ready
 		DTCs_GUI_Pass(dtcs_list,dtcs_size);
 		last_byte = -1;
 	}else{
 		if(last_byte >= 0){
-			dtcs_conv_add((uint8_t) last_byte, rx_data); //converts and adds to global static DTCs list
+			DTC_Decode((uint8_t) last_byte, rx_byte); //converts and adds to global static DTCs list
 			byte = UART_DTC_Received_cmd;
 			osMessageQueuePut(send_task_queue, &byte, 0, 0);
 			last_byte = -999;
 		}else{
-			last_byte = rx_data;
+			last_byte = rx_byte;
 		}
-		HAL_UART_Receive_IT(&huart1,&rx_data, 1);
+		HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 	}
 	return last_byte;
 }
 
-static void Live_Data(){
 
-}
+static void get_PIDs(){
+	int row = 0;
+	int col = 0;
+	uint8_t checksum = 0;
 
-static void Freeze_Data(){
+	while (1){
 
+		if (row != 7){
+			pid_bitmask[row][col] = rx_byte;
+			checksum += rx_byte;
+			HAL_UART_Receive_IT(&huart1,&rx_byte,1);
+		}
+
+		//setting up for next call
+		if (col == 3){
+			row ++;
+			col = 0;
+
+		}else if (row == 7){
+			if (Sum_Check(checksum,rx_byte)) {
+				break;
+			}
+			row = 0;
+			col = 0;
+			checksum = 0;
+
+			rx_byte = UART_PIDS;
+			HAL_UART_Transmit_IT(&huart1,&rx_byte,1); //retry request
+
+		}else{
+			col += 1;
+		}
+		osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
+	}
+
+	GUI_Set_PIDs(cur_pid,NULL,pid_bitmask, 0);
+	vTaskDelay(pdMS_TO_TICKS(10));
+	osSemaphoreRelease(SERV_DONE_sem); //ready for next service
 }
 
 /**
- * UART Callback funcitons
+ * Grabs the raw bytes from UART for value of PID requested
+ */
+static void get_Data_PID(uint8_t data){
+	uint8_t checksum = 0;
+
+	if (cur_pid == 0x20){ //exit task
+		osMessageQueueReset(control_queue); //clear all remaining PID request
+		osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+		return;
+	}
+	while(1){
+		pid_bytes = data; //set global size
+		PID_VALUE = (uint8_t *)pvPortMalloc(pid_bytes);
+
+		for (int i = 0; i < pid_bytes; i ++){
+			HAL_UART_Receive_IT(&huart1,&data,1); //receive data bytes
+			osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever); //wait till receive finished
+			PID_VALUE[i] = data;
+			checksum += data;
+		}
+
+		checksum = ~checksum;
+		HAL_UART_Receive_IT(&huart1,&data,1); //receive checksum
+		osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);  //wait till receive finished
+
+		if (checksum == data){
+			break;
+		}else{
+			checksum = 0;
+			HAL_UART_Receive_IT(&huart1,&data,1); //receive size and start over
+			HAL_UART_Transmit_IT(&huart1,&cur_pid,1);//request current PID data again
+			osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever); //wait till receive finished
+		}
+
+	}
+
+	GUI_Set_PIDs(cur_pid,PID_VALUE,NULL, pid_bytes);
+	vTaskDelay(pdMS_TO_TICKS(10));
+	osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+}
+
+/**
+ * UART Callback functions
  */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
 	if (huart->Instance == USART1){
 	}
+
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART1){
-		osMessageQueuePut(receive_task_queue,&rx_data, 0,0);
+		osMessageQueuePut(receive_task_queue,&rx_byte, 0,0);
 	}
+
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
@@ -180,12 +308,63 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
 		while (__HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE)) {
 			dummy = huart->Instance->RDR;
 		}
+
 		//setting UART_TX() to resend last command
 		retry_last = true;
 		//set receive again based on expected input
 		HAL_UART_Receive_IT(huart,&byte,1);
 
     }
+
+}
+
+
+//used to queue up action sequences on UART (mainly for PID request)
+static void UART_CONTROl(){
+	uint8_t byte;
+
+	Service_Request_t ServReq;
+	while (1){
+		if (osMessageQueueGet(control_queue,&ServReq,NULL,osWaitForever) == osOK){
+
+			TX_ticks = osWaitForever; //stopping TX repeat for start command
+			retry_last = false;
+			vTaskDelay(pdMS_TO_TICKS(10)); //small pause to let RX read last bytes sent if one was
+
+			/**
+			 * Resetting all global variables for next service
+			 */
+			cur_service = ServReq.service;
+			cur_pid = ServReq.pid;     //PID 0x20 = exit PID data sequence
+			pid_bytes = -1;            // = number of bytes in pid value
+
+			if (dtcs_list != NULL){
+				vPortFree(dtcs_list);
+				dtcs_list = NULL;
+				dtcs_size = -1;
+			}
+
+			cur_dtcs_list_size = 0;
+
+			if (cur_service == UART_DTCs_Reset_cmd) {
+				byte = cur_service;
+				osMessageQueuePut(send_task_queue, &byte, 0, 0);
+
+			}else if (cur_service == UART_DATA_PID){
+				if (cur_pid != 0x20) HAL_UART_Receive_IT(&huart1,&rx_byte, 1); //receive number of bytes
+				byte = UART_DATA_PID;
+				osMessageQueuePut(send_task_queue, &byte, 0, 0); //send PID
+
+			}else{
+				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
+				byte = UART_Start_cmd;
+				osMessageQueuePut(send_task_queue, &byte, 0, 0);
+
+			}
+
+			osSemaphoreAcquire(SERV_DONE_sem, portMAX_DELAY); //wait till service is done
+		}
+	}
 }
 
 /*
@@ -195,25 +374,49 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart){
 static void UART_TX(){
 	uart_comms_t tx_action;
 	uint8_t byte;
-	uint32_t ticks = osWaitForever;
 	osStatus_t queue_get;
+	int timeouts = 0;
 	while(1){
-		queue_get = osMessageQueueGet(send_task_queue, &tx_action, NULL, ticks);
+
+		queue_get = osMessageQueueGet(send_task_queue, &tx_action, NULL, TX_ticks);
+
 		if(retry_last || queue_get == osOK ){
 			retry_last = false;
-			///////////////////////////////////////////////////////////////////////////////////////////
-			byte = uart_byte_setup(tx_action);
-			HAL_UART_Transmit_IT(&huart1, &byte,1);
-			///////////////////////////////////////////////////////////////////////////////////////////
-			if (tx_action == UART_DTCs_Reset_cmd ) osDelay(pdMS_TO_TICKS(200));
-			if (tx_action == UART_Start_cmd && dtcs_size == -1 ) {
-				ticks = osKernelGetTickFreq() * 1.5;
+
+			if (tx_action != UART_DATA_PID){
+				byte = uart_byte_setup(tx_action);
+
 			}else{
-				ticks = osWaitForever;
+				byte = cur_pid;
+
 			}
+
+			HAL_UART_Transmit_IT(&huart1, &byte,1);
+
+			if (tx_action == UART_DTCs_Reset_cmd ) {
+				HAL_UART_Receive_IT(&huart1,&byte, 1);
+				osDelay(pdMS_TO_TICKS(100));
+				osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+
+			}else if (cur_service == UART_DATA_PID && cur_pid == 0x20){
+				osSemaphoreRelease(SERV_DONE_sem);
+			}
+
+			if (tx_action == UART_Start_cmd && (dtcs_size == -1 && pid_bytes == -1)) { //change for repeat every command if not received expected response
+				TX_ticks = osKernelGetTickFreq() * .25;
+				timeouts++;
+				if (timeouts >= 10){
+					UART_Reset();
+					timeouts = 0;
+				}
+			}else{
+				TX_ticks = osWaitForever;
+				timeouts = 0;
+			}
+
 		}else if (queue_get == osErrorTimeout){
 			retry_last = true;
-			if (huart1.RxState != HAL_UART_STATE_BUSY_RX) HAL_UART_Receive_IT(&huart1,&rx_data,1);
+			if (huart1.RxState != HAL_UART_STATE_BUSY_RX) HAL_UART_Receive_IT(&huart1,&byte,1);
 
 		}
 	}
@@ -229,49 +432,63 @@ static void UART_TX(){
  */
 static void UART_RX(){
 	uint8_t byte;
+
 	int last_byte = -999;
 	uart_comms_t rx_action;
 	osStatus_t rx_Queue_Get;
-	bool Serve_code_rx = false; //expecting DTCs
+	bool Serv_Bytes = false; //expecting bytes for Service (non command)
 
 	while(1){
-		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_data, NULL,osWaitForever);
+		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
 		if(rx_Queue_Get == osOK){
-			if (!Serve_code_rx){
-				if (is_valid_frame(rx_data)){
-					rx_action = ((rx_data>>3) & 0x0F);
-				}else{
-					rx_action = UART_Retry_cmd;
-				}
-			}else{
-				rx_action = UART_SERVICE_RUNNING;
-			}
 
-			switch (rx_action){
-			case UART_Received_cmd:
-				Serve_code_rx = true;
-				byte = curr_service;
-				HAL_UART_Receive_IT(&huart1,&rx_data,1);
-				osMessageQueuePut(send_task_queue, &byte, 0, osWaitForever);
-				break;
-			case UART_Retry_cmd:
-				retry_last = true;
-				HAL_UART_Receive_IT(&huart1,&rx_data,1);
-				break;
-			case UART_SERVICE_RUNNING:
-				if (curr_service == UART_DTCs_REQ_STORED_cmd || curr_service == UART_DTCs_REQ_PENDING_cmd || curr_service == UART_DTCs_REQ_PERM_cmd){
-					last_byte = Read_Codes(last_byte);
-					if (last_byte == -1) Serve_code_rx = false; //All DTCs grabbed
-				}else if (curr_service == UART_DTCs_REQ_LD_cmd){
-					Live_Data();
-					Serve_code_rx = false;
-				}else if (curr_service == UART_DTCs_REQ_FFD_cmd){
-					Freeze_Data();
-					Serve_code_rx = false;
+			if (cur_service == UART_DATA_PID){ //PIDs coming without commands
+				get_Data_PID(rx_byte);
+			}else if (Serv_Bytes && cur_service == UART_PIDS){
+				get_PIDs();
+				Serv_Bytes = false;
+			}else{
+
+				if (!Serv_Bytes){
+					if (is_valid_frame(rx_byte)){
+						rx_action = ((rx_byte>>3) & 0x0F);
+					}else{
+						rx_action = UART_Retry_cmd;
+					}
+				}else{
+					rx_action = UART_SERVICE_RUNNING;
 				}
-				break;
-			default:
-				break;
+
+				switch (rx_action){
+				case UART_Received_cmd:
+					UART_Reset(); //stop outgoing start commands
+
+					if (cur_service == UART_DTCs_Reset_cmd){
+						break;
+					}else if (cur_service == UART_DATA_PID) {
+						byte = cur_pid;
+					}else{
+						byte = cur_service;
+					}
+
+					Serv_Bytes = true;								//code is in this read function
+					HAL_UART_Receive_IT(&huart1,&rx_byte,1);
+					osMessageQueuePut(send_task_queue, &byte, 0, osWaitForever);
+					break;
+				case UART_SERVICE_RUNNING:
+					if (cur_service == UART_DTCs_REQ_STORED_cmd || cur_service == UART_DTCs_REQ_PENDING_cmd || cur_service == UART_DTCs_REQ_PERM_cmd){
+
+						last_byte = Read_Codes(last_byte);
+						if (last_byte == -1){
+							Serv_Bytes = false; //All DTCs grabbed
+							osSemaphoreRelease(SERV_DONE_sem);
+						}
+					}
+					break;
+
+				default:
+					break;
+				}
 			}
 		}
 	}
@@ -279,45 +496,57 @@ static void UART_RX(){
 }
 
 
-/**
- * Function decription: Setting current service
- */
-void UART_Set_Service(uart_comms_t ser){
-	uint8_t byte;
-	curr_service = ser;
-	vPortFree(dtcs_list);
-	dtcs_list = NULL;
-	dtcs_size = -1;
-	cur_dtcs_list_size = 0;
-	retry_last = false;
 
-	if (ser == UART_DTCs_Reset_cmd) {
-		byte = ser;
-		osMessageQueuePut(send_task_queue, &byte, 0, 0);
-	}else{
-		HAL_UART_Receive_IT(&huart1,&rx_data, 1);
-		byte = UART_Start_cmd;
-		osMessageQueuePut(send_task_queue, &byte, 0, 0);
+/**
+ * Queues up UART actions from GUI input
+ */
+void UART_Set_Service(uart_comms_t ser, int pid){
+	Service_Request_t tempReq;
+	uint8_t msgPrio = 0;
+	uint32_t timeout = 0;
+
+	tempReq.service = ser; //mode and service are interchangeable terms
+	tempReq.pid = pid;
+
+	if (ser == UART_DATA_PID && pid == 0x20){
+		msgPrio = 255;
+		timeout = portMAX_DELAY;
+	}
+
+	if (osMessageQueuePut(control_queue, &tempReq, msgPrio, timeout) != osOK){
 	}
 }
+
 
 /*
  * Function Description: Used to start and initiate UART. Also for clean up.
  *
  */
-void Get_TC_USART(){
+void UART_INIT(){
 
 	osDelay(pdMS_TO_TICKS(150)); //small delay for GUI setup
 	//setting up FreeRTOS*********************************************************************************
+	SERV_DONE_sem = osSemaphoreNew(1,0,NULL);
+
 	send_task_queue = osMessageQueueNew(3, sizeof(uart_comms_t),NULL);
 	init_error_check(send_task_queue);
+
 	receive_task_queue = osMessageQueueNew(1, sizeof(uart_comms_t),NULL);
 	init_error_check(receive_task_queue);
+
+	control_queue = osMessageQueueNew(7, sizeof(Service_Request_t),NULL); 		//six items visible on scroll list + exit command (PID = 0x20)
+	init_error_check(control_queue);
+
 	receive_handle = osThreadNew(UART_RX, NULL, &receiveTask_attributes);
 	init_error_check(receive_handle);
+
 	send_handle = osThreadNew(UART_TX, NULL, &sendTask_attributes);
 	init_error_check(send_handle);
-	blink_handle = osThreadNew(blk_toggle_led,NULL,&blinkTask_attributes);
+
+	control_handle = osThreadNew(UART_CONTROl, NULL, &controlTask_attributes);
+	init_error_check(control_handle);
+
+	blink_handle = osThreadNew(blk_toggle_led,NULL,&blinkTask_attributes); //testing only (blink.c and blink.h are both for testing)
 	init_error_check(blink_handle);
 
 	osThreadExit();

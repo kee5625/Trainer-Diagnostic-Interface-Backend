@@ -109,7 +109,7 @@
           },
           {
             "Type": "FlexButton",
-            "Name": "Freeze_Frame_Button",
+            "Name": "freeze_data_button",
             "X": 192,
             "Y": 136,
             "Width": 97,
@@ -275,7 +275,7 @@
             "InteractionName": "Interaction1",
             "Trigger": {
               "Type": "TriggerClicked",
-              "TriggerComponent": "Freeze_Frame_Button"
+              "TriggerComponent": "freeze_data_button"
             },
             "Action": {
               "Type": "ActionGotoScreen",
@@ -341,14 +341,14 @@
                 "TextId": "__SingleUse_DYU8",
                 "TextRotation": "0",
                 "ColorReleased": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 },
                 "ColorPressed": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 }
               },
               {
@@ -397,14 +397,14 @@
                 "TextId": "__SingleUse_81ML",
                 "TextRotation": "0",
                 "ColorReleased": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 },
                 "ColorPressed": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 }
               },
               {
@@ -453,14 +453,14 @@
                 "TextId": "__SingleUse_LHAN",
                 "TextRotation": "0",
                 "ColorReleased": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 },
                 "ColorPressed": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 }
               },
               {
@@ -508,10 +508,15 @@
                 "Y": 15,
                 "TextId": "__SingleUse_VJLJ",
                 "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
                 "ColorPressed": {
-                  "Red": 10,
-                  "Green": 10,
-                  "Blue": 10
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
                 }
               },
               {
@@ -757,12 +762,12 @@
           },
           {
             "Type": "ScrollList",
-            "Name": "RLD_Options",
+            "Name": "data",
             "Y": 59,
             "Width": 480,
             "Height": 213,
-            "ItemTemplateName": "rowItem_RLD",
-            "NumberofItems": 59,
+            "LockPosition": true,
+            "ItemTemplateName": "rowItem_Data",
             "Easing": "Back",
             "EasingOption": "Out",
             "SwipeAcceleration": 1.0,
@@ -832,20 +837,6 @@
         "Name": "Freeze_Frame_Data",
         "Components": [
           {
-            "Type": "ScrollList",
-            "Name": "RLD_Options",
-            "Y": 59,
-            "Width": 480,
-            "Height": 213,
-            "ItemTemplateName": "rowItem_RLD",
-            "NumberofItems": 10,
-            "Easing": "Back",
-            "EasingOption": "Out",
-            "SwipeAcceleration": 1.0,
-            "DragAcceleration": 1.0,
-            "OverShootPercentage": 75
-          },
-          {
             "Type": "Box",
             "Name": "blue_background",
             "Width": 480,
@@ -856,6 +847,21 @@
               "Green": 14,
               "Blue": 87
             }
+          },
+          {
+            "Type": "ScrollList",
+            "Name": "Freeze_data",
+            "Y": 59,
+            "Width": 480,
+            "Height": 213,
+            "LockPosition": true,
+            "ItemTemplateName": "rowItem_Data",
+            "NumberofItems": 10,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
           },
           {
             "Type": "ScalableImage",
@@ -929,7 +935,7 @@
     ],
     "CustomContainerDefinitions": [
       {
-        "Name": "rowItem_RLD",
+        "Name": "rowItem_Data",
         "Width": 480,
         "Height": 36,
         "Components": [
@@ -954,9 +960,28 @@
           },
           {
             "Type": "TextArea",
-            "Name": "Title_TB",
+            "Name": "count_TB",
             "X": 51,
-            "Width": 373,
+            "Width": 33,
+            "Height": 36,
+            "TextId": "__SingleUse_LYG4",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_T5Z7",
+              "UseBuffer": true,
+              "BufferSize": 6
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Title_TB",
+            "X": 84,
+            "Width": 340,
             "Height": 36,
             "TextId": "__SingleUse_V6KV",
             "TextRotation": "0",
@@ -1027,20 +1052,15 @@
             "Width": 480,
             "Height": 86,
             "Color": {
-              "Green": 69,
-              "Blue": 124
+              "Green": 14,
+              "Blue": 122
             }
           },
           {
             "Type": "Box",
             "Name": "box1_1",
             "Width": 480,
-            "Height": 50,
-            "Color": {
-              "Red": 157,
-              "Green": 161,
-              "Blue": 162
-            }
+            "Height": 50
           },
           {
             "Type": "TextArea",
@@ -1050,6 +1070,11 @@
             "Height": 50,
             "TextId": "__SingleUse_FNEY",
             "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
             "Wildcard1": {
               "TextId": "__SingleUse_40UU",
               "UseBuffer": true,
@@ -1064,6 +1089,11 @@
             "Height": 86,
             "TextId": "__SingleUse_WCDW",
             "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
             "Wildcard1": {
               "TextId": "__SingleUse_LYMN",
               "UseBuffer": true,

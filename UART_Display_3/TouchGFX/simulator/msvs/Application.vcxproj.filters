@@ -303,9 +303,6 @@
     <ClCompile Include="..\..\gui\src\containers\rowItem_RLD.cpp">
       <Filter>Source Files\gui\containers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_RLDBase.cpp">
-      <Filter>Source Files\generated\gui_generated\containers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataPresenter.cpp">
       <Filter>Source Files\gui\freeze_frame_data_screen</Filter>
     </ClCompile>
@@ -314,6 +311,12 @@
     </ClCompile>
     <ClCompile Include="..\..\generated\gui_generated\src\freeze_frame_data_screen\Freeze_Frame_DataViewBase.cpp">
       <Filter>Source Files\generated\gui_generated\freeze_frame_data_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\containers\rowItem_Data.cpp">
+      <Filter>Source Files\gui\containers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\containers\rowItem_DataBase.cpp">
+      <Filter>Source Files\generated\gui_generated\containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -796,9 +799,6 @@
     <ClInclude Include="..\..\gui\include\gui\containers\rowItem_RLD.hpp">
       <Filter>Header Files\gui\containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_RLDBase.hpp">
-      <Filter>Header Files\generated\gui_generated\containers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataPresenter.hpp">
       <Filter>Header Files\gui\freeze_frame_data_screen</Filter>
     </ClInclude>
@@ -807,6 +807,12 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\freeze_frame_data_screen\Freeze_Frame_DataViewBase.hpp">
       <Filter>Header Files\generated\gui_generated\freeze_frame_data_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\containers\rowItem_Data.hpp">
+      <Filter>Header Files\gui\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\containers\rowItem_DataBase.hpp">
+      <Filter>Header Files\generated\gui_generated\containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

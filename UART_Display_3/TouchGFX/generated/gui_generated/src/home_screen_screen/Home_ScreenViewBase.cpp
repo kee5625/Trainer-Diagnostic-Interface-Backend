@@ -42,17 +42,17 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     Read_live_data_Start_button.setPosition(63, 136, 97, 64);
     add(Read_live_data_Start_button);
 
-    Freeze_Frame_Button.setBoxWithBorderPosition(0, 0, 97, 64);
-    Freeze_Frame_Button.setBorderSize(5);
-    Freeze_Frame_Button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
-    Freeze_Frame_Button.setText(TypedText(T___SINGLEUSE_WYQT));
-    Freeze_Frame_Button.setTextPosition(0, 43, 97, 64);
-    Freeze_Frame_Button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
-    Freeze_Frame_Button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID));
-    Freeze_Frame_Button.setIconXY(24, 0);
-    Freeze_Frame_Button.setAction(flexButtonCallback);
-    Freeze_Frame_Button.setPosition(192, 136, 97, 64);
-    add(Freeze_Frame_Button);
+    freeze_data_button.setBoxWithBorderPosition(0, 0, 97, 64);
+    freeze_data_button.setBorderSize(5);
+    freeze_data_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(0, 153, 204), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(51, 102, 153));
+    freeze_data_button.setText(TypedText(T___SINGLEUSE_WYQT));
+    freeze_data_button.setTextPosition(0, 43, 97, 64);
+    freeze_data_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
+    freeze_data_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID));
+    freeze_data_button.setIconXY(24, 0);
+    freeze_data_button.setAction(flexButtonCallback);
+    freeze_data_button.setPosition(192, 136, 97, 64);
+    add(freeze_data_button);
 
     Read_TC_Start_button.setBoxWithBorderPosition(0, 0, 97, 64);
     Read_TC_Start_button.setBorderSize(5);
@@ -99,10 +99,10 @@ void Home_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButt
         //Go to Read_Live_Data_Screen with no screen transition
         application().gotoRead_Live_Data_ScreenScreenNoTransition();
     }
-    if (&src == &Freeze_Frame_Button)
+    if (&src == &freeze_data_button)
     {
         //Interaction1
-        //When Freeze_Frame_Button clicked change screen to Freeze_Frame_Data
+        //When freeze_data_button clicked change screen to Freeze_Frame_Data
         //Go to Freeze_Frame_Data with screen transition towards East
         application().gotoFreeze_Frame_DataScreenWipeTransitionEast();
     }

@@ -1,4 +1,5 @@
-../../TouchGFX/gui/include/gui/model/ModelListener.hpp:16:18:virtual void ModelListener::set_dtcs(char**, int)	1
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:17:18:virtual void ModelListener::set_dtcs(char**, int)	1
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:19:18:virtual void ModelListener::set_Data(int, uint8_t*, uint8_t (*)[4], int)	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:Home_ScreenPresenter::~Home_ScreenPresenter()	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp:10:6:virtual void Home_ScreenPresenter::activate()	1
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenPresenter.hpp:28:13:virtual Home_ScreenPresenter::~Home_ScreenPresenter()	1

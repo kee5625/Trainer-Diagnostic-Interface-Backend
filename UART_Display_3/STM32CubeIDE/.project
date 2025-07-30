@@ -630,6 +630,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/containers/rowItem.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/gui/rowItem_Data.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/containers/rowItem_Data.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/gui/rowItem_RLD.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/gui/src/containers/rowItem_RLD.cpp</locationURI>
@@ -775,9 +780,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/rowItem_RLDBase.cpp</name>
+			<name>Application/User/generated/rowItem_DataBase.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/containers/rowItem_RLDBase.cpp</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/containers/rowItem_DataBase.cpp</locationURI>
 		</link>
 		<link>
 			<name>Application/User/generated/rowItem_dtcsBase.cpp</name>

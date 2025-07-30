@@ -22,6 +22,8 @@
     "array": "c",
     "string": "c",
     "string_view": "c",
-    "span": "c"
+    "span": "c",
+    "twia_tc.h": "c",
+    "tc_ref.h": "c"
   }
 }

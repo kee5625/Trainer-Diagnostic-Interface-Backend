@@ -38,6 +38,7 @@ public:
 private:
     char** dtcs_list;
     int dtcs_num = 0;
+
     TC_ScreenPresenter();
     TC_ScreenView& view;
 };

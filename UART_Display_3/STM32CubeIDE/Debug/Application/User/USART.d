@@ -53,9 +53,9 @@ Application/User/USART.o: ../Application/User/USART.c \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Application/User/USART.h ../Application/User/blinking.h \
+ ../../Core/Inc/USART.h ../Application/User/blinking.h \
  ../../Core/Inc/..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp \
- ../../Core/Inc/UART_COMMS.hpp
+ ../../Core/Inc/UART_COMMS.hpp ../../Core/Inc/PIDs_Library.hpp
 ../../Core/Inc/main.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../../Core/Inc/stm32h7xx_hal_conf.h:
@@ -110,7 +110,8 @@ Application/User/USART.o: ../Application/User/USART.c \
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-../Application/User/USART.h:
+../../Core/Inc/USART.h:
 ../Application/User/blinking.h:
 ../../Core/Inc/..\..\STM32CubeIDE\Application\User\TouchGFX\App\TC_Bridge.hpp:
 ../../Core/Inc/UART_COMMS.hpp:
+../../Core/Inc/PIDs_Library.hpp:

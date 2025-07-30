@@ -15,30 +15,20 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
+#include "esp_system.h"
 #include "esp_err.h"
 #include "esp_log.h"
 #include "driver/twai.h"
 #include "UART_SEND.h"
 #include "TWAI_OBD.h"
+#include "PID_Library.h"
 
-#define RX_TASK_PRIO                    8       //Receiving task priority
-#define TX_TASK_PRIO                    9       //Sending task priority
+#define RX_TASK_PRIO                    19      //Receiving task priority
+#define TX_TASK_PRIO                    20       //Sending task priority
 #define CTRL_TSK_PRIO                   10      //Control task priority
 #define TX_GPIO_NUM                     14
 #define RX_GPIO_NUM                     15
 #define TAG                             "ECM/Trainer"
-
-typedef enum {
-    TX_REQUEST_TC,
-    TX_FLOW_CONTROL_RESPONSE,
-    TX_TASK_EXIT,
-} tx_task_action_t;
-
-typedef enum {
-    RX_RECEIVE_TC,
-    RX_RECEIVE_LIVE_DATA,
-    RX_TASK_EXIT,
-} rx_task_action_t;
 
 static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
 static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS(); //change! to 125k - 1M was at 25k
@@ -50,10 +40,20 @@ static uint8_t pending_dtcs[12] = {0x03,0x04,0x02,0x00,0x04,0x00, 0x05, 0x00, 0x
 static uint8_t perminate_dtcs[0];
 static int CF_num = 0; 
 static int frames_Before_FC = 0;
+static uint8_t* pid_Data;
 static QueueHandle_t tx_task_queue;
 static SemaphoreHandle_t TC_sent_sem;
 static SemaphoreHandle_t FC_Frame_sem;
 static SemaphoreHandle_t start_sem;
+static uint8_t PIDs_Supported[7][4] = {
+    {0xDA,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+};
 
 static const twai_message_t TWAI_MSG = {
     // Message type and format settings
@@ -80,11 +80,50 @@ static inline twai_message_t TWAI_Clear_DTCS(){ //good and bad response not impl
     return msg;
 }
 
+static twai_message_t PID_Grab(uint8_t pid){
+    twai_message_t response = TWAI_MSG;
+    ESP_LOGI(TAG,"PID %i", pid);
+    if (pid % 0x20 == 0){ //is bitmask request
+        response.data[0] = 0x06;
+        response.data[1] = SHOW_LIVE_DATA_RESP;
+        response.data[2] = pid;
+        for (int i = 0; i < 4; i ++){
+            response.data[i + 3] = PIDs_Supported[pid / 0x20][i];
+            ESP_LOGI(TAG,"PID mod %i and i is %i", pid % 0x20, i);
+        }
+        return response;
+    }else{
+        int numbytes = PID_Bytes_LUT[pid];
+        ESP_LOGI(TAG,"NUM bytes: %i", numbytes);
+        pid_Data = (uint8_t *)pvPortMalloc(numbytes);
+        for(int i = 0; i < numbytes; i++){
+            pid_Data[i] = (uint8_t) (i + 15);
+        }
+        if (numbytes >= 0x06){ //multiframe message setup
+            response.data[0] = MULT_FRAME_FIRST;
+            response.data[1] = numbytes + 2;
+            response.data[2] = SHOW_LIVE_DATA_RESP;
+            response.data[3] = pid;
+            for (int i = 0; i < 4; i ++){
+                response.data[i+4] = pid_Data[i];
+            }
+        }else { //single frame setup
+            response.data[0] = numbytes + 2;
+            response.data[1] = SHOW_LIVE_DATA_RESP;
+            response.data[2] = pid;
+            for (int i = 0; i < numbytes; i ++){
+                response.data[i+3] = pid_Data[i];
+            }
+        }
+    }
+    return response;
+}
+
 /**
  * Function Description: Passed the desired request from TWAI_OBD.h this will create a corret frame for it. To send a multi frame message call
  * this function for every frame. 
  */
-static twai_message_t TWAI_setup(uint8_t response){
+static twai_message_t TWAI_setup(uint8_t response, uint8_t pid){
     twai_message_t message = TWAI_MSG; 
     int bytes = 0;
     int start = 0;
@@ -156,8 +195,8 @@ static void twai_receive_task(void *arg)
     while (1) {
         if (twai_receive(&rx_action,portMAX_DELAY) == ESP_OK){
             num_bytes = rx_action.data[0]; //number of bytes
-            if (num_bytes == 0x01 ||num_bytes == 0x02){ // 1 byte is most request but some will need 2 bytes
-                mode_req = rx_action.data[1]; //mode request
+            if (num_bytes == 0x01 || num_bytes == 0x02){ // 1 byte is most request but some will need 2 bytes
+                mode_req = rx_action.data[1]; 
             }else if (num_bytes == MULT_FRAME_FLOW){
                 mode_req = (uint8_t) MULT_FRAME_FLOW;
             }else{  
@@ -165,35 +204,40 @@ static void twai_receive_task(void *arg)
             }
 
             switch(mode_req){
+                case SHOW_LIVE_DATA_REQ:
+                    tx_action = PID_Grab(rx_action.data[2]);
+                    ESP_LOGI(TAG,"Received live data request.");
+                    xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
+                    break;
                 case STORED_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
-                    tx_action = TWAI_setup(mode_req);
+                    tx_action = TWAI_setup(mode_req,0);
                     ESP_LOGI(TAG,"Received stored dtcs request");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
                 case CLEAR_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
-                    tx_action = TWAI_setup(mode_req);
+                    tx_action = TWAI_setup(mode_req,0);
                     ESP_LOGI(TAG,"Received clear dtcs request %i", tx_action.data[1]);
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
                 case PENDING_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
-                    tx_action = TWAI_setup(mode_req);
+                    tx_action = TWAI_setup(mode_req,0);
                     ESP_LOGI(TAG,"Received pending dtcs request");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     for (int i = 4; i < sizeof(pending_dtcs); i += 6){
-                        tx_action = TWAI_setup(mode_req);
+                        tx_action = TWAI_setup(mode_req,0);
                         xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     }
                     break;
                 case PERM_DTCS_REQ:
                     frames_Before_FC = 0;
                     CF_num = 0;
-                    tx_action = TWAI_setup(mode_req);;
+                    tx_action = TWAI_setup(mode_req,0);
                     ESP_LOGI(TAG,"Received perminate dtcs request");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
@@ -241,7 +285,7 @@ static void twai_transmit_task(void *arg)
             ESP_LOGI(TAG,"Single frame sent.");
             start = 2;
         }
-        ESP_LOGI(TAG,"First byte: 0x%02X",action.data[0]);
+        ESP_LOGI(TAG,"First byte: 0x%02X Second Byte: 0x%02X",action.data[0],action.data[1]);
         for (int i = start; i <= 6; i += 2){
             ESP_LOGI(TAG, "Trouble code 0x%02X 0x%02X", action.data[i],action.data[i + 1]);
         }

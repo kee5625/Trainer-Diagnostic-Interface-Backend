@@ -43,7 +43,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     Pending_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
     Pending_dtcs_button.setText(TypedText(T___SINGLEUSE_DYU8));
     Pending_dtcs_button.setTextPosition(0, 12, 152, 50);
-    Pending_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Pending_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     Pending_dtcs_button.setPosition(169, 93, 152, 50);
     add(Pending_dtcs_button);
 
@@ -52,7 +52,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     Stored_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
     Stored_dtcs_button.setText(TypedText(T___SINGLEUSE_81ML));
     Stored_dtcs_button.setTextPosition(0, 12, 152, 50);
-    Stored_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Stored_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     Stored_dtcs_button.setAction(flexButtonCallback);
     Stored_dtcs_button.setPosition(17, 93, 152, 50);
     add(Stored_dtcs_button);
@@ -62,7 +62,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     Perm_dtcs_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(12, 27, 55), touchgfx::Color::getColorFromRGB(157, 161, 162), touchgfx::Color::getColorFromRGB(157, 161, 162));
     Perm_dtcs_button.setText(TypedText(T___SINGLEUSE_LHAN));
     Perm_dtcs_button.setTextPosition(0, 11, 152, 50);
-    Perm_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(10, 10, 10), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Perm_dtcs_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     Perm_dtcs_button.setPosition(320, 93, 152, 50);
     add(Perm_dtcs_button);
 
@@ -71,7 +71,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     Clear_DTCS_button.setBoxWithBorderColors(touchgfx::Color::getColorFromRGB(0, 69, 124), touchgfx::Color::getColorFromRGB(0, 102, 153), touchgfx::Color::getColorFromRGB(0, 51, 102), touchgfx::Color::getColorFromRGB(0, 51, 102));
     Clear_DTCS_button.setText(TypedText(T___SINGLEUSE_VJLJ));
     Clear_DTCS_button.setTextPosition(0, 15, 114, 59);
-    Clear_DTCS_button.setTextColors(touchgfx::Color::getColorFromRGB(0, 0, 0), touchgfx::Color::getColorFromRGB(10, 10, 10));
+    Clear_DTCS_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     Clear_DTCS_button.setVisible(false);
     Clear_DTCS_button.setAction(flexButtonCallback);
     Clear_DTCS_button.setPosition(245, 0, 114, 59);

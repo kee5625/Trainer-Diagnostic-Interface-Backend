@@ -94,8 +94,16 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
  ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp \
  ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp \
- ../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp \
- ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp \
+ ../../Core/Inc/PIDs_Library.hpp \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
+ ../../Core/Inc/FreeRTOSConfig.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
+ ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp \
+ ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp \
  ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp \
  ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp \
@@ -245,8 +253,16 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp:
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:
-../../TouchGFX/gui/include/gui/containers/rowItem_RLD.hpp:
-../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_RLDBase.hpp:
+../../Core/Inc/PIDs_Library.hpp:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
+../../Core/Inc/FreeRTOSConfig.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
+../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:
+../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp:
 ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp:
 ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:

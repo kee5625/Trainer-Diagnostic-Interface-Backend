@@ -10,6 +10,7 @@ void Home_ScreenView::setupScreen()
 {
     Home_ScreenViewBase::setupScreen();
     Read_TC_Start_button.setAction(wr_TC_Button_Pressed);
+    Read_live_data_Start_button.setAction(wr_TC_Button_Pressed);
 }
 
 void Home_ScreenView::tearDownScreen()

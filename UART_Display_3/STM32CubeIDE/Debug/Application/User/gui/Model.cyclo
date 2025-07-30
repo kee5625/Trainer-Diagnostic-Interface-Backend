@@ -1,8 +1,10 @@
-../../TouchGFX/gui/include/gui/model/ModelListener.hpp:16:18:virtual void ModelListener::set_dtcs(char**, int)	1
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:17:18:virtual void ModelListener::set_dtcs(char**, int)	1
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:19:18:virtual void ModelListener::set_Data(int, uint8_t*, uint8_t (*)[4], int)	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:12:1:Model::Model()	1
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:17:6:void Model::tick()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:22:6:void Model::dtcs_Set(char**, int)	10
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:44:6:void Model::Model_Set_Service(uart_comms_t)	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:49:6:bool Model::Get_DTCs_Status()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:53:5:int Model::dtcs_num_get()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:57:8:char** Model::dtcs_get()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:23:6:void Model::dtcs_Set(char**, int)	10
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:45:6:void Model::Model_Set_Service(uart_comms_t, int)	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:50:6:void Model::Model_Set_Data(int, uint8_t*, uint8_t (*)[4], int)	2
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:54:6:bool Model::Get_DTCs_Status()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:58:5:int Model::dtcs_num_get()	1
+C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:62:8:char** Model::dtcs_get()	1

@@ -1,3 +1,4 @@
+../../TouchGFX/gui/include/gui/model/ModelListener.hpp:19:18:virtual void ModelListener::set_Data(int, uint8_t*, uint8_t (*)[4], int)	0	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:TC_ScreenPresenter::~TC_ScreenPresenter()	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:55:6:virtual void TC_ScreenPresenter::activate()	0	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:virtual TC_ScreenPresenter::~TC_ScreenPresenter()	8	static
