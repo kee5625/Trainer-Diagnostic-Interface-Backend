@@ -52,7 +52,7 @@ static const twai_message_t TWAI_Request_msg = {
     .dlc_non_comp = 0,      // DLC is less than 8
     .flags = TWAI_MSG_FLAG_NONE,
     // Message ID and payload
-    .identifier = ID_DT_ECUs,
+    .identifier = ID_DT,
     .data_length_code = 8,
     .data = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
     //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
@@ -66,7 +66,7 @@ static const twai_message_t TWAI_Clear_DTCS = {
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_DT_ECUs,
+    .identifier = ID_DT,
     .data_length_code = 8,
     .data = {0x01, CLEAR_DTCS_REQ, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
     //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
@@ -81,7 +81,7 @@ static const twai_message_t TWAI_Response_FC = { //only after FF unless ECU send
     .self = 0,              // Not a self reception request
     .dlc_non_comp = 0,      // DLC is less than 8
     // Message ID and payload
-    .identifier = ID_DT_ECUs,
+    .identifier = ID_DT,
     .data_length_code = 8,
     .data = {MULT_FRAME_FLOW, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 };
@@ -200,12 +200,13 @@ static void Live_Data_Get(twai_message_t data){
     tx_task_action_t tx_response;
     int byte_count = 0;
     bool IS_BIT_MASK = data.data[2] % 0x20 == 0; //availability bit-masks not other data bit-masks for now 
-    ESP_LOGI(TAG, "PID: %i", get_Req_PID());
+   
+
     while (1){
         if (IS_BIT_MASK || (data.data[0] < 0x8 && data.data[1] == SHOW_LIVE_DATA_RESP && (data.data[2] == get_Req_PID())) ){ //bit-mask frame or single frame
             if (IS_BIT_MASK){ //Available PID bit-mask only for now 
                 int num_bitmask = (data.data[2] / 0x20); 
-                ESP_LOGI(TAG,"Bitmask number %i", num_bitmask + 1);
+               
                 for(int i = 0; i < 4; i++){
                     PIDs_Supported[num_bitmask][i] = data.data[i + 3]; 
                 }
@@ -215,7 +216,7 @@ static void Live_Data_Get(twai_message_t data){
                 PID_VALUE = (uint8_t *)pvPortMalloc(PID_VALUE_BYTES);
                 for (int i = 0; i < PID_VALUE_BYTES; i++){
                     PID_VALUE[i] = data.data[i + 3];
-                    ESP_LOGI(TAG,"PID value: %i", PID_VALUE[i]);
+                    
                 }
 
             }
@@ -272,15 +273,13 @@ static void twai_receive_task()
                     }
 
                 }else if (current_service == CLEAR_DTCS_GOOD_RESP){
-                    ESP_LOGI(TAG, "DTCs reset successfully.");
                     xSemaphoreGive(TWAI_DONE_sem);
 
                 }else if (current_service == CLEAR_DTCS_BAD_RESP){
-                    ESP_LOGE(TAG,"FAILED to rest DTCs. Possibly unsupported or bad request.");
+                    
 
                 }else if (current_service == SHOW_LIVE_DATA_RESP){
                     Live_Data_Get(RX_Data);
-                    ESP_LOGI(TAG,"Live data response received.");
                     xSemaphoreGive(TWAI_COMPLETE);
                 }else if (current_service == SHOW_FREEZE_FRAME_RESP){
 
@@ -307,10 +306,8 @@ static void twai_transmit_task()
             case TX_REQUEST_PIDS: //grabs all in a row
                 for (int i = 0x00; i < 0xC8; i += 0x20){
                     TX_output = PID_MSG_REQ(SHOW_LIVE_DATA_REQ, i);
-                    ESP_LOGI(TAG,"Sent PID %i request.", TX_output.data[2]);
                     twai_transmit(&TX_output, portMAX_DELAY); 
                     xSemaphoreTake(TWAI_COMPLETE, portMAX_DELAY);
-                    ESP_LOGI(TAG,"Sent PID %i request.", i);
                 }
                 Set_PID_Bitmask(PIDs_Supported);
                 xSemaphoreGive(TWAI_DONE_sem);
