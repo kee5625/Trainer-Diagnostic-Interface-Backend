@@ -55,7 +55,7 @@ static const twai_message_t TWAI_Request_msg = {
     .identifier = ID_DT,
     .data_length_code = 8,
     .data = {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-    //*******Num data bytes, Mode 03 (request DTC's), padding (0)...... */
+    
 };
 
 static const twai_message_t TWAI_Clear_DTCS = {
@@ -121,10 +121,10 @@ static inline twai_message_t req_msg_create(uint8_t request){
     return msg;
 }
 
-static inline twai_message_t PID_MSG_REQ(uint8_t request, uint8_t PID){
+static inline twai_message_t PID_MSG_REQ(uint8_t PID){
     twai_message_t msg = TWAI_Request_msg;
     msg.data[0] = 0x02;
-    msg.data[1] = request;
+    msg.data[1] = SHOW_LIVE_DATA_REQ;
     msg.data[2] = PID;
     return msg;
 }
@@ -304,8 +304,8 @@ static void twai_transmit_task()
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
         switch(action){
             case TX_REQUEST_PIDS: //grabs all in a row
-                for (int i = 0x00; i < 0xC8; i += 0x20){
-                    TX_output = PID_MSG_REQ(SHOW_LIVE_DATA_REQ, i);
+                for (int i = 0x00; i < 0x20; i += 0x20){ //0xC8
+                    TX_output = PID_MSG_REQ( i);
                     twai_transmit(&TX_output, portMAX_DELAY); 
                     xSemaphoreTake(TWAI_COMPLETE, portMAX_DELAY);
                 }
@@ -313,7 +313,7 @@ static void twai_transmit_task()
                 xSemaphoreGive(TWAI_DONE_sem);
                 break;
             case TX_REQUEST_DATA:
-                TX_output = PID_MSG_REQ(SHOW_LIVE_DATA_REQ, get_Req_PID());
+                TX_output = PID_MSG_REQ(get_Req_PID());
                 twai_transmit(&TX_output, portMAX_DELAY);
                 break;
             case TX_REQUEST_STORED_DTCS:

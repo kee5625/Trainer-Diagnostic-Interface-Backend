@@ -11,17 +11,12 @@
 #define tc_size 5
 
 typedef enum {
-    SERV_PIDS      = 0, //PID bitmask
+    SERV_PIDS           = 0, //PID bitmask
     SERV_DATA           = 1, //individual PID value
     SERV_FREEZE_DATA    = 2,
     SERV_STORED_DTCS    = 3,
     SERV_CLEAR_DTCS     = 4,
-
-
     SERV_PENDING_DTCS   = 7,
-
-
-
     SERV_PERM_DTCS      = 10,
     //more to be added later
 } service_request_t;

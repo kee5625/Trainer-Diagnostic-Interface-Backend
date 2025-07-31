@@ -60,7 +60,136 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
 }
 
 /**
- * Gets available PIDs bit-mask and waits for PIDs through UART to update PID data
+ * UART Protocol: DTC (Diagnostic Trouble Codes) Communication
+ * ===========================================================
+ * 
+ * Notes:
+ * - Start commands and Receive commands are handled in the `rx` function.
+ * - DTCs can be Pending, Stored, or Permanent depending on the request.
+ * 
+ * ------------------------------------------------------------------------
+ * From Gateway (to Display)
+ * ------------------------------------------------------------------------
+ * Description:
+ *   Sends DTC data to the display after receiving a request.
+ *
+ * Byte packing:
+ *   Byte 0     : Receive Command (e.g., 0xBB)
+ *   Byte 1     : Total Number of DTCs for the category
+ *   Byte 2     : DTC 0 (first half DTC)
+ *   Byte 3     : DTC 0 (second half DTC)
+ *   Byte 4     : DTC 1 (first half DTC)
+ *   Byte 5     : DTC 1 (second half DTC)
+ *   ...
+ *   Byte N     : DTC N (first half DTC)
+ *   Byte N+1   : DTC N (second half DTC)
+ *   Final Byte : END Command (e.g., 0xEE)
+ *  
+ * bit packing (commands):
+ *   Bit 0     : Start Command 1
+ *   Bit 1     : UART command see UART_TC.h
+ *   Bit 2     : ^
+ *   Bit 3     : ^
+ *   Bit 4     : ^
+ *   Bit 5     : 1 (uart_end_pad)
+ *   Bit 6     : 1 (uart_end_pad)
+ *   Bit 7     : 0 (uart_end_pad)
+ * 
+ * 
+ * Encoded DTC: 00      00   0111 / 0000 0011
+ *              ^letter ^num ^num   ^num ^num
+ *              P        0   B      0    3
+ *  
+ *
+ * ------------------------------------------------------------------------
+ * From Display (to ECU / Trainer)
+ * ------------------------------------------------------------------------
+ * Description:
+ *   Sends a request for DTCs in a specific category.
+ * 
+ * Byte Packing:
+ * Byte 0               : Start Command (e.g., 0xAA)
+ * Byte 1               : DTC Command Type:
+ *                          - 0x04 = Stored
+ *                          - 0x05 = Pending
+ *                          - 0x06 = Permanent
+ * Byte 2+ Num_bytes    : DTC Received cmd
+ * 
+ * 
+ * Bit packing (commands):
+ *   Bit 0     : Start Command 1
+ *   Bit 1     : UART command see UART_TC.h
+ *   Bit 2     : ^
+ *   Bit 3     : ^
+ *   Bit 4     : ^
+ *   Bit 5     : 1 (uart_end_pad)
+ *   Bit 6     : 1 (uart_end_pad)
+ *   Bit 7     : 0 (uart_end_pad)
+ *  
+ */
+static void Read_Codes(uint8_t command){
+    uart_comms_t action;
+    Set_TWAI_Serv(command); 
+
+    dtcs = get_dtcs();
+    num_bytes_dtcs = get_dtcs_bytes();  
+    ESP_LOGI(TAG,"Sending number of DCTS: %i", num_bytes_dtcs / 2);
+    ESP_LOGI(TAG,"Stored DTCs request received.");
+
+    action = UART_DTCS_Num_cmd;
+    xQueueSend(uart_send_queue, &action,portMAX_DELAY);
+    
+    while (1){
+        action = UART_DTC_next_cmd;
+        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+
+        xQueueReceive(uart_queue,&command,portMAX_DELAY);
+        uart_read_bytes(UART_PORT_NUM, &command, 1, portMAX_DELAY);
+
+        if (!is_valid_frame(command)) {
+            action = UART_Retry_cmd;
+            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+            continue;
+        }
+
+        command = (command >> 3) & 0x0F; //grabs command no padding
+
+        if(command == UART_DTC_Received_cmd){
+            ESP_LOGI(TAG,"DTC sent successfully.");
+            if (num_bytes_dtcs >= dtcs_sent + 2){
+                action = UART_DTC_next_cmd;
+            }else{
+                dtcs_sent = 0; //incremented by TX thread
+                action = UART_DTCs_End_cmd;
+                xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                break;
+            }
+            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+        }
+    }
+}
+
+
+/**
+ * Gets available PIDs bit-mask and waits for PIDs through UART to update PID data. Display starts with start command
+ * 
+ * UART Protocol Overview
+ * ======================
+ * 
+ * From Gateway (to Display):
+ *   Byte 0   : Receive Command
+ *   Byte 1-28: PIDs Supported Bitmask [7][4] (28 bytes)
+ *   Byte 29  : Checksum (display repeat req if failed)
+ *   Byte 30+ : Repeated blocks of:
+ *              - Byte N    : Num of bytes for PID data
+ *              - Byte N+1  : Data for PID
+ *              - Byte N+2  : Checksum (display repeat req if failed)
+ * 
+ * From Display (to Gateway):
+ *   Byte 0   : Start Command (e.g. 0x20)
+ *   Byte 1   : UART_PIDS Request Flag
+ *   Byte 2+  : Sequence of PIDs requested (1 byte each)
+ *   Final    : 0x20 sent
  */
 static void PIDs_GRAB_LIVE_DATA(){
     uint8_t rx_data = 0x00;
@@ -143,7 +272,7 @@ static void UART_TX(){
 
             case UART_DTC_next_cmd:
                 //sending two bytes for one dtcs
-                if (num_bytes_dtcs == 0) break; //don't send if twai failure
+                if (num_bytes_dtcs == 0) break; //don't send if twai failure or no codes
                 uart_write_bytes(UART_PORT_NUM, &dtcs[dtcs_sent], 1);
                 uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
                 uart_write_bytes(UART_PORT_NUM, &dtcs[dtcs_sent + 1], 1);
@@ -186,14 +315,12 @@ static void UART_TX(){
 /**
  * Function Description: Receive inputs from UART and fill queue for uart_send_queue in the UART_TX() function.
  * Notes: Below is the expected command order the Gateway(slave) should receive from the Display(master)
- * CMD order receive: Start   , num TC req, TC request, TC received, TC received, TC received, TC reset, start...
- * CMD order Send   : received, num TC    ,TC         , Next TC    , Next TC    , TC end comm, received, received...
  */
 static void UART_RX(){
     uart_event_t rx_action;
     uart_comms_t action;
     uint8_t rx_data;
-    data_expected data_in = EXPECT_COMM;
+    uint8_t command;
     vTaskDelay(pdMS_TO_TICKS(50));
     while(1){
         xQueueReceive(uart_queue,&rx_action,portMAX_DELAY);
@@ -201,24 +328,20 @@ static void UART_RX(){
             case UART_DATA: //UART DATA Case
                 for(;;){
                     uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
-                    if (data_in == EXPECT_COMM){
-                        // checking if data is valid
-                        if (((rx_data >> 7) & uart_start_pad) && ((rx_data & 0x07) & uart_end_pad)){
-                            break;
-                        }else{
-                            action = UART_Retry_cmd;
-                            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-                            ESP_LOGW(TAG, "Invalid command.\n Command: %02X", rx_data);
-                        }
-                    }else if (data_in == EXPECT_PID && EXPECT_PID == 0x20){ //exit condition 
-                        data_in = EXPECT_COMM;
-                        rx_data = 0x00;
-                         ESP_LOGI(TAG,"EXIT PID Mode.");
+                    
+                    // checking if data is valid
+                    if (is_valid_frame(rx_data)){
+                        break;
+                    }else{
+                        action = UART_Retry_cmd;
+                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                        ESP_LOGW(TAG, "Invalid command.\n Command: %02X", rx_data);
                     }
                 }
 
+                command = (rx_data >> 3) & 0x0F;
                 //switch statement for commmands inside UART_DATA case switch (see above)
-                switch ((rx_data >> 3) & 0x0F){
+                switch (command){
                 case UART_Start_cmd:
                     ESP_LOGI(TAG,"Received start command.");
                     dtcs_sent = 0;
@@ -227,54 +350,13 @@ static void UART_RX(){
                     break;
 
                 case UART_DTCs_REQ_STORED_cmd:
-                    Set_TWAI_Serv(SERV_STORED_DTCS);
-
-                    dtcs = get_dtcs();
-                    num_bytes_dtcs = get_dtcs_bytes();  
-                    ESP_LOGI(TAG,"Sending number of DCTS: %i", num_bytes_dtcs / 2);
-                    ESP_LOGI(TAG,"Stored DTCs request received.");
-                    action = UART_DTCS_Num_cmd;
-                    xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                    action = UART_DTC_next_cmd;
-                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                    Read_Codes(SERV_STORED_DTCS);
                     break;
-
                 case UART_DTCs_REQ_PENDING_cmd:
-                    Set_TWAI_Serv(SERV_PENDING_DTCS);
-        
-                    dtcs = get_dtcs();
-                    num_bytes_dtcs = get_dtcs_bytes();  
-
-                    ESP_LOGI(TAG,"Pending DTCs request received.");
-                    action = UART_DTCS_Num_cmd;
-                    xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                    action = UART_DTC_next_cmd;
-                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                    Read_Codes(SERV_PENDING_DTCS);
                     break;
-
                 case UART_DTCs_REQ_PERM_cmd:
-                    Set_TWAI_Serv(SERV_PERM_DTCS);
-                    
-                    dtcs = get_dtcs();
-                    num_bytes_dtcs = get_dtcs_bytes();  
-
-                    ESP_LOGI(TAG,"Perminate DTCs request received.");
-                    action = UART_DTCS_Num_cmd;
-                    xQueueSend(uart_send_queue, &action,portMAX_DELAY);
-                    action = UART_DTC_next_cmd;
-                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-                    break;
-
-                case UART_DTC_Received_cmd:
-                    ESP_LOGI(TAG,"NUM DTC %i:", num_bytes_dtcs /2);
-                    ESP_LOGI(TAG,"DTC sent successfully.");
-                    if (num_bytes_dtcs >= dtcs_sent + 2){
-                        action = UART_DTC_next_cmd;
-                    }else{
-                        dtcs_sent = 0;
-                        action = UART_DTCs_End_cmd;
-                    }
-                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                    Read_Codes(SERV_PERM_DTCS);
                     break;
 
                 case UART_DTCs_Reset_cmd:

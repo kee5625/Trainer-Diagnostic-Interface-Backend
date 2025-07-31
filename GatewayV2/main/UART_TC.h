@@ -7,12 +7,6 @@
 #define uart_start_pad 1
 #define uart_end_pad 6
 
-typedef enum{
-	EXPECT_COMM,
-	EXPECT_PID,
-	EXPECT_CHECKSUM,
-}data_expected;
-
 typedef enum {
 	//general UART commands
     UART_Start_cmd             = 1,

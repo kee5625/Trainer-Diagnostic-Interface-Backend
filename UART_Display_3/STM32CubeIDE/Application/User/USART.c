@@ -221,6 +221,7 @@ static void get_PIDs(){
 			if (Sum_Check(checksum,rx_byte)) {
 				break;
 			}
+
 			row = 0;
 			col = 0;
 			checksum = 0;
@@ -356,10 +357,12 @@ static void UART_CONTROl(){
 				osMessageQueuePut(send_task_queue, &byte, 0, 0); //send PID
 
 			}else{
-				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
+//				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
+				UART_Reset();
+				osDelay(pdMS_TO_TICKS(10));
 				byte = UART_Start_cmd;
 				osMessageQueuePut(send_task_queue, &byte, 0, 0);
-
+//				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 			}
 
 			osSemaphoreAcquire(SERV_DONE_sem, portMAX_DELAY); //wait till service is done
