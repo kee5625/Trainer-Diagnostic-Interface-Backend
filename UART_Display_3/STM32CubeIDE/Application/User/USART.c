@@ -341,9 +341,9 @@ static void UART_CONTROl(){
 			if (dtcs_list != NULL){
 				vPortFree(dtcs_list);
 				dtcs_list = NULL;
-				dtcs_size = -1;
 			}
 
+			dtcs_size = -1;
 			cur_dtcs_list_size = 0;
 
 			if (cur_service == UART_DTCs_Reset_cmd) {
@@ -403,9 +403,9 @@ static void UART_TX(){
 			}
 
 			if (tx_action == UART_Start_cmd && (dtcs_size == -1 && pid_bytes == -1)) { //change for repeat every command if not received expected response
-				TX_ticks = osKernelGetTickFreq() * .25;
+				TX_ticks = osKernelGetTickFreq() * .5;
 				timeouts++;
-				if (timeouts >= 10){
+				if (timeouts >= 5){
 					UART_Reset();
 					timeouts = 0;
 				}

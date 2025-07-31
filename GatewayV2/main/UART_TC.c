@@ -60,7 +60,7 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
 }
 
 /**
- * Gets bit-mask and waits for PIDs through UART to update PID data
+ * Gets available PIDs bit-mask and waits for PIDs through UART to update PID data
  */
 static void PIDs_GRAB_LIVE_DATA(){
     uint8_t rx_data = 0x00;
@@ -92,7 +92,7 @@ static void PIDs_GRAB_LIVE_DATA(){
     while (1){
         ESP_LOGI(TAG,"Waiting on PID...");
         xQueueReceive(uart_queue,&rx_data,portMAX_DELAY);
-        uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
+        uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY); //extra ?
 
         if (rx_data == 0x20) break; //exit
 
@@ -170,6 +170,7 @@ static void UART_TX(){
                 break;
 
             case UART_DTCS_Num_cmd:
+                ESP_LOGI(TAG,"NUM dtcs sent %i", num_bytes_dtcs / 2);
                 temp_byte = num_bytes_dtcs / 2;
                 uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
@@ -295,13 +296,15 @@ static void UART_RX(){
                     break;
                 }
 
+                break; //for UART data type switch
+
             //error handeling for rx line.
             case UART_FIFO_OVF:
             case UART_BUFFER_FULL:
             case UART_BREAK:
             case UART_PARITY_ERR:
             case UART_FRAME_ERR:
-                ESP_LOGI(TAG, "%i", rx_action.type);
+                ESP_LOGI(TAG, " Error: %i", rx_action.type);
                 uart_flush_input(UART_PORT_NUM);
                 xQueueReset(uart_queue);
                 action = UART_Retry_cmd;

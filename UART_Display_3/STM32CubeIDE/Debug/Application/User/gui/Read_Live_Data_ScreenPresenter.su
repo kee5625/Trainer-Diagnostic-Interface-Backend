@@ -2,6 +2,8 @@
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:44:13:Read_Live_Data_ScreenPresenter::~Read_Live_Data_ScreenPresenter()	0	static
 C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.cpp:41:6:virtual void Read_Live_Data_ScreenPresenter::activate()	0	static
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:44:13:virtual Read_Live_Data_ScreenPresenter::~Read_Live_Data_ScreenPresenter()	8	static
+../../Core/Inc/PIDs_Library.hpp:177:14:char* decode_ThrottlePosition(const uint8_t*)	24	static
+../../Core/Inc/PIDs_Library.hpp:113:14:char* decode_intakeAirTemp(const uint8_t*)	24	static
 ../../Core/Inc/PIDs_Library.hpp:91:14:char* decode_VechicleSpeed(const uint8_t*)	24	static
 ../../Core/Inc/PIDs_Library.hpp:80:14:char* decode_EngineSpeed(const uint8_t*)	24	static
 ../../Core/Inc/PIDs_Library.hpp:69:14:char* decode_ManifoldABSPressure(const uint8_t*)	24	static

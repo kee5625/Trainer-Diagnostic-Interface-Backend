@@ -174,6 +174,16 @@ inline char* decode_EngineLoad(const uint8_t* value){
 	return buf;
 }
 
+inline char* decode_ThrottlePosition(const uint8_t* value){
+	float newVal = (100.0f / 255.0f) * value[0];
+	char* buf = (char*)pvPortMalloc(32);
+	if (!buf) return nullptr;
+	int intPart = (int)newVal;
+	int fracPart = (int)((newVal - intPart) * 100);
+	snprintf(buf, 16, "%d.%02d", intPart, fracPart);
+	return buf;
+}
+
 //PID code = index 0x01 = 1
 const PIDDecoder PIDInfoTable[]{
 		{"", "PIDs supported [$01 - $20]", bit_Mask_Request},       										//0
@@ -192,6 +202,14 @@ const PIDDecoder PIDInfoTable[]{
 		{"km/h", "Vehicle speed",decode_ManifoldABSPressure},                                               //0D
 		{"° before TDC", "Timing advance",decode_VechicleSpeed},                                            //0E
 		{"°C", "Intake air temperature",decode_EngineTemp},                                                 //0E
+		{"°C", "Intake air temperature", decode_intakeAirTemp},                                             //0F
+		{"g/s", "Mass air flow sensor (MAF) air flow rate", decode_EngineSpeed},                            //10
+		{"%", "Throttle position", decode_ThrottlePosition},                                                //11
+		{"", "Commanded secondary air status", bit_Map_Request},                                            //12
+		{"", "Oxygen sensors present (in 2 banks)", decode_PercentDualBanks},								//13  not the right function
+
+
+
 //		{"°C", "Intake air temperature", 4^},                                                               //0F
 //		{"g/s", "Mass air flow sensor (MAF) air flow rate", 10^},                                           //10
 //		{"%", "Throttle position", 11^},                                                                    //11

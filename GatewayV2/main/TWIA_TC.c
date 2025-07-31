@@ -92,7 +92,7 @@ static QueueHandle_t tx_task_queue;
 static SemaphoreHandle_t TWAI_COMPLETE; //marks when TWAI done with curr_service
 static uint8_t *dtcs = NULL;
 static int curr_BYTES = 0;
-static uint8_t PIDs_Supported[7][4];
+static uint8_t PIDs_Supported[7][4]; //filled with 0's in init (0 = unsupported, 1 = supported)
 static uint8_t *PID_VALUE;
 static uint8_t PID_VALUE_BYTES = 0;
 
@@ -207,7 +207,7 @@ static void Live_Data_Get(twai_message_t data){
             if (IS_BIT_MASK){ //Available PID bit-mask only for now 
                 int num_bitmask = (data.data[2] / 0x20); 
                
-                for(int i = 0; i < 4; i++){
+                for(int i = 0; i < 4; i++){ //right here changed 4 to 1 change back **********************************************
                     PIDs_Supported[num_bitmask][i] = data.data[i + 3]; 
                 }
 
@@ -471,4 +471,5 @@ void TWAI_INIT(){
     xTaskCreatePinnedToCore(TWAI_Services, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
     vTaskDelay(pdMS_TO_TICKS(75));
+    memset(PIDs_Supported, 0, sizeof(PIDs_Supported)); //set bitmask to 0 initially
 }
