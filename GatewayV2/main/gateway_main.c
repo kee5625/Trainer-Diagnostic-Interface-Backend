@@ -45,7 +45,7 @@ QueueHandle_t service_queue;
 
 void DTCS_reset(){
     dtcs = NULL;
-    dtcs_bytes = 0;
+    dtcs_bytes = 0; 
 }
 
 void Set_DTCs(uint8_t *codes, int codes_bytes){
@@ -84,8 +84,14 @@ void Set_TWAI_Serv(service_request_t req){
             DTCS_reset();
         case SERV_PENDING_DTCS:
         case SERV_PERM_DTCS:
+
             xQueueSend(service_queue, &req, portMAX_DELAY);
-            xSemaphoreTake(TWAI_DONE_sem, portMAX_DELAY);
+            ESP_LOGI("MAIN","HERE A");
+            //Loop until TWAI completes service
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(2500)) != pdTRUE){
+                TWAI_RESET(req); //restart TWAI completely
+            }
+           
         
         default:
             break;
@@ -106,6 +112,7 @@ uint8_t get_dtcs_bytes(){
 }
 
 uint8_t get_Req_PID(){
+    return 0x0D; //here
     return req_PID;
 }
 

@@ -4,12 +4,12 @@
 #define TWIA_TC
 
 #include "driver/twai.h"
-#include "TWIA_TC.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
 #include <inttypes.h>
+#include "TC_ref.h"
 
 
 //TWAI action type setup
@@ -27,6 +27,6 @@ typedef enum {
 
 //funcitons
 void TWAI_INIT();
-
+void TWAI_RESET(service_request_t req);
 
 #endif

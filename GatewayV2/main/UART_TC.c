@@ -194,6 +194,7 @@ static void Read_Codes(uint8_t command){
 static void PIDs_GRAB_LIVE_DATA(){
     uint8_t rx_data = 0x00;
     uart_comms_t action;
+    uart_event_t event;
 
     Set_TWAI_Serv(SERV_PIDS); //grabs bit-mask
     ESP_LOGI(TAG,"PIDs bitmask grabbed.");
@@ -217,15 +218,21 @@ static void PIDs_GRAB_LIVE_DATA(){
 
     /**
      * Grabbing PIDs data... PID 0x20 = exit command
+     * 
+     * Note:PID 0x20 is a bitmask request and is already grabbed with the bitmask.
      */
     while (1){
         ESP_LOGI(TAG,"Waiting on PID...");
-        xQueueReceive(uart_queue,&rx_data,portMAX_DELAY);
-        uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY); //extra ?
+
+        xQueueReceive(uart_queue,&event,portMAX_DELAY);
+        if (event.type != UART_DATA) continue; //skip errors and retry might need fixing here
+
+        uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY); //grab rx buffer
 
         if (rx_data == 0x20) break; //exit
 
         Set_Req_PID(rx_data); //set pid in main
+        ESP_LOGI(TAG,"Grabbing next PID");
         Set_TWAI_Serv(SERV_DATA); //Thread blocked until TWAI grabs data
 
        
@@ -244,8 +251,7 @@ static void PIDs_GRAB_LIVE_DATA(){
         checksum = ~checksum;//1s compliment
         ESP_LOGI(TAG,"FINISHED and sent checksum for PID data. %i", checksum);
         uart_write_bytes(UART_PORT_NUM, &checksum, 1);
-        
-
+        uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
     }
     ESP_LOGI(TAG,"PID service complete.");
 }
