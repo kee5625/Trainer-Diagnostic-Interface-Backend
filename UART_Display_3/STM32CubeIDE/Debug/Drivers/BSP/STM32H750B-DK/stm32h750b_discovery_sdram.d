@@ -1,6 +1,6 @@
 Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.h \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.c \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.h \
  ../../Core/Inc/stm32h750b_discovery_conf.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../../Core/Inc/stm32h7xx_hal_conf.h \
@@ -44,10 +44,10 @@ Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.o: \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/mt48lc4m32b2/mt48lc4m32b2.h \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/mt48lc4m32b2/mt48lc4m32b2.h \
  ../../Core/Inc/mt48lc4m32b2_conf.h
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.h:
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_sdram.h:
 ../../Core/Inc/stm32h750b_discovery_conf.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../../Core/Inc/stm32h7xx_hal_conf.h:
@@ -91,6 +91,6 @@ C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_di
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h:
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/mt48lc4m32b2/mt48lc4m32b2.h:
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_errno.h:
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/../Components/mt48lc4m32b2/mt48lc4m32b2.h:
 ../../Core/Inc/mt48lc4m32b2_conf.h:

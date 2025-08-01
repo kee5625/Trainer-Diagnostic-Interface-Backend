@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/TouchGFXGPIO.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXGPIO.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXGPIO.cpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/GPIO.hpp \
  ../../Core/Inc/main.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \

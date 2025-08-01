@@ -32,7 +32,8 @@
 static uint8_t rx_byte;
 static bool retry_last = false;    				//used for retry command
 uart_comms_t cur_service;						//marks current service being request(GUI sets)
-static uint32_t TX_ticks = osWaitForever;       //used to ping start commands
+static uint32_t TX_ticks = osWaitForever;       //only used to ping start commands
+static bool resetFlag = false;
 
 //DTCs globals
 static char *dtcs_list = NULL; 	   				//list of all DTCs(each DTC is 5 characters long)
@@ -105,14 +106,17 @@ static inline bool Sum_Check(uint8_t localSum, uint8_t externalSum){
 
 static inline void UART_Reset(){
 
-	HAL_UART_Abort(&huart1);
+	if (huart1.gState != HAL_UART_STATE_READY || huart1.RxState != HAL_UART_STATE_READY)
+	{
+		HAL_UART_Abort(&huart1);
 
-	__HAL_UART_CLEAR_OREFLAG(&huart1);
-	__HAL_UART_CLEAR_PEFLAG(&huart1);
-	__HAL_UART_CLEAR_FEFLAG(&huart1);
-	__HAL_UART_CLEAR_NEFLAG(&huart1);
+		__HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_OREF);
+		__HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_PEF);
+		__HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_FEF);
+		__HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_NEF);
+	}
 
-	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+	if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
 }
 
 void init_error_check(void *ptr){
@@ -175,16 +179,21 @@ static int Read_Codes(int last_byte){
 	uint8_t byte;
 
 	if (dtcs_size == -1){
+
 		dtcs_size = rx_byte;
 		last_byte = -999;
 		byte = UART_DTC_Received_cmd;
 		HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 		osMessageQueuePut(send_task_queue, &byte, 0, 0);
+
 	}else if (last_byte == -999 && is_valid_frame(rx_byte) && ((rx_byte>>3) & 0x0F) == UART_DTCs_End_cmd){
+
 		osSemaphoreRelease(blink_sem); //for testing: shows DTCs are ready
 		DTCs_GUI_Pass(dtcs_list,dtcs_size);
 		last_byte = -1;
+
 	}else{
+
 		if(last_byte >= 0){
 			DTC_Decode((uint8_t) last_byte, rx_byte); //converts and adds to global static DTCs list
 			byte = UART_DTC_Received_cmd;
@@ -193,9 +202,13 @@ static int Read_Codes(int last_byte){
 		}else{
 			last_byte = rx_byte;
 		}
+
 		HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
+
 	}
+
 	return last_byte;
+
 }
 
 
@@ -232,12 +245,19 @@ static void get_PIDs(){
 		}else{
 			col += 1;
 		}
+
 		osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
+
+		if (resetFlag) {
+			osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+			return;
+		}
 	}
 
 	GUI_Set_PIDs(cur_pid,NULL,pid_bitmask, 0);
 	vTaskDelay(pdMS_TO_TICKS(10));
 	osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+
 }
 
 /**
@@ -245,36 +265,53 @@ static void get_PIDs(){
  */
 static void get_Data_PID(uint8_t data){
 	uint8_t checksum = 0;
+	int i = -1; //index
+	osStatus_t Queue_status = osOK;
+	bool failed = false;
 
 	if (cur_pid == 0x20){ //exit task
-		osMessageQueueReset(control_queue); //clear all remaining PID request
 		osSemaphoreRelease(SERV_DONE_sem); //ready for next service
 		return;
 	}
+
 	while(1){
-		pid_bytes = data; //set global size
-		PID_VALUE = (uint8_t *)pvPortMalloc(pid_bytes);
+		if (Queue_status == osOK){ //if not osOk checksum will fail and retry
 
-		for (int i = 0; i < pid_bytes; i ++){
-			HAL_UART_Receive_IT(&huart1,&data,1); //receive data bytes
-			osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever); //wait till receive finished
-			PID_VALUE[i] = data;
-			checksum += data;
+			if (i == -1){
+				pid_bytes = data; //set global size
+				PID_VALUE = (uint8_t *)pvPortMalloc(pid_bytes);
+
+			}else if (i < pid_bytes){
+				PID_VALUE[i] = data;
+				checksum += data;
+
+			}else{
+				checksum = ~checksum;
+
+				if (!failed && checksum == data){
+					break;
+
+				}else{
+					failed = false;
+					checksum = 0;
+					i = -1;
+					HAL_UART_Transmit_IT(&huart1,&cur_pid,1);//request current PID data again
+
+				}
+			}
+			i ++;
+
+		}else if (Queue_status == osErrorTimeout){
+			failed = true;
 		}
 
-		checksum = ~checksum;
-		HAL_UART_Receive_IT(&huart1,&data,1); //receive checksum
-		osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);  //wait till receive finished
-
-		if (checksum == data){
-			break;
-		}else{
-			checksum = 0;
-			HAL_UART_Receive_IT(&huart1,&data,1); //receive size and start over
-			HAL_UART_Transmit_IT(&huart1,&cur_pid,1);//request current PID data again
-			osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever); //wait till receive finished
+		if (resetFlag) {
+			osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+			return;
 		}
 
+		HAL_UART_Receive_IT(&huart1,&data,1);
+		Queue_status = osMessageQueueGet(receive_task_queue, &rx_byte, NULL,pdMS_TO_TICKS(250));
 	}
 
 	GUI_Set_PIDs(cur_pid,PID_VALUE,NULL, pid_bytes);
@@ -347,27 +384,54 @@ static void UART_CONTROl(){
 			dtcs_size = -1;
 			cur_dtcs_list_size = 0;
 
-			if (cur_service == UART_DTCs_Reset_cmd) {
+			if (cur_service == UART_end_of_cmd || (cur_service == UART_DATA_PID && cur_pid == 0x20)){
+				uint8_t msg = UART_end_of_cmd;
+
+				if (huart1.gState != HAL_UART_STATE_READY || huart1.RxState != HAL_UART_STATE_READY){
+					HAL_UART_Abort(&huart1);
+				}
+
+				//resetting queues
+				osMessageQueueReset(send_task_queue);
+
+				osMessageQueueReset(receive_task_queue);
+				osMessageQueuePut(receive_task_queue, &msg, 255, 0); //getting unstuck from QueueGets for receive
+				osMessageQueueReset(receive_task_queue);
+
+				resetFlag = false;
+				if (cur_pid == 0x20){
+					HAL_UART_Receive_IT(&huart1,&rx_byte, 1); //receive number of bytes
+					byte = UART_DATA_PID;
+					osMessageQueuePut(send_task_queue, &byte, 0, 0); //send PID
+				}
+
+			}else if (cur_service == UART_DTCs_Reset_cmd) {
 				byte = cur_service;
 				osMessageQueuePut(send_task_queue, &byte, 0, 0);
 
 			}else if (cur_service == UART_DATA_PID){
-				if (cur_pid != 0x20) HAL_UART_Receive_IT(&huart1,&rx_byte, 1); //receive number of bytes
+				HAL_UART_Receive_IT(&huart1,&rx_byte, 1); //receive number of bytes
 				byte = UART_DATA_PID;
 				osMessageQueuePut(send_task_queue, &byte, 0, 0); //send PID
 
 			}else{
-//				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 				UART_Reset();
 				osDelay(pdMS_TO_TICKS(10));
 				byte = UART_Start_cmd;
 				osMessageQueuePut(send_task_queue, &byte, 0, 0);
-//				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
+
+			}
+
+			if (cur_service ==  UART_end_of_cmd && huart1.gState == HAL_UART_STATE_READY && huart1.RxState == HAL_UART_STATE_READY ){
+				osSemaphoreRelease(SERV_DONE_sem);
 			}
 
 			osSemaphoreAcquire(SERV_DONE_sem, portMAX_DELAY); //wait till service is done
+
 		}
+
 	}
+
 }
 
 /*
@@ -418,9 +482,14 @@ static void UART_TX(){
 			}
 
 		}else if (queue_get == osErrorTimeout){
-			retry_last = true;
-			if (huart1.RxState != HAL_UART_STATE_BUSY_RX) HAL_UART_Receive_IT(&huart1,&byte,1);
-
+			if (resetFlag){
+				osSemaphoreRelease(SERV_DONE_sem);
+				retry_last = false;
+				TX_ticks = osWaitForever;
+			}else{
+				retry_last = true;
+				if (huart1.RxState != HAL_UART_STATE_BUSY_RX) HAL_UART_Receive_IT(&huart1,&byte,1);
+			}
 		}
 	}
 }
@@ -443,7 +512,7 @@ static void UART_RX(){
 
 	while(1){
 		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
-		if(rx_Queue_Get == osOK){
+		if(rx_Queue_Get == osOK && rx_byte != UART_end_of_cmd ){ //end command sent by display to display no padding
 
 			if (cur_service == UART_DATA_PID){ //PIDs coming without commands
 				get_Data_PID(rx_byte);
@@ -481,6 +550,10 @@ static void UART_RX(){
 				case UART_SERVICE_RUNNING:
 					if (cur_service == UART_DTCs_REQ_STORED_cmd || cur_service == UART_DTCs_REQ_PENDING_cmd || cur_service == UART_DTCs_REQ_PERM_cmd){
 
+						if (resetFlag) {
+							osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+							return;
+						}
 						last_byte = Read_Codes(last_byte);
 						if (last_byte == -1){
 							Serv_Bytes = false; //All DTCs grabbed
@@ -505,18 +578,16 @@ static void UART_RX(){
  */
 void UART_Set_Service(uart_comms_t ser, int pid){
 	Service_Request_t tempReq;
-	uint8_t msgPrio = 0;
-	uint32_t timeout = 0;
 
 	tempReq.service = ser; //mode and service are interchangeable terms
 	tempReq.pid = pid;
 
-	if (ser == UART_DATA_PID && pid == 0x20){
-		msgPrio = 255;
-		timeout = portMAX_DELAY;
+	if (ser == UART_end_of_cmd || (ser == UART_DATA_PID && pid == 0x20)){
+		osMessageQueueReset(control_queue);
+		resetFlag = true; //end current tasks
 	}
 
-	if (osMessageQueuePut(control_queue, &tempReq, msgPrio, timeout) != osOK){
+	if (osMessageQueuePut(control_queue, &tempReq, 0, 0) != osOK){
 	}
 }
 

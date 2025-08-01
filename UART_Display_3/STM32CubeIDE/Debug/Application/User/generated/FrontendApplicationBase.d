@@ -1,5 +1,5 @@
 Application/User/generated/FrontendApplicationBase.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/MVPApplication.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/common/AbstractPartition.hpp \

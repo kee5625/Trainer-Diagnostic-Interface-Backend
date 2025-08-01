@@ -1,5 +1,5 @@
 Application/User/gui/Freeze_Frame_DataView.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataView.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/freeze_frame_data_screen/Freeze_Frame_DataView.cpp \
  ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \

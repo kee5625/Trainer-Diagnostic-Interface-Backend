@@ -158,25 +158,48 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& s
 	}
 
     if (&source == &Pending_dtcs_button){
+
     	presenter->Pres_Set_Service(UART_DTCs_REQ_PENDING_cmd);
+
      } else if (&source == &Stored_dtcs_button){
+
     	presenter->Pres_Set_Service(UART_DTCs_REQ_STORED_cmd);
+
     } else if (&source == &Perm_dtcs_button){
+
     	presenter->Pres_Set_Service(UART_DTCs_REQ_PERM_cmd);
+
 	} else if (&source == &Clear_DTCS_button || &source == &LD_Button){
+
     	if (presenter->get_Num_DTCs() != 0) Select_Phase_Set();
 
-    	if (&source == &LD_Button) application().gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
+    	if (&source == &LD_Button) {
+
+    		presenter->Pres_Set_Service(UART_end_of_cmd); //stop UART
+    		application().gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
+
+    	}
 
     	if (&source == &Clear_DTCS_button) presenter->Pres_Set_Service(UART_DTCs_Reset_cmd);
+
 	}
+
     if (&source == &back_button){
+
+    	presenter->Pres_Set_Service(UART_end_of_cmd); //stop UART
+
     	if (screen_Phase == Phase::select){
+
     		application().gotoHome_ScreenScreenWipeTransitionEast();
+
     	}else{
+
     		Select_Phase_Set();
+
     	}
+
     }
+
 }
 
 void TC_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex){

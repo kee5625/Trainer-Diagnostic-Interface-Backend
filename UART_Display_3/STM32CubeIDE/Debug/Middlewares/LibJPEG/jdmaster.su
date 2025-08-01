@@ -1,8 +1,8 @@
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:45:1:use_merged_upsample	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:88:1:jpeg_calc_output_dimensions	32	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:229:1:prepare_range_limit_table	24	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:269:1:master_selection	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:412:1:prepare_for_output_pass	24	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:472:1:finish_output_pass	24	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:489:1:jpeg_new_colormap	24	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:517:1:jinit_master_decompress	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:45:1:use_merged_upsample	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:88:1:jpeg_calc_output_dimensions	32	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:229:1:prepare_range_limit_table	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:269:1:master_selection	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:412:1:prepare_for_output_pass	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:472:1:finish_output_pass	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:489:1:jpeg_new_colormap	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdmaster.c:517:1:jinit_master_decompress	24	static

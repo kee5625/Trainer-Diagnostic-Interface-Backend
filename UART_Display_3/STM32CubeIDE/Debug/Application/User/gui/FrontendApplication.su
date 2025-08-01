@@ -1,13 +1,13 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Application.hpp:91:18:virtual void touchgfx::Application::appSwitchScreen(uint8_t)	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Application.hpp:104:18:virtual void touchgfx::Application::requestRedraw(touchgfx::Rect&)	0	static
 ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp:16:13:FrontendApplication::~FrontendApplication()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:29:42:void __tcf_2()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:29:42:void __tcf_2()	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:449:18:void touchgfx::Callback<dest_type, void, void, void>::execute() [with dest_type = FrontendApplicationBase]	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:459:18:bool touchgfx::Callback<dest_type, void, void, void>::isValid() const [with dest_type = FrontendApplicationBase]	0	static
 ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp:18:18:virtual void FrontendApplicationBase::changeToStartScreen()	0	static
 ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp:16:13:virtual FrontendApplication::~FrontendApplication()	8	static
 ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp:18:18:virtual void FrontendApplication::handleTickEvent()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:28:23:void __tcf_1()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:28:23:void __tcf_1()	0	static
 ../../Middlewares/ST/touchgfx/framework/include/mvp/MVPApplication.hpp:59:18:virtual void touchgfx::MVPApplication::handlePendingScreenTransition()	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:20:1:FrontendApplication::FrontendApplication(Model&, FrontendHeap&)	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:26:6:void FrontendApplication::gotoTC_ScreenScreenWipeTransitionEast()	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:20:1:FrontendApplication::FrontendApplication(Model&, FrontendHeap&)	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/common/FrontendApplication.cpp:26:6:void FrontendApplication::gotoTC_ScreenScreenWipeTransitionEast()	16	static

@@ -10,18 +10,18 @@ if(NOT EXISTS "C:/ESP-IDF/v5.4.1/esp-idf/components/bootloader/subproject")
   file(MAKE_DIRECTORY "C:/ESP-IDF/v5.4.1/esp-idf/components/bootloader/subproject")
 endif()
 file(MAKE_DIRECTORY
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader"
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix"
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/tmp"
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp"
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src"
-  "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/tmp"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/src"
+  "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

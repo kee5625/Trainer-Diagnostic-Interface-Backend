@@ -1,5 +1,5 @@
 Middlewares/LibJPEG/jdpostct.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdpostct.c \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jdpostct.c \
  ../../Middlewares/Third_Party/LibJPEG/include/jinclude.h \
  ../../LIBJPEG/Target/jconfig.h ../../LIBJPEG/Target/jdata_conf.h \
  ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \

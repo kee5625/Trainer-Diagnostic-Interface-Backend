@@ -1,5 +1,5 @@
 Application/User/gui/rowItem_Data.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp \
  ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \

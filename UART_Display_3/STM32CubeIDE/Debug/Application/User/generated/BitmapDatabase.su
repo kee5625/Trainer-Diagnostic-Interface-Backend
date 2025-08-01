@@ -1,2 +1,2 @@
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/images/src/BitmapDatabase.cpp:33:37:const touchgfx::Bitmap::BitmapData* BitmapDatabase::getInstance()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/images/src/BitmapDatabase.cpp:38:10:uint16_t BitmapDatabase::getInstanceSize()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/images/src/BitmapDatabase.cpp:33:37:const touchgfx::Bitmap::BitmapData* BitmapDatabase::getInstance()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/images/src/BitmapDatabase.cpp:38:10:uint16_t BitmapDatabase::getInstanceSize()	0	static

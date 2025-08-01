@@ -1,4 +1,4 @@
-# Install script for directory: C:/ESP-IDF/Gatway_updates/GatewayV2/main
+# Install script for directory: C:/ESP-IDF/Gateway_updates/GatewayV2/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

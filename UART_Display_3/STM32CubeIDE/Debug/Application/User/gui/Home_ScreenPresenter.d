@@ -1,5 +1,5 @@
 Application/User/gui/Home_ScreenPresenter.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenPresenter.cpp \
  ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/home_screen_screen/Home_ScreenViewBase.hpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \

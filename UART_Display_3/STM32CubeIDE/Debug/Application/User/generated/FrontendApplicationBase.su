@@ -20,17 +20,17 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/transitions/Transition.hpp:89:18:virtual void touchgfx::Transition::invalidate()	8	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/transitions/WipeTransition.hpp:149:18:void touchgfx::WipeTransition<templateDirection>::invalidate() [with touchgfx::Direction templateDirection = touchgfx::EAST]	8	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/transitions/WipeTransition.hpp:69:18:void touchgfx::WipeTransition<templateDirection>::handleTickEvent() [with touchgfx::Direction templateDirection = touchgfx::EAST]	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:48:6:void FrontendApplicationBase::gotoHome_ScreenScreenNoTransitionImpl()	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:85:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransitionImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:48:6:void FrontendApplicationBase::gotoHome_ScreenScreenNoTransitionImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:85:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransitionImpl()	40	static
 ../../Middlewares/ST/touchgfx/framework/include/mvp/MVPApplication.hpp:59:18:virtual void touchgfx::MVPApplication::handlePendingScreenTransition()	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:59:6:void FrontendApplicationBase::gotoHome_ScreenScreenWipeTransitionEastImpl()	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:109:6:void FrontendApplicationBase::gotoFreeze_Frame_DataScreenWipeTransitionEastImpl()	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:72:6:void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEastImpl()	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:96:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl()	40	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:23:1:FrontendApplicationBase::FrontendApplicationBase(Model&, FrontendHeap&)	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:42:6:void FrontendApplicationBase::gotoHome_ScreenScreenNoTransition()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:53:6:void FrontendApplicationBase::gotoHome_ScreenScreenWipeTransitionEast()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:66:6:void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEast()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:79:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransition()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:90:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEast()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:103:6:void FrontendApplicationBase::gotoFreeze_Frame_DataScreenWipeTransitionEast()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:59:6:void FrontendApplicationBase::gotoHome_ScreenScreenWipeTransitionEastImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:109:6:void FrontendApplicationBase::gotoFreeze_Frame_DataScreenWipeTransitionEastImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:72:6:void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEastImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:96:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEastImpl()	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:23:1:FrontendApplicationBase::FrontendApplicationBase(Model&, FrontendHeap&)	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:42:6:void FrontendApplicationBase::gotoHome_ScreenScreenNoTransition()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:53:6:void FrontendApplicationBase::gotoHome_ScreenScreenWipeTransitionEast()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:66:6:void FrontendApplicationBase::gotoTC_ScreenScreenWipeTransitionEast()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:79:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenNoTransition()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:90:6:void FrontendApplicationBase::gotoRead_Live_Data_ScreenScreenWipeTransitionEast()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp:103:6:void FrontendApplicationBase::gotoFreeze_Frame_DataScreenWipeTransitionEast()	0	static

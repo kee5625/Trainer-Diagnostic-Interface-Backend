@@ -1,5 +1,5 @@
 Application/User/gui/Home_ScreenView.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/home_screen_screen/Home_ScreenView.cpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/MVPApplication.hpp \

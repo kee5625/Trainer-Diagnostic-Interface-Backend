@@ -1,5 +1,5 @@
 Application/User/generated/ApplicationFontProvider.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/fonts/src/ApplicationFontProvider.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/fonts/src/ApplicationFontProvider.cpp \
  ../../TouchGFX/generated/fonts/include/fonts/ApplicationFontProvider.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/FontManager.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Font.hpp \

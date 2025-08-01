@@ -1,12 +1,12 @@
 ../../TouchGFX/gui/include/gui/model/ModelListener.hpp:19:18:virtual void ModelListener::set_Data(int, uint8_t*, uint8_t (*)[4], int)	0	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:TC_ScreenPresenter::~TC_ScreenPresenter()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:55:6:virtual void TC_ScreenPresenter::activate()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:55:6:virtual void TC_ScreenPresenter::activate()	0	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:virtual TC_ScreenPresenter::~TC_ScreenPresenter()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:15:6:virtual void TC_ScreenPresenter::set_dtcs(char**, int)	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:15:6:virtual void TC_ScreenPresenter::set_dtcs(char**, int)	40	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:virtual void* TC_ScreenPresenter::_ZThn4_N18TC_ScreenPresenterD1Ev()	0	static
 ../../TouchGFX/gui/include/gui/tc_screen_screen/TC_ScreenPresenter.hpp:31:13:virtual void* TC_ScreenPresenter::_ZThn4_N18TC_ScreenPresenterD0Ev()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:9:1:TC_ScreenPresenter::TC_ScreenPresenter(TC_ScreenView&)	4	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:44:6:void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t)	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:63:6:bool TC_ScreenPresenter::Get_DTCs_Status()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:67:5:int TC_ScreenPresenter::get_Num_DTCs()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:71:13:const char* TC_ScreenPresenter::GetDtcs(int)	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:9:1:TC_ScreenPresenter::TC_ScreenPresenter(TC_ScreenView&)	4	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:44:6:void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t)	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:63:6:bool TC_ScreenPresenter::Get_DTCs_Status()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:67:5:int TC_ScreenPresenter::get_Num_DTCs()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/tc_screen_screen/TC_ScreenPresenter.cpp:71:13:const char* TC_ScreenPresenter::GetDtcs(int)	0	static

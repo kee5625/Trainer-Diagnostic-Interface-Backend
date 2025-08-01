@@ -22,4 +22,4 @@ set confirm off
 set confirm on
 
 # Load application symbols
-file C:/ESP-IDF/Gatway_updates/Gateway_SlaveV2/build/bootloader/bootloader.elf
+file C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/bootloader/bootloader.elf

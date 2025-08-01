@@ -1,5 +1,5 @@
 Application/User/generated/Read_Live_Data_ScreenViewBase.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp \

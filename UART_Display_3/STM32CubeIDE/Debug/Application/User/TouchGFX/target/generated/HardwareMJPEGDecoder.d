@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/generated/HardwareMJPEGDecoder.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/generated/HardwareMJPEGDecoder.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/HardwareMJPEGDecoder.cpp \
  ../../TouchGFX/target/generated/HardwareMJPEGDecoder.hpp \
  ../../TouchGFX/target/generated/MJPEGDecoder.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/Types.hpp \

@@ -1,5 +1,5 @@
 Application/User/generated/TC_ScreenViewBase.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/tc_screen_screen/TC_ScreenViewBase.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/tc_screen_screen/TC_ScreenViewBase.cpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/tc_screen_screen/TC_ScreenViewBase.hpp \
  ../../TouchGFX/gui/include/gui/common/FrontendApplication.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/common/FrontendApplicationBase.hpp \

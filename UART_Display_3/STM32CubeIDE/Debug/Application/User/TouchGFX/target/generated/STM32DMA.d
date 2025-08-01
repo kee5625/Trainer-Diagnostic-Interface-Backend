@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/generated/STM32DMA.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../../Core/Inc/stm32h7xx_hal_conf.h \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \

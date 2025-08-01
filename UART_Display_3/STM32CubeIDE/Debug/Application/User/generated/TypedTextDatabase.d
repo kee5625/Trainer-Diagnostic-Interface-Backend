@@ -1,5 +1,5 @@
 Application/User/generated/TypedTextDatabase.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Font.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Unicode.hpp \

@@ -1,5 +1,5 @@
 Application/User/generated/FontCache.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/fonts/src/FontCache.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/fonts/src/FontCache.cpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TextProvider.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Font.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Unicode.hpp \

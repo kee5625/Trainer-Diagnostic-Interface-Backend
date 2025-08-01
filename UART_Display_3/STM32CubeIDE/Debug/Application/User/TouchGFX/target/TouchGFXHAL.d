@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/TouchGFXHAL.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp \
  ../../TouchGFX/target/TouchGFXHAL.hpp \
  ../../TouchGFX/target/generated/TouchGFXGeneratedHAL.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp \

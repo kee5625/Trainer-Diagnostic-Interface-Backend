@@ -1,5 +1,5 @@
 Application/User/TouchGFX/target/CortexMMCUInstrumentation.o: \
- C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/target/CortexMMCUInstrumentation.cpp \
+ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/CortexMMCUInstrumentation.cpp \
  ../../TouchGFX/target/CortexMMCUInstrumentation.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/platform/core/MCUInstrumentation.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/Types.hpp \

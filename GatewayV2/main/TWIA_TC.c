@@ -203,7 +203,7 @@ static int Live_Data_Get(twai_message_t data){
     tx_task_action_t tx_response;
     int byte_count = 0;
     bool IS_BIT_MASK = data.data[2] % 0x20 == 0; //availability bit-masks not other data bit-masks for now 
-    ESP_LOGI(TAG,"HERE 2");
+     
     while (1){
 
        
@@ -224,7 +224,6 @@ static int Live_Data_Get(twai_message_t data){
                 }
             }
 
-            ESP_LOGI(TAG,"HERE 3");
             return 0; //return for pid data 
         }else if (data.data[0] == MULT_FRAME_FIRST && data.data[2] == SHOW_LIVE_DATA_RESP && get_Req_PID() == data.data[3]){ //below this is data responses 
             PID_VALUE = (uint8_t *)pvPortMalloc(data.data[1]);
@@ -391,9 +390,7 @@ void TWAI_RESET(service_request_t req){
     xQueueReset(service_queue);
 
     resetflag = true;
-    ESP_LOGI(TAG,"HERE 5");
     xSemaphoreTake(TWAI_DONE_sem, portMAX_DELAY); //current service done and TWAI turned off 
-    ESP_LOGI(TAG,"HERE 6");
     resetflag = false;
     xSemaphoreTake(TWAI_COMPLETE, 0);        //taking pending semaphores
     xSemaphoreTake(BIT_MASK_ROW_GRABED, 0);
@@ -414,13 +411,12 @@ static void TWAI_Services()
     
     while(1){
         xQueueReceive(service_queue,&current_serv,portMAX_DELAY);
-        ESP_LOGI(TAG,"HERE 7");
         twai_get_status_info(&status);
         if (status.state == TWAI_STATE_STOPPED){
             ESP_LOGI(TAG,"TWAI started");
             twai_start();
         }
-        ESP_LOGI(TAG,"HERE 8");
+
         switch (current_serv){
             case SERV_PIDS:
                 tx_action = TX_REQUEST_PIDS;
@@ -433,9 +429,7 @@ static void TWAI_Services()
             case SERV_DATA:
                 tx_action = TX_REQUEST_DATA;
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
-                ESP_LOGI(TAG,"HERE 9");
                 xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
-                ESP_LOGI(TAG,"HERE 1");
                 Set_PID_Value(PID_VALUE,PID_VALUE_BYTES);
                 break;
 

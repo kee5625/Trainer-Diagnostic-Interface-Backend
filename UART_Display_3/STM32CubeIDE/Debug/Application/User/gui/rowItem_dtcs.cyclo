@@ -12,7 +12,7 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/Container.hpp:165:23:virtual touchgfx::Drawable* touchgfx::Container::getFirstChild()	1
 ../../TouchGFX/gui/include/gui/containers/rowItem_dtcs.hpp:10:13:rowItem_dtcs::~rowItem_dtcs()	1
 ../../TouchGFX/gui/include/gui/containers/rowItem_dtcs.hpp:10:13:virtual rowItem_dtcs::~rowItem_dtcs()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:9:1:rowItem_dtcs::rowItem_dtcs()	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:19:6:void rowItem_dtcs::dtcs_Desc_set(const char*)	1
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:25:6:void rowItem_dtcs::dtcs_set(const char*)	2
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:14:6:virtual void rowItem_dtcs::initialize()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:9:1:rowItem_dtcs::rowItem_dtcs()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:19:6:void rowItem_dtcs::dtcs_Desc_set(const char*)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:25:6:void rowItem_dtcs::dtcs_set(const char*)	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_dtcs.cpp:14:6:virtual void rowItem_dtcs::initialize()	1

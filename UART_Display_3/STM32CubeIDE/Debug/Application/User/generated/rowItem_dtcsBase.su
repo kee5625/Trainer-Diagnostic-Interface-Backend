@@ -24,11 +24,11 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:49:36:virtual touchgfx::TextArea::BoundingArea touchgfx::TextAreaWithWildcardBase::calculateBoundingArea() const	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:84:41:virtual const touchgfx::Unicode::UnicodeChar* touchgfx::TextAreaWithOneWildcard::getWildcard1() const	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:62:7:touchgfx::TextAreaWithOneWildcard::~TextAreaWithOneWildcard()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:37:1:rowItem_dtcsBase::~rowItem_dtcsBase()	0	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:42:6:virtual void rowItem_dtcsBase::initialize()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:37:1:rowItem_dtcsBase::~rowItem_dtcsBase()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:42:6:virtual void rowItem_dtcsBase::initialize()	0	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:65:13:virtual touchgfx::TypedText::~TypedText()	8	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:62:7:virtual touchgfx::TextAreaWithOneWildcard::~TextAreaWithOneWildcard()	8	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:37:1:virtual rowItem_dtcsBase::~rowItem_dtcsBase()	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:37:1:virtual rowItem_dtcsBase::~rowItem_dtcsBase()	8	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:111:18:virtual void touchgfx::TextArea::setBaselineY(int16_t)	16	static
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:127:18:virtual void touchgfx::TextArea::setXBaselineY(int16_t, int16_t)	16	static
-C:/ESP-IDF/Gatway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:8:1:rowItem_dtcsBase::rowItem_dtcsBase()	72	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp:8:1:rowItem_dtcsBase::rowItem_dtcsBase()	72	static
