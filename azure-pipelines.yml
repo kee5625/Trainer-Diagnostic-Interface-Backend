@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- Gateway_Update
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    for dir in */ ; do
+      echo "Entering $dir"
+      cd "$dir"
+
+      if [ -f Makefile ]; then
+        echo "Makefile found — building with make"
+        make
+      elif [ -f main.cpp ]; then
+        echo "No Makefile — compiling with g++"
+        g++ -o program main.cpp
+      else
+        echo "No main.cpp or Makefile in $dir — skipping"
+      fi
+
+      cd ..
+    done
+  displayName: 'Build and Run C++ program'
