@@ -140,33 +140,35 @@ static void Read_Codes(uint8_t command){
     xQueueSend(uart_send_queue, &action,portMAX_DELAY);
     
     while (1){
-        action = UART_DTC_next_cmd;
-        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-
-        xQueueReceive(uart_queue,&command,portMAX_DELAY);
+        // xQueueReceive(uart_queue,&command,portMAX_DELAY);
         uart_read_bytes(UART_PORT_NUM, &command, 1, portMAX_DELAY);
 
         if (!is_valid_frame(command)) {
             action = UART_Retry_cmd;
             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
             continue;
+
         }
 
         command = (command >> 3) & 0x0F; //grabs command no padding
 
         if(command == UART_DTC_Received_cmd){
-            ESP_LOGI(TAG,"DTC sent successfully.");
             if (num_bytes_dtcs >= dtcs_sent + 2){
                 action = UART_DTC_next_cmd;
+
             }else{
                 dtcs_sent = 0; //incremented by TX thread
                 action = UART_DTCs_End_cmd;
                 xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                 break;
+
             }
+
             xQueueSend(uart_send_queue, &action, portMAX_DELAY);
         }
+
     }
+
 }
 
 
@@ -283,7 +285,7 @@ static void UART_TX(){
                 uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
                 uart_write_bytes(UART_PORT_NUM, &dtcs[dtcs_sent + 1], 1);
                 uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
-                ESP_LOGI(TAG,"Trouble code bytes sent 0x%02X 0x%02X",dtcs[dtcs_sent], dtcs[dtcs_sent + 1]);
+                ESP_LOGI(TAG,"Trouble code bytes sent 0x%02X 0x%02X, dtcs_sent index: %i",dtcs[dtcs_sent], dtcs[dtcs_sent + 1],dtcs_sent);
                 dtcs_sent += 2;
                 break;
 
@@ -320,7 +322,7 @@ static void UART_TX(){
 
 /**
  * Function Description: Receive inputs from UART and fill queue for uart_send_queue in the UART_TX() function.
- * Notes: Below is the expected command order the Gateway(slave) should receive from the Display(master)
+ *  
  */
 static void UART_RX(){
     uart_event_t rx_action;

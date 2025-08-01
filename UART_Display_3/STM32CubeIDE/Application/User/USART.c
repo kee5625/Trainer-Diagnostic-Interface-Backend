@@ -175,6 +175,74 @@ static void DTC_Decode(uint8_t first_byte, uint8_t second_byte) {
     dtcs_list[cur_dtcs_list_size - 1] = '\0';
 }
 
+/**
+ * UART Protocol: DTC (Diagnostic Trouble Codes) Communication
+ * ===========================================================
+ *
+ * Notes:
+ * - Start commands and Receive commands are handled in the `rx` function.
+ * - DTCs can be Pending, Stored, or Permanent depending on the request.
+ *
+ * ------------------------------------------------------------------------
+ * From Gateway (to Display)
+ * ------------------------------------------------------------------------
+ * Description:
+ *   Sends DTC data to the display after receiving a request.
+ *
+ * Byte packing:
+ *   Byte 0     : Receive Command (e.g., 0xBB)
+ *   Byte 1     : Total Number of DTCs for the category
+ *   Byte 2     : DTC 0 (first half DTC)
+ *   Byte 3     : DTC 0 (second half DTC)
+ *   Byte 4     : DTC 1 (first half DTC)
+ *   Byte 5     : DTC 1 (second half DTC)
+ *   ...
+ *   Byte N     : DTC N (first half DTC)
+ *   Byte N+1   : DTC N (second half DTC)
+ *   Final Byte : END Command (e.g., 0xEE)
+ *
+ * bit packing (commands):
+ *   Bit 0     : Start Command 1
+ *   Bit 1     : UART command see UART_TC.h
+ *   Bit 2     : ^
+ *   Bit 3     : ^
+ *   Bit 4     : ^
+ *   Bit 5     : 1 (uart_end_pad)
+ *   Bit 6     : 1 (uart_end_pad)
+ *   Bit 7     : 0 (uart_end_pad)
+ *
+ *
+ * Encoded DTC: 00      00   0111 / 0000 0011
+ *              ^letter ^num ^num   ^num ^num
+ *              P        0   B      0    3
+ *
+ *
+ * ------------------------------------------------------------------------
+ * From Display (to ECU / Trainer)
+ * ------------------------------------------------------------------------
+ * Description:
+ *   Sends a request for DTCs in a specific category.
+ *
+ * Byte Packing:
+ * Byte 0               : Start Command (e.g., 0xAA)
+ * Byte 1               : DTC Command Type:
+ *                          - 0x04 = Stored
+ *                          - 0x05 = Pending
+ *                          - 0x06 = Permanent
+ * Byte 2+ Num_bytes    : DTC Received cmd
+ *
+ *
+ * Bit packing (commands):
+ *   Bit 0     : Start Command 1
+ *   Bit 1     : UART command see UART_TC.h
+ *   Bit 2     : ^
+ *   Bit 3     : ^
+ *   Bit 4     : ^
+ *   Bit 5     : 1 (uart_end_pad)
+ *   Bit 6     : 1 (uart_end_pad)
+ *   Bit 7     : 0 (uart_end_pad)
+ *
+ */
 static int Read_Codes(int last_byte){
 	uint8_t byte;
 
@@ -211,7 +279,27 @@ static int Read_Codes(int last_byte){
 
 }
 
-
+/**
+ * This funciton gets available PIDs bit-mask only. Get_Data_PID gets the individual PID value
+ *
+ * UART Protocol Overview
+ * ======================
+ *
+ * From Gateway (to Display):
+ *   Byte 0   : Receive Command
+ *   Byte 1-28: PIDs Supported Bitmask [7][4] (28 bytes)
+ *   Byte 29  : Checksum (display repeat req if failed)
+ *   Byte 30+ : Repeated blocks of:
+ *              - Byte N    : Num of bytes for PID data
+ *              - Byte N+1  : Data for PID
+ *              - Byte N+2  : Checksum (display repeat req if failed)
+ *
+ * From Display (to Gateway):
+ *   Byte 0   : Start Command (e.g. 0x20)
+ *   Byte 1   : UART_PIDS Request Flag
+ *   Byte 2+  : Sequence of PIDs requested (1 byte each)
+ *   Final    : 0x20 sent
+ */
 static void get_PIDs(){
 	int row = 0;
 	int col = 0;
@@ -261,7 +349,26 @@ static void get_PIDs(){
 }
 
 /**
- * Grabs the raw bytes from UART for value of PID requested
+ * Available PIDs bit-mask grabbed by get_PIDs() above and then this function waits for PIDs through UART to update PID data.
+ * Display starts with start command
+ *
+ * UART Protocol Overview
+ * ======================
+ *
+ * From Gateway (to Display):
+ *   Byte 0   : Receive Command
+ *   Byte 1-28: PIDs Supported Bitmask [7][4] (28 bytes)
+ *   Byte 29  : Checksum (display repeat req if failed)
+ *   Byte 30+ : Repeated blocks of:
+ *              - Byte N    : Num of bytes for PID data
+ *              - Byte N+1  : Data for PID
+ *              - Byte N+2  : Checksum (display repeat req if failed)
+ *
+ * From Display (to Gateway):
+ *   Byte 0   : Start Command (e.g. 0x20)
+ *   Byte 1   : UART_PIDS Request Flag
+ *   Byte 2+  : Sequence of PIDs requested (1 byte each)
+ *   Final    : 0x20 sent
  */
 static void get_Data_PID(uint8_t data){
 	uint8_t checksum = 0;
@@ -511,7 +618,7 @@ static void UART_RX(){
 	bool Serv_Bytes = false; //expecting bytes for Service (non command)
 
 	while(1){
-		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
+		rx_Queue_Get = osMessageQueueGet(receive_task_queue, &rx_byte, NULL,pdMS_TO_TICKS(3000));
 		if(rx_Queue_Get == osOK && rx_byte != UART_end_of_cmd ){ //end command sent by display to display no padding
 
 			if (cur_service == UART_DATA_PID){ //PIDs coming without commands
@@ -565,6 +672,10 @@ static void UART_RX(){
 				default:
 					break;
 				}
+			}
+		}else if (rx_Queue_Get == osErrorTimeout){
+			if (cur_service == UART_PIDS && cur_pid == 0x20){
+				osSemaphoreRelease(SERV_DONE_sem);
 			}
 		}
 	}
