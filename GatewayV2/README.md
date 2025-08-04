@@ -6,7 +6,7 @@ UART will listen until it receives a command which it will then go and queue up 
 
 
 #TWAI - CAN interaction
-The TWAI/CAN on the Gateway will be controlled by a service thread which is given commands by UART. The service thread queues up actions for the transmit function which will request data from ECUs/ECMs. The rx thread is always listening and filtering out IDs that are not ECUs. This means that it is constantly running which could be changed to have it only run after a service has been set, that way external tools wounldn't cause accidental code to execute on the gateway.
+The TWAI/CAN on the Gateway will be controlled by a service thread which is given commands by UART. The service thread queues up actions for the transmit function which will request data from ECUs/ECMs. The rx thread is always listening and filtering out IDs that are not ECUs. This means that it is constantly running which could be changed to have it only run after a service has been set, that way external tools wounldn't cause accidental code to execute on the gateway. (See main read me for CAN break down).
 
 
 #UART SPECS

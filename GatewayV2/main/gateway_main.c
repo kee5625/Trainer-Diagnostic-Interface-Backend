@@ -87,8 +87,9 @@ void Set_TWAI_Serv(service_request_t req){
 
             xQueueSend(service_queue, &req, portMAX_DELAY);
             ESP_LOGI("MAIN","HERE A");
+            
             //Loop until TWAI completes service
-            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(2500)) != pdTRUE){
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(5000)) != pdTRUE){
                 TWAI_RESET(req); //restart TWAI completely
             }
            

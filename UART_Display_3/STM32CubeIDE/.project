@@ -850,6 +850,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/__generated/image_icon_theme_images_navigation_arrow_back_55_55_E8F6FB.svg.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/generated/image_Learning_Labs_quote_form.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/image_Learning_Labs_quote_form.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/generated/image_Screenshot_2025-07-07_153147.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/images/src/image_Screenshot_2025-07-07_153147.cpp</locationURI>

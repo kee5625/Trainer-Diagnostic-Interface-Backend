@@ -134,6 +134,11 @@ static inline twai_message_t PID_MSG_REQ(uint8_t PID){
     return msg;
 }
 
+
+/**
+ * Function Description: Comptelete all frame reading for all DTC modes (Pending, Stored, and Perminate).
+ * 
+ */
 static int DTC_Frame_Reading(twai_message_t data, int num_bytes, int next_dtc){
     tx_task_action_t tx_response;
 
@@ -198,7 +203,10 @@ static int DTC_Frame_Reading(twai_message_t data, int num_bytes, int next_dtc){
     return num_bytes;
 }
 
-//return 1 for bitmask row 0 for data pid -1 for error and restflag true
+/**
+ * Funciton Description: Complete all live data reqeust (available bit-mask and Value).
+ * return 1 for bitmask row 0 for data pid -1 for error and when restflag = true
+ */
 static int Live_Data_Get(twai_message_t data){
     tx_task_action_t tx_response;
     int byte_count = 0;

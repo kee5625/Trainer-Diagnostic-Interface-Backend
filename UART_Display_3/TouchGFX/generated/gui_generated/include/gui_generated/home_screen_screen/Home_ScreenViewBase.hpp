@@ -11,6 +11,7 @@
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/QRCode.hpp>
 
 class Home_ScreenViewBase : public touchgfx::View<Home_ScreenPresenter>
 {
@@ -36,6 +37,9 @@ protected:
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  freeze_data_button;
     touchgfx::IconButtonStyle< touchgfx::TextButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  >  Read_TC_Start_button;
     touchgfx::TextArea Trainer_Name;
+    uint8_t qrBuffer_qrCode1[QRCODE_BUFFER_SIZE(5)];
+    uint8_t qrScratchBuffer_qrCode1[QRCODE_BUFFER_SIZE(5)];
+    touchgfx::QRCode qrCode1;
 
 private:
 

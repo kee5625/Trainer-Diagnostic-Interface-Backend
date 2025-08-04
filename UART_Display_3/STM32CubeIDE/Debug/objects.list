@@ -47,6 +47,7 @@
 "./Application/User/generated/TypedTextDatabase.o"
 "./Application/User/generated/UnmappedDataFont.o"
 "./Application/User/generated/VectorFontRendererBuffers.o"
+"./Application/User/generated/image_Learning_Labs_quote_form.o"
 "./Application/User/generated/image_Screenshot_2025-07-07_153147.o"
 "./Application/User/generated/image_icon_theme_images_action_assessment_40_40_E8F6FB.svg.o"
 "./Application/User/generated/image_icon_theme_images_action_home_filled_60_60_E8F6FB.svg.o"

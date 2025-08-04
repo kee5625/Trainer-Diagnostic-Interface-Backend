@@ -71,6 +71,13 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     Trainer_Name.setLinespacing(0);
     Trainer_Name.setTypedText(touchgfx::TypedText(T___SINGLEUSE_DOM7));
     add(Trainer_Name);
+
+    qrCode1.setXY(0, 0);
+    qrCode1.setBuffers(qrBuffer_qrCode1, qrScratchBuffer_qrCode1);
+    qrCode1.setQRCodeVersion(5);
+    qrCode1.setScale(3);
+    qrCode1.convertStringToQRCode("https://www.atechtraining.com/products/automobile");
+    add(qrCode1);
 }
 
 Home_ScreenViewBase::~Home_ScreenViewBase()

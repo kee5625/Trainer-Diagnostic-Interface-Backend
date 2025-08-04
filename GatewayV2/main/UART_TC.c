@@ -153,7 +153,8 @@ static void Read_Codes(uint8_t command){
         command = (command >> 3) & 0x0F; //grabs command no padding
 
         if(command == UART_DTC_Received_cmd){
-            if (num_bytes_dtcs >= dtcs_sent + 2){
+            ESP_LOGI(TAG,"Receive command!!!!!!!!!!!!!");
+            if (num_bytes_dtcs > dtcs_sent){
                 action = UART_DTC_next_cmd;
 
             }else{
@@ -195,7 +196,6 @@ static void Read_Codes(uint8_t command){
  */
 static void PIDs_GRAB_LIVE_DATA(){
     uint8_t rx_data = 0x00;
-    uart_comms_t action;
     uart_event_t event;
 
     Set_TWAI_Serv(SERV_PIDS); //grabs bit-mask
@@ -259,8 +259,8 @@ static void PIDs_GRAB_LIVE_DATA(){
 }
 
 /**
- * Fucntion Description: Sends UART based on the xQueueSend from UART_RX() function.
- * Note: See the UART_RX() function for the expected command order.
+ * Fucntion Description: Queue up and send beginning request. 
+ * Note: Only for PID data this function will be responsible for all sending.
  */
 static void UART_TX(){
     uart_send_queue = xQueueCreate(1, sizeof(uart_comms_t));

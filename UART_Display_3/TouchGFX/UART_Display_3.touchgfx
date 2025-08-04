@@ -243,6 +243,20 @@
               "Blue": 255
             },
             "AutoSize": true
+          },
+          {
+            "Type": "QRCode",
+            "Name": "qrCode1",
+            "Width": 111,
+            "Height": 111,
+            "QRVersion": 5,
+            "Scale": 3,
+            "Text": "https://www.atechtraining.com/products/automobile",
+            "BackgroundColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
           }
         ],
         "Interactions": [
