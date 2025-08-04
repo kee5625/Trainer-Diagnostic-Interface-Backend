@@ -36,7 +36,7 @@ typedef enum {
 	//More general UART commands
 	UART_SERVICE_RUNNING       = 16,   //used for switch statement to start grabbing DTCs in display code
 	UART_end_of_cmd            = 17,
-    UART_stop_cmd              = 18,
+	UART_SERVICE_IDLE          = 18,
 	UART_CMD_MAX,
 }uart_comms_t;
 

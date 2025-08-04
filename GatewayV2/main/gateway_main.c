@@ -73,8 +73,10 @@ void Set_PID_Value(uint8_t *data,int num_bytes){
 }
 
 //controlls TWAI based on req
-void Set_TWAI_Serv(service_request_t req){
-    
+int Set_TWAI_Serv(service_request_t req){
+    int timeout_count = 0;
+    int status = 0;
+
     switch(req){
         case SERV_PIDS:
         case SERV_DATA:
@@ -86,17 +88,23 @@ void Set_TWAI_Serv(service_request_t req){
         case SERV_PERM_DTCS:
 
             xQueueSend(service_queue, &req, portMAX_DELAY);
-            ESP_LOGI("MAIN","HERE A");
-            
+            ESP_LOGI("MAIN","Request was %i", req);
+
             //Loop until TWAI completes service
             while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(5000)) != pdTRUE){
+
+                if (timeout_count >= 5) {
+                    req = TWAI_ERROR;
+                    status = -1; //timeout error
+                }
+
                 TWAI_RESET(req); //restart TWAI completely
             }
-           
         
         default:
             break;
     }
+    return status;
 }
 
 

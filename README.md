@@ -40,7 +40,6 @@ If the board does not automatically leave bootloader mode:
 2. Open menuconfig, disable Bluetooth Classic under bluedroid, enable BLE, and enable BLE ONLY in controller options
 3. Reconfigure, build, and pray
 
-
 # -------------------------------------------------------------Modes/Services Desction-------------------------------------------------------------------------------
 
 #Integrated/Supported Services/Modes 

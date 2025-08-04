@@ -18,6 +18,7 @@ typedef enum {
     SERV_CLEAR_DTCS     = 4,
     SERV_PENDING_DTCS   = 7,
     SERV_PERM_DTCS      = 10,
+    TWAI_ERROR          = 11,
     //more to be added later
 } service_request_t;
 
@@ -30,7 +31,7 @@ void Set_Req_PID(int PID);
 void Set_DTCs(uint8_t *codes, int num_codes);
 void Set_PID_Bitmask(uint8_t bitmask[7][4]);
 void Set_PID_Value(uint8_t *data,int num_bytes);
-void Set_TWAI_Serv(service_request_t req);
+int Set_TWAI_Serv(service_request_t req);
 
 void DTCS_reset();
 

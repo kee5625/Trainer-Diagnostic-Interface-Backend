@@ -270,8 +270,9 @@ static void twai_receive_task()
     twai_message_t RX_Data;
     esp_err_t rec_successful;
     int next_dtc = 4;
+
     while (1) {
-        rec_successful = twai_receive(&RX_Data,pdMS_TO_TICKS(2000));
+        rec_successful = twai_receive(&RX_Data,pdMS_TO_TICKS(3000));
 
         if (rec_successful == ESP_OK){
 
@@ -280,7 +281,7 @@ static void twai_receive_task()
 
                 if (current_service == STORED_DTCS_RESP ||  current_service == PENDING_DTCS_RESP  || current_service == PERM_DTCS_RESP){
                     temp_bytes = num_bytes;
-                    num_bytes = DTC_Frame_Reading(RX_Data,num_bytes,next_dtc);//------------------------------------------------------note: Different functions read frames differently
+                    num_bytes = DTC_Frame_Reading(RX_Data,num_bytes,next_dtc);//------------------------------------------------------note: Different modes/services read frames differently
                     
                     if (num_bytes == 0){
                         next_dtc = 4;
@@ -299,15 +300,19 @@ static void twai_receive_task()
                     for (int i = 0; i < 8; i ++){
                         ESP_LOGI(TAG, "data %i: 0x%02X", i, RX_Data.data[i]);
                     }
+
                     int dataType = Live_Data_Get(RX_Data);
 
                     if (dataType == 1){ //grabbing bitmask
                         xSemaphoreGive(BIT_MASK_ROW_GRABED);
+
                     }else if (dataType == 0){ //grabbing PID data
                         xSemaphoreGive(TWAI_COMPLETE);
+
                     }else{//error resetting
                         xSemaphoreGive(BIT_MASK_ROW_GRABED);
                         xSemaphoreGive(TWAI_COMPLETE);
+
                     }
 
                 }else if (current_service == SHOW_FREEZE_FRAME_RESP){
@@ -403,9 +408,13 @@ void TWAI_RESET(service_request_t req){
     xSemaphoreTake(TWAI_COMPLETE, 0);        //taking pending semaphores
     xSemaphoreTake(BIT_MASK_ROW_GRABED, 0);
 
-    //sending command again
-    ESP_LOGI(TAG,"Reseting.");
-    xQueueSend(service_queue, &req, portMAX_DELAY); //start command in queue
+    if (req != TWAI_ERROR){
+        //sending command again
+        ESP_LOGI(TAG,"Reseting.");
+        xQueueSend(service_queue, &req, portMAX_DELAY); //start command in queue
+    }else{
+        xSemaphoreGive(TWAI_COMPLETE);
+    }
      
 }
 
