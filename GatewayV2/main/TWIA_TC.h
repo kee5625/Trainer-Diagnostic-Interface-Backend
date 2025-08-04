@@ -1,18 +1,21 @@
+
+
 #ifndef TWIA_TC
 #define TWIA_TC
 
 #include "driver/twai.h"
-#include "TWIA_TC.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
 #include <inttypes.h>
+#include "TC_ref.h"
 
 
 //TWAI action type setup
 typedef enum {
-    TX_REQUEST_LD                       = 1,
+    TX_REQUEST_PIDS                     = 0,
+    TX_REQUEST_DATA                     = 1,
     TX_REQUEST_FFD                      = 2,
     TX_REQUEST_STORED_DTCS              = 3,
     TX_REQUEST_PENDING_DTCS             = 4,
@@ -23,7 +26,13 @@ typedef enum {
 } tx_task_action_t;
 
 //funcitons
-void twai_TC_Get();
+void TWAI_INIT();
+void TWAI_RESET(service_request_t req);
 
+uint8_t* get_DTCs_buffer(void);
+uint8_t get_DTCs_length(void);
+uint8_t* get_bitmask_row(int row);
+uint8_t* get_live_data_buffer(void);
+uint8_t get_live_data_length(void);
 
 #endif

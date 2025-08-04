@@ -1,3 +1,11 @@
+/**
+ * Coder: Noah Batcher
+ * Last updated: 6/11/2025
+ * Project: Trainer Fault Code Diagnostic Gatway
+ * 
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "freertos/FreeRTOS.h"
@@ -16,29 +24,32 @@
 #include "time.h"
 #include "sys/time.h"
 
-#include "TWIA_TC.h"
-#include "TC_ref.h"
 #include "ble.h"
+#include "TWIA_TC.h"
+#include "UART_TC.h"
+#include "TC_ref.h"
 /* --------------------- Definitions and static variables ------------------ */
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
+#define MAX_TWAI_RESETS 3
 
-volatile bool stream_on_master = false;
-
+//static copies
 static uint8_t *dtcs;
 static uint8_t dtcs_bytes;
-SemaphoreHandle_t TC_Recieved_sem;
-SemaphoreHandle_t TWAI_GRAB_TC_sem;
-SemaphoreHandle_t DTCS_Loaded_sem;
+static uint8_t supported_Bitmask[7][4];
+
+uint8_t req_PID = 0;
+
+SemaphoreHandle_t TWAI_DONE_sem;
 QueueHandle_t service_queue;
 
 
 void DTCS_reset(){
     dtcs = NULL;
-    dtcs_bytes = 0;
+    dtcs_bytes = 0; 
 }
 
-void TC_Code_set(uint8_t *codes, int codes_bytes){
+void Set_DTCs(uint8_t *codes, int codes_bytes){
     dtcs = pvPortMalloc(codes_bytes);
     dtcs_bytes = codes_bytes;
     if (codes != NULL){
@@ -49,41 +60,60 @@ void TC_Code_set(uint8_t *codes, int codes_bytes){
     }
 }
 
-void set_serv(service_request_t req){
+//
+void Set_Req_PID(int PID){
+    req_PID = PID;
+}
+
+void Set_PID_Bitmask(uint8_t bitmask[7][4]){
+    memcpy(supported_Bitmask, bitmask, sizeof(supported_Bitmask));
+}
+
+void Set_PID_Value(uint8_t *data,int num_bytes){
+    UART_PID_VALUE(data,num_bytes);
+}
+
+//controlls TWAI based on req
+void Set_TWAI_Serv(service_request_t req){
     
     switch(req){
-        case SERV_LD_DATA:
+        case SERV_PIDS:
+        case SERV_DATA:
         case SERV_FREEZE_DATA:
         case SERV_STORED_DTCS:
-        case SERV_CLEAR_DTCS: /*fall through*/
+        case SERV_CLEAR_DTCS: 
             DTCS_reset();
+            /*fall through*/
         case SERV_PENDING_DTCS:
         case SERV_PERM_DTCS:
+
             xQueueSend(service_queue, &req, portMAX_DELAY);
-            xSemaphoreTake(DTCS_Loaded_sem, portMAX_DELAY);
-            
+            ESP_LOGI("MAIN","HERE A");
+            //Loop until TWAI completes service
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(2500)) != pdTRUE){
+                TWAI_RESET(req); //restart TWAI completely
+            }
+           
+        
         default:
             break;
     }
 }
 
-uint8_t *get_dtcs(){ //Made to have 1 D pointer to all values that can send through UART
-    return (uint8_t *)dtcs;
-}
 
-uint8_t get_dtcs_bytes(){
-    return dtcs_bytes;
+
+
+uint8_t get_Req_PID(){
+    //return 0x0D; //here
+    return req_PID;
 }
 
 void app_main(void)
 {  
-    ESP_ERROR_CHECK(nvs_flash_init());
-
-    BLE_init();
-
     service_queue = xQueueCreate(3, sizeof(service_request_t));
-    DTCS_Loaded_sem = xSemaphoreCreateBinary();
-    twai_TC_Get();
+    TWAI_DONE_sem = xSemaphoreCreateBinary();
 
+    TWAI_INIT();
     //UART_INIT();
+    BLE_init();
 }

@@ -28,6 +28,8 @@
     "compare": "c",
     "ble.h": "c",
     "chrono": "c",
-    "twai_tc_can.h": "c"
+    "twai_tc_can.h": "c",
+    "format": "c",
+    "task.h": "c"
   }
 }

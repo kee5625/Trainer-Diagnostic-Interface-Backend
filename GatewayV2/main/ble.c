@@ -5,6 +5,8 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
+#include "freertos/semphr.h"
 
 #include "esp_system.h"
 #include "esp_log.h"
@@ -21,16 +23,20 @@
 #include "ble.h"
 #include "TC_ref.h"
 #include "esp_gatts_api.h"
+#include "TWAI_OBD.h"
+#include "TWIA_TC.h"
 
 // -----------------------------------------------------------------------------
 // Configuration
 // -----------------------------------------------------------------------------
+
 static const char *TAG = "PowerSeat";   //Log tag
 // Custom UUIDs (16‑bit for brevity, upgrade to 128‑bit if needed)
 #define TRAINER_SERVICE_UUID        0xABCD    //primary service
 #define TRAINER_UUID_TX             0xAB01    // TX Request (Write / WNR)
 #define TRAINER_UUID_RX             0xAB02    // RX Response(Notify / Read)
 #define TRAINER_UUID_CTRL           0xAB03    // Control char (Read / Write)
+#define TWAI_WAIT_MS  200 
 
 // Service handle count: svc + 3x(char + cccd) = 8
 #define TRAINER_NUM_HANDLES 8
@@ -43,7 +49,6 @@ static const char *TAG = "PowerSeat";   //Log tag
         (unsigned int)(msg).identifier, (msg).data_length_code,                  \
         (msg).data[0], (msg).data[1], (msg).data[2], (msg).data[3],              \
         (msg).data[4], (msg).data[5], (msg).data[6], (msg).data[7])
-
 #define LOG_BIN(label, val)  ESP_LOGI(TAG, label " = %d (0x%02X)", (val), (val))
 
 //globals used by rest of firmware
@@ -53,7 +58,12 @@ static esp_gatt_if_t   gatts_if_save = ESP_GATT_IF_NONE;
 static uint16_t        rx_cccd_hdl   = 0;
 
 extern QueueHandle_t service_queue;
-extern bool stream_on_master;
+bool stream_on_master = false;
+extern uint8_t req_PID;
+extern SemaphoreHandle_t TWAI_DONE_sem;
+
+// BLE queue handle
+QueueHandle_t ble_queue = NULL;
 
 // Atribute Handles
 uint8_t hdl_tx = 0;
@@ -72,7 +82,6 @@ static esp_attr_value_t ctrl_attr_val = {
     .attr_value = (uint8_t *)ctrl_init_val,
 };
 
-
 static void trainer_profile_cb(esp_gatts_cb_event_t, esp_gatt_if_t, esp_ble_gatts_cb_param_t *);
 
 trainer_profile_t profile = {
@@ -81,9 +90,15 @@ trainer_profile_t profile = {
     .app_id   = 0,
 };
 
+/* Forward Declarations */
+extern bool BLE_push_dtcs(const uint8_t *bytes, uint8_t len);
+extern bool BLE_push_buf(const uint8_t *p, uint8_t len);
+extern void BLE_notify_clear(void);
+
 // -----------------------------------------------------------------------------
 // Helper macros
 // -----------------------------------------------------------------------------
+
 #define GATT_CHAR_PROP_RD_WR  (ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_WRITE)
 
 // -----------------------------------------------------------------------------
@@ -134,21 +149,27 @@ static void gap_event_handler(esp_gap_ble_cb_event_t evt, esp_ble_gap_cb_param_t
     }
 }
 
-/* Forward so Gateway-main can ask us to signal bytes */
+/* Forward so Gateway-main can ask to signal bytes */
 bool BLE_push_dtcs(const uint8_t *bytes, uint8_t len)
 {
     if (!conn_active || !notify_on) return false;
 
+    if (len == 0) {                 // “no DTCs” placeholder
+        uint8_t zero = 0x00;
+        esp_ble_gatts_send_indicate(
+            gatts_if_save, profile.conn_id,
+            hdl_rx, 1, &zero, true);
+        return true;
+    }
+
     /* Break long arrays into <20-byte MTU chunks; send as indications
        so we get ACKs and the buffer doesn’t overrun. */
     while (len) {
-        uint16_t part = (len > 20) ? 20 : len;
-        esp_ble_gatts_send_indicate(gatts_if_save,
-                                    /*conn_id*/ profile.conn_id,
-                                    /*attr_hdl*/ hdl_rx,
-                                    part,
-                                    (uint8_t*)bytes,
-                                    /*need_confirm*/ true);
+        uint8_t part = (len > 20) ? 20 : len;
+        esp_ble_gatts_send_indicate(
+            gatts_if_save, profile.conn_id, hdl_rx,
+            part, (uint8_t*)bytes, true
+        );
         bytes += part;
         len   -= part;
     }
@@ -161,48 +182,161 @@ void BLE_notify_clear(void)
     BLE_push_dtcs(&ok, 1);
 }
 
-/* ────────────────────────────────────────────────────────────
- *  1. Map BLE-writes → same service_queue the UART already uses
- * ──────────────────────────────────────────────────────────── */
-
-static void handle_ui_cmd(uint8_t byte)
+// Similar to BLE Push but used for specific functions
+bool BLE_push_buf(const uint8_t *p, uint8_t len)
 {
-    /* Minimal protocol (expand as you like):
-     *   0x01  = “give me pending DTCs”
-     *   0x02  = “give me stored DTCs”
-     *   0x03  = “give me permanent DTCs”
-     *   0x04  = “clear codes”
-     */
-    
-    ESP_LOGI(TAG,"[BLE] cmd 0x%02X → enqueue service_queue", byte);
-    service_request_t s;
-    
-    switch (byte) {
-        case 0x01: s = SERV_PENDING_DTCS; break;
-        case 0x02: s = SERV_STORED_DTCS;  break;
-        case 0x03: s = SERV_PERM_DTCS;    break;
-        case 0x04: s = SERV_CLEAR_DTCS;   break;
-        case 0x05: s = SERV_LD_DATA;     break;    //one time "Get Data"
-        case 0x06:
-            stream_on_master = !stream_on_master;
-            ESP_LOGI(TAG, "Live stream %s", stream_on_master?"ON":"OFF");
-            return;
-        default:   return;                      /* ignore unknown op    */
+    if (!conn_active || !notify_on) return false;
+    while (len) {
+        uint8_t n = (len > 20) ? 20 : len;
+        esp_ble_gatts_send_indicate(gatts_if_save, profile.conn_id,
+                                    hdl_rx, n, (uint8_t*)p, false);
+        p   += n;
+        len -= n;
     }
-    ESP_LOGI(TAG, "BLE cmd 0x%02X mapped to svc=%d", byte, s);
-    if (service_queue) {
-       // block until the service task picks it up
-       BaseType_t res = xQueueSend(service_queue, &s, pdMS_TO_TICKS(100));
-       ESP_LOGI(TAG, "[BLE] xQueueSend(service_queue) → %s",
-          res == pdPASS ? "OK" : (res == errQUEUE_FULL ? "FULL" : "ERR"));
-   }
+    return true;
 }
 
-        
+
+/* ────────────────────────────────────────────────────────────
+ *  Map BLE-writes 
+ * ──────────────────────────────────────────────────────────── */
+
+static void handle_ui_cmd(const uint8_t *buf, uint16_t len) {
+    if (len == 0) return;
+    uint8_t cmd = buf[0];
+    switch (cmd) {
+       case 0x01: case 0x02: case 0x03: case 0x04: {    // All different trouble code options
+        ble_req_t r =  {
+            .svc    = (cmd == 0x01) ? SERV_PENDING_DTCS
+                    : (cmd == 0x02) ? SERV_STORED_DTCS
+                    : (cmd == 0x03) ? SERV_PERM_DTCS
+                                    : SERV_CLEAR_DTCS,
+            .pid = 0
+        };
+        xQueueSend(ble_queue, &r, 0);
+        return;
+       }
+        case 0x05:  // Get data once
+            stream_on_master = false;
+            for (int i = 1; i < len; ++i) {
+                ble_req_t r = { .svc = SERV_DATA, .pid = buf[i] };         
+                xQueueSend(ble_queue, &r, portMAX_DELAY);
+            }
+            break;
+        case 0x06:  // Live stream on
+            stream_on_master = true;
+            ESP_LOGI(TAG, "Live stream ON");
+            // first step in a stream: fetch the bitmask
+            ble_req_t r = { .svc = SERV_PIDS, .pid = 0 };
+            xQueueSend(ble_queue, &r, 0);
+            break;
+        case 0x07:  // Live stream off
+            stream_on_master = false;
+            ESP_LOGI(TAG, "Live stream OFF");
+            break;
+        default:
+            ESP_LOGW(TAG, "Unknown BLE command 0x%02X", cmd);
+            break;
+    }
+}
+
+// Tasks to do once ble queue is populated
+static void ble_service_task(void *arg){
+    ble_req_t req;
+    while (xQueueReceive(ble_queue, &req, portMAX_DELAY)) {
+        switch (req.svc) {
+            case SERV_PENDING_DTCS:
+            case SERV_STORED_DTCS:
+            case SERV_PERM_DTCS:{
+                Set_TWAI_Serv(req.svc);                               /* kick off CAN request */
+                if (xSemaphoreTake(TWAI_DONE_sem,                     
+                                pdMS_TO_TICKS(TWAI_WAIT_MS)) == pdTRUE) {
+                    BLE_push_dtcs(get_DTCs_buffer(), get_DTCs_length());
+                } else {
+                    ESP_LOGW(TAG, "TWAI timeout -> sending empty DTC list");
+                    BLE_push_dtcs(NULL, 0);                            
+                }
+                break;
+            }
+            case SERV_CLEAR_DTCS: {
+                Set_TWAI_Serv(req.svc);
+                if (xSemaphoreTake(TWAI_DONE_sem,
+                                pdMS_TO_TICKS(TWAI_WAIT_MS)) == pdTRUE) {
+                    BLE_notify_clear();                               /* ACK only after ECU */
+                } else {
+                    ESP_LOGW(TAG, "TWAI timeout on CLEAR_DTCS");
+                }
+                break;
+            }
+            case SERV_PIDS: {
+                // Run can request
+                Set_TWAI_Serv(SERV_PIDS);
+                
+                for(int row=0; row<7; ++row){
+                    uint8_t pkt[5];
+                    pkt[0] = 0x00;
+                    memcpy(pkt + 1, get_bitmask_row(row), 4);
+                    BLE_push_buf(pkt, 5);
+                }
+                
+                break;
+            }
+            case SERV_DATA:{
+                Set_Req_PID(req.pid);
+                Set_TWAI_Serv(SERV_DATA);
+                
+                uint8_t  n  = get_live_data_length();
+                uint8_t *d = get_live_data_buffer();
+
+                uint8_t *pkt = pvPortMalloc(n + 1);
+                if (pkt) {
+                    pkt[0] = req.pid;
+                    memcpy(pkt + 1, d, n);
+                    BLE_push_buf(pkt, 1 + n);
+                    vPortFree(pkt);
+                }
+                
+                
+                break;
+            }
+            case SERV_FREEZE_DATA:
+                // not supported yet
+                break;
+
+            default:
+                // unknown service means just ignore
+                break;
+        }
+
+        // if live‐streaming, start round-robin:
+        if (stream_on_master && req.svc == SERV_PIDS) {
+            while (stream_on_master) {
+                for (int row = 0; row < 7 && stream_on_master; ++row) {
+                    uint8_t *mask = get_bitmask_row(row);
+                    for (int byte = 0; byte < 4 && stream_on_master; ++byte) {
+                        for (int bit = 0; bit < 8 && stream_on_master; ++bit) {
+                            if (mask[byte] & (1 << (7 - bit))) {
+                                uint8_t pid = row * 0x20 + byte * 8 + bit;
+                                // enqueue a data‐request
+                                ble_req_t next = { .svc = SERV_DATA, .pid = pid };
+                                xQueueSend(ble_queue, &next, 0);
+                                // wait for it to complete inside next loop iteration
+                                goto next_iteration;
+                            }
+                        }
+                    }
+                }
+            next_iteration:
+                vTaskDelay(pdMS_TO_TICKS(100));  // throttle the stream
+            }
+        }
+    }
+}
 
 // -----------------------------------------------------------------------------
 // GATT Profile Callback
 // -----------------------------------------------------------------------------
+
 static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param){    
     switch(event){
     // ───── Registration ─────
@@ -215,7 +349,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         profile.service_id.id.uuid.len = ESP_UUID_LEN_16;
         profile.service_id.id.uuid.uuid.uuid16 = TRAINER_SERVICE_UUID;
 
-        // Device name comes from menuconfig or NVS
+        // Device name comes from menuconfig
         esp_ble_gap_set_device_name(CONFIG_TRAINER_DEVICE_NAME);
         esp_ble_gap_config_adv_data(&adv_data);
 
@@ -227,7 +361,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         profile.service_hdl = param->create.service_handle;
         esp_ble_gatts_start_service(profile.service_hdl);
 
-        // RX Characteristic (ESP→client)
+        // RX Characteristic (ESP -> client)
         esp_bt_uuid_t rx_uuid = { .len = ESP_UUID_LEN_16, .uuid.uuid16 = TRAINER_UUID_RX };
         esp_err_t err = esp_ble_gatts_add_char(
             profile.service_hdl, &rx_uuid,
@@ -245,13 +379,13 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
             &cccd_attr_val, NULL);
         if (err) ESP_LOGE(TAG,"add CCCD failed (%s)", esp_err_to_name(err));
 
-        // TX Characteristic (client→ESP)
+        // TX Characteristic (client -> ESP)
         esp_bt_uuid_t tx_uuid = { .len = ESP_UUID_LEN_16, .uuid.uuid16 = TRAINER_UUID_TX };
         esp_ble_gatts_add_char(profile.service_hdl, &tx_uuid,
                                ESP_GATT_PERM_WRITE,
                                PROP_TX, NULL, NULL);
         
-        // Control Characteristic (optional)
+        // Control Characteristic
         esp_bt_uuid_t ctrl_uuid = { .len = ESP_UUID_LEN_16, .uuid.uuid16 = TRAINER_UUID_CTRL };
         esp_ble_gatts_add_char(profile.service_hdl, &ctrl_uuid,
                                ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
@@ -271,7 +405,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         break;
     }
     case ESP_GATTS_ADD_CHAR_DESCR_EVT: {
-        /* first descriptor we add is the CCCD for RX characteristic */
+        /* first descriptor is the CCCD for RX characteristic */
         rx_cccd_hdl = param->add_char_descr.attr_handle;
         /*start advertising*/
         esp_ble_gap_start_advertising(&adv_params);
@@ -279,10 +413,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
         break;
     }
     // ───── Write to TX / CTRL ─────
-    case ESP_GATTS_WRITE_EVT: {
-        const uint8_t *d = param->write.value;
-        uint16_t len = param->write.len;
-        
+    case ESP_GATTS_WRITE_EVT: {       
         
         //Log event handler trigger
         ESP_LOGI(TAG, "[BLE] WRITE_EVT handle=0x%04X, len=%u, need_rsp=%u",
@@ -292,7 +423,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
             esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
         }
         if (param->write.handle == hdl_tx) {
-            if (param->write.len) handle_ui_cmd(param->write.value[0]);
+            handle_ui_cmd(param->write.value, param->write.len);
 
         }else if (param->write.handle == rx_cccd_hdl && param->write.len >= 2) {
             /* 0x0001 = notifications, 0x0002 = indications*/
@@ -336,6 +467,7 @@ static void trainer_profile_cb(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_i
 // -----------------------------------------------------------------------------
 //                           GATT dispatcher (1 profile)
 // -----------------------------------------------------------------------------
+
 static void gatts_event_handler(esp_gatts_cb_event_t evt, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
     if(evt == ESP_GATTS_REG_EVT && param->reg.status == ESP_GATT_OK){
@@ -350,6 +482,7 @@ static void gatts_event_handler(esp_gatts_cb_event_t evt, esp_gatt_if_t gatts_if
 // -----------------------------------------------------------------------------
 // Application entry point
 // -----------------------------------------------------------------------------
+
 void BLE_init()
 {
     // 1. NVS & BLE controller init
@@ -367,8 +500,11 @@ void BLE_init()
     ESP_ERROR_CHECK(esp_ble_gatts_register_callback(gatts_event_handler));
     ESP_ERROR_CHECK(esp_ble_gatts_app_register(profile.app_id));
 
-    // 3. Increase MTU for bigger payloads
+    // 3. MTU config
     esp_ble_gatt_set_local_mtu(247);
 
-    ESP_LOGI(TAG, "Trainer-Gateway BLE ready ⸻ name: %s", CONFIG_TRAINER_DEVICE_NAME);    
+    ESP_LOGI(TAG, "Trainer-Gateway BLE ready ⸻ name: %s", CONFIG_TRAINER_DEVICE_NAME);
+    
+    ble_queue = xQueueCreate(20, sizeof(ble_req_t));
+    xTaskCreate(ble_service_task, "ble_svc", 4096, NULL, 6, NULL);
 }

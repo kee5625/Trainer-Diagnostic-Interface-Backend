@@ -6,12 +6,11 @@
 
 #include "esp_gatts_api.h"
 #include "esp_gatt_common_api.h"
-
-
 #include <stdint.h>
 #include <stdbool.h>
+#include "TC_ref.h"
+#include "TWIA_TC.h"
 
-/* Call once from app_main() after UART_INIT() */
 void BLE_init(void);
 
 /* Push a freshly-received DTC blob up to the mobile / web app             */
@@ -32,7 +31,14 @@ typedef struct {                       /* ■ BLE profile bookkeeping           
     esp_gatt_srvc_id_t  service_id;    /* we filled before create_service()        */
 } trainer_profile_t;
 
+typedef struct {
+    service_request_t svc;
+    uint8_t           pid;     /* single PID that this request targets       */
+} ble_req_t;
+
 extern trainer_profile_t profile;
 extern uint8_t           hdl_rx;
+extern bool stream_on_master;
+extern QueueHandle_t ble_queue;
 
 #endif
