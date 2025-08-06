@@ -24,14 +24,13 @@
 #include "time.h"
 #include "sys/time.h"
 
-#include "ble.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
 #include "TC_ref.h"
+#include "ble.h"
 /* --------------------- Definitions and static variables ------------------ */
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
 #define IF_BIT_RESET(byte,bit) (!((byte) & (1<< (bit))))
-#define MAX_TWAI_RESETS 3
 
 //static copies
 static uint8_t *dtcs;
@@ -74,34 +73,58 @@ void Set_PID_Value(uint8_t *data,int num_bytes){
 }
 
 //controlls TWAI based on req
-void Set_TWAI_Serv(service_request_t req){
-    
+int Set_TWAI_Serv(service_request_t req){
+    int timeout_count = 0;
+    int status = 0;
+
     switch(req){
-        case SERV_PIDS:
+        case SERV_PIDS_LIVE:
+        case SERV_PIDS_FREEZE:
         case SERV_DATA:
         case SERV_FREEZE_DATA:
         case SERV_STORED_DTCS:
-        case SERV_CLEAR_DTCS: 
+        case SERV_CLEAR_DTCS: //intentional fall through
             DTCS_reset();
-            /*fall through*/
         case SERV_PENDING_DTCS:
         case SERV_PERM_DTCS:
 
             xQueueSend(service_queue, &req, portMAX_DELAY);
-            ESP_LOGI("MAIN","HERE A");
+            ESP_LOGI("MAIN","Request was %i", req);
+
             //Loop until TWAI completes service
-            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(2500)) != pdTRUE){
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(1500)) != pdTRUE){
+
+                if (timeout_count >= 2) {
+                    req = TWAI_ERROR;
+                    TWAI_RESET(req); //stop TWIA
+                    status = -1; //timeout error
+                    ESP_LOGI("MAIN", "TWAI error");
+                    break;
+                }
+
                 TWAI_RESET(req); //restart TWAI completely
+
+                timeout_count++;
             }
-           
-        
+            break;
         default:
             break;
     }
+    return status;
 }
 
 
+uint8_t *get_bitmask_row(int row){
+    return supported_Bitmask[row]; //single row of bitmask
+}
 
+uint8_t *get_dtcs(){ //Made to have 1 D pointer to all values that can send through UART
+    return (uint8_t *)dtcs;
+}
+
+uint8_t get_dtcs_bytes(){
+    return dtcs_bytes; //total number of bytes for all dtcs (1 dtcs = 2 bytes)
+}
 
 uint8_t get_Req_PID(){
     //return 0x0D; //here
@@ -112,8 +135,7 @@ void app_main(void)
 {  
     service_queue = xQueueCreate(3, sizeof(service_request_t));
     TWAI_DONE_sem = xSemaphoreCreateBinary();
-
     TWAI_INIT();
-    //UART_INIT();
+    UART_INIT();
     BLE_init();
 }

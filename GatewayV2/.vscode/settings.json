@@ -30,6 +30,9 @@
     "chrono": "c",
     "twai_tc_can.h": "c",
     "format": "c",
-    "task.h": "c"
+    "task.h": "c",
+    "freertos.h": "c",
+    "twia_tc.h": "c",
+    "stdlib.h": "c"
   }
 }
