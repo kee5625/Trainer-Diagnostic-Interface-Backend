@@ -529,6 +529,6 @@
         esp_ble_gatt_set_local_mtu(247);
 
         ESP_LOGI(TAG, "Trainer-Gateway BLE ready ⸻ name: %s", CONFIG_TRAINER_DEVICE_NAME);
-        ble_cmd_queue = xQueueCreate(10, sizeof(ble_cmd_t));
+        ble_cmd_queue = xQueueCreate(50, sizeof(ble_cmd_t));
         xTaskCreate(ble_worker_task, "ble_worker", 4096, NULL, 5, NULL);
     }

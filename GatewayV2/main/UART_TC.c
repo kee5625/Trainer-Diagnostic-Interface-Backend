@@ -37,21 +37,11 @@
 static const char *TAG = "UART Service";
 static uint8_t *dtcs; //1-d array of dtcs
 static uint8_t num_bytes_dtcs;
-static uint8_t *PID_VALUE;
-static int PID_NUM_BYTES = 0;
+uint8_t *PID_VALUE;
+int PID_NUM_BYTES = 0;
 static int dtcs_sent = 0;
 static QueueHandle_t uart_queue;
 static QueueHandle_t uart_send_queue;
-
-static inline uint8_t uart_byte_setup(uart_comms_t command){
-		return     ((uart_start_pad & 0x01) << 7) |
-				   ((command & 0x0F) << 3) |
-				   ((uart_end_pad & 0x07) << 0);
-}
-
-static inline bool is_valid_frame(uint8_t byte){
-	return ((byte >> 7) & uart_start_pad) && ((byte & 0x07) & uart_end_pad);
-}
 
 void UART_PID_VALUE(uint8_t *data,int num_bytes){
     PID_VALUE = data;
@@ -127,44 +117,61 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
  *   Bit 7     : 0 (uart_end_pad)
  *  
  */
-static void Read_Codes(uint8_t command){
+static void Read_Codes(uint8_t data){
     uart_comms_t action;
-    Set_TWAI_Serv(command); 
+    uint8_t send_byte = 0;
+    int timeout = 0;
+
+    timeout = Set_TWAI_Serv(data); 
+
+    if (timeout == -1) return; //TWAI timeout error
 
     dtcs = get_dtcs();
     num_bytes_dtcs = get_dtcs_bytes();  
     ESP_LOGI(TAG,"Sending number of DCTS: %i", num_bytes_dtcs / 2);
     ESP_LOGI(TAG,"Stored DTCs request received.");
 
-    action = UART_DTCS_Num_cmd;
-    xQueueSend(uart_send_queue, &action,portMAX_DELAY);
+    //sending total number of DTCs
+    ESP_LOGI(TAG,"NUM dtcs sent %i", num_bytes_dtcs / 2);
+    send_byte = num_bytes_dtcs / 2;
+    uart_write_bytes(UART_PORT_NUM, &send_byte,1);
     
+    timeout = 0;
     while (1){
-        // xQueueReceive(uart_queue,&command,portMAX_DELAY);
-        uart_read_bytes(UART_PORT_NUM, &command, 1, portMAX_DELAY);
+        timeout = uart_read_bytes(UART_PORT_NUM, &data, 1, pdMS_TO_TICKS(5000)); 
+        ESP_LOGI(TAG,"timeout %i", timeout);
 
-        if (!is_valid_frame(command)) {
-            action = UART_Retry_cmd;
-            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-            continue;
+        if (timeout != 0){ //0 means timeout
 
-        }
+            if(data == UART_DTC_Received_cmd){
+                ESP_LOGI(TAG,"Receive command!!!!!!!!!!!!!");
 
-        command = (command >> 3) & 0x0F; //grabs command no padding
+                if (num_bytes_dtcs > dtcs_sent){
+                    action = UART_DTC_next_cmd;
 
-        if(command == UART_DTC_Received_cmd){
-            if (num_bytes_dtcs >= dtcs_sent + 2){
-                action = UART_DTC_next_cmd;
+                }else{
+                    dtcs_sent = 0; //incremented by TX thread
+                    action = UART_DTCs_End_cmd;
+                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+                    break;
 
-            }else{
-                dtcs_sent = 0; //incremented by TX thread
-                action = UART_DTCs_End_cmd;
+                }
+
+                xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+
+            }else if (data == UART_end_of_cmd){
+                action = UART_Received_cmd;
                 xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                 break;
-
+            }else{
+                if (data == UART_end_of_cmd){
+                    break; //end command exitting
+                }
             }
 
-            xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+        }else { //timeout 
+            ESP_LOGI(TAG,"TIMEOUT");
+            break; //end command might come
         }
 
     }
@@ -193,30 +200,35 @@ static void Read_Codes(uint8_t command){
  *   Byte 2+  : Sequence of PIDs requested (1 byte each)
  *   Final    : 0x20 sent
  */
-static void PIDs_GRAB_LIVE_DATA(){
+static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
     uint8_t rx_data = 0x00;
-    uart_comms_t action;
-    uart_event_t event;
 
-    Set_TWAI_Serv(SERV_PIDS); //grabs bit-mask
-    ESP_LOGI(TAG,"PIDs bitmask grabbed.");
+    Set_TWAI_Serv(mode); //grabs bit-mask
+    ESP_LOGI(TAG,"PIDs bitmask grabbed. %i", mode);
 
     uint8_t * temp_row;
     uint8_t checksum = 0;
+    bool timedOUT = false;
 
     //sending PIDs mask
     for (int i = 0; i < 7; i ++){
         temp_row = get_bitmask_row(i);
         for (int k = 0; k < 4; k ++){
             uart_write_bytes(UART_PORT_NUM,&temp_row[k] ,1);
-            uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
+            if (uart_wait_tx_done(UART_PORT_NUM, pdMS_TO_TICKS(150)) != ESP_OK){
+                timedOUT = true;
+                break;
+            }
             vTaskDelay(pdMS_TO_TICKS(25));
             checksum += temp_row[k];
         }
+        if (timedOUT) break;
     }
-    checksum = ~checksum;
-    uart_write_bytes(UART_PORT_NUM,&checksum,1);
-    ESP_LOGI(TAG,"checksum writen. %i", checksum);
+    if (!timedOUT){
+        checksum = ~checksum;
+        uart_write_bytes(UART_PORT_NUM,&checksum,1);
+        ESP_LOGI(TAG,"checksum writen. %i", checksum);
+    }
 
     /**
      * Grabbing PIDs data... PID 0x20 = exit command
@@ -226,27 +238,32 @@ static void PIDs_GRAB_LIVE_DATA(){
     while (1){
         ESP_LOGI(TAG,"Waiting on PID...");
 
-        xQueueReceive(uart_queue,&event,portMAX_DELAY);
-        if (event.type != UART_DATA) continue; //skip errors and retry might need fixing here
+        if (uart_read_bytes(UART_PORT_NUM, &rx_data, 1,pdMS_TO_TICKS(5000))== 0) break;
+        
 
-        uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY); //grab rx buffer
-
-        if (rx_data == 0x20) break; //exit
+        if (rx_data == 0x20) { //exit condition 
+            uart_comms_t action;
+            action = UART_Received_cmd; 
+            xQueueSend(uart_send_queue,&action,portMAX_DELAY);
+            break;
+        }
 
         Set_Req_PID(rx_data); //set pid in main
-        ESP_LOGI(TAG,"Grabbing next PID");
+        ESP_LOGI(TAG,"Grabbing next PID 0x%02X", rx_data);
         Set_TWAI_Serv(SERV_DATA); //Thread blocked until TWAI grabs data
 
        
         uint8_t checksum = 0;
-        if (PID_NUM_BYTES == 0) break; //0 data
         uart_write_bytes(UART_PORT_NUM, &PID_NUM_BYTES,1); //send num_bytes
         uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
 
         for (int i = 0; i < PID_NUM_BYTES; i++){
             uint8_t temp = PID_VALUE[i];
             uart_write_bytes(UART_PORT_NUM, &temp,1);
+            ESP_LOGI(TAG,"Wrote: %i", temp);
             uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
+               
+
             checksum += PID_VALUE[i];
         }
 
@@ -255,12 +272,14 @@ static void PIDs_GRAB_LIVE_DATA(){
         uart_write_bytes(UART_PORT_NUM, &checksum, 1);
         uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
     }
+
+
     ESP_LOGI(TAG,"PID service complete.");
 }
 
 /**
- * Fucntion Description: Sends UART based on the xQueueSend from UART_RX() function.
- * Note: See the UART_RX() function for the expected command order.
+ * Fucntion Description: Queue up and send beginning request. 
+ * Note: Only for PID data this function will be responsible for all sending.
  */
 static void UART_TX(){
     uart_send_queue = xQueueCreate(1, sizeof(uart_comms_t));
@@ -274,7 +293,7 @@ static void UART_TX(){
 
             case UART_Received_cmd:
                 ESP_LOGI(TAG,"Sending received command back.");
-                temp_byte = uart_byte_setup(UART_Received_cmd);
+                temp_byte = UART_Received_cmd;
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 break;
 
@@ -291,24 +310,19 @@ static void UART_TX(){
 
             case UART_DTCs_Reset_cmd:
                 ESP_LOGI(TAG,"Received rest TC command");
-                temp_byte = uart_byte_setup(UART_Received_cmd);
+                temp_byte = UART_Received_cmd;
                 uart_write_bytes(UART_PORT_NUM, &temp_byte, 1);
                 break;
 
             case UART_Retry_cmd:
                 ESP_LOGI(TAG, "Sending retry commmand request.");
-                temp_byte = uart_byte_setup(UART_Retry_cmd);
-                uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
-                break;
-            case UART_DTCs_End_cmd:
-                ESP_LOGI(TAG,"All dtcs codes sent");
-                temp_byte = uart_byte_setup(UART_DTCs_End_cmd);
+                temp_byte = UART_Retry_cmd;
                 uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
 
-            case UART_DTCS_Num_cmd:
-                ESP_LOGI(TAG,"NUM dtcs sent %i", num_bytes_dtcs / 2);
-                temp_byte = num_bytes_dtcs / 2;
+            case UART_DTCs_End_cmd:
+                ESP_LOGI(TAG,"All dtcs codes sent");
+                temp_byte = UART_DTCs_End_cmd;
                 uart_write_bytes(UART_PORT_NUM, &temp_byte,1);
                 break;
 
@@ -319,7 +333,6 @@ static void UART_TX(){
     }
 }
 
-
 /**
  * Function Description: Receive inputs from UART and fill queue for uart_send_queue in the UART_TX() function.
  *  
@@ -328,28 +341,17 @@ static void UART_RX(){
     uart_event_t rx_action;
     uart_comms_t action;
     uint8_t rx_data;
-    uint8_t command;
+   
     vTaskDelay(pdMS_TO_TICKS(50));
     while(1){
         xQueueReceive(uart_queue,&rx_action,portMAX_DELAY);
         switch (rx_action.type){
             case UART_DATA: //UART DATA Case
-                for(;;){
-                    uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
-                    
-                    // checking if data is valid
-                    if (is_valid_frame(rx_data)){
-                        break;
-                    }else{
-                        action = UART_Retry_cmd;
-                        xQueueSend(uart_send_queue, &action, portMAX_DELAY);
-                        ESP_LOGW(TAG, "Invalid command.\n Command: %02X", rx_data);
-                    }
-                }
-
-                command = (rx_data >> 3) & 0x0F;
+                uart_read_bytes(UART_PORT_NUM, &rx_data, 1, portMAX_DELAY);
+                ESP_LOGI(TAG,"Grabbed data %i", rx_data);
+                
                 //switch statement for commmands inside UART_DATA case switch (see above)
-                switch (command){
+                switch (rx_data){
                 case UART_Start_cmd:
                     ESP_LOGI(TAG,"Received start command.");
                     dtcs_sent = 0;
@@ -360,26 +362,50 @@ static void UART_RX(){
                 case UART_DTCs_REQ_STORED_cmd:
                     Read_Codes(SERV_STORED_DTCS);
                     break;
+
                 case UART_DTCs_REQ_PENDING_cmd:
                     Read_Codes(SERV_PENDING_DTCS);
                     break;
+
                 case UART_DTCs_REQ_PERM_cmd:
                     Read_Codes(SERV_PERM_DTCS);
                     break;
 
                 case UART_DTCs_Reset_cmd:
                     ESP_LOGI(TAG,"Reseting DTCs.");
-                    action = UART_Received_cmd;
-                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
+
                     //resetting trouble_code
                     dtcs = NULL;
                     num_bytes_dtcs = 0;
                     vTaskDelay(pdMS_TO_TICKS(100));
                     Set_TWAI_Serv(SERV_CLEAR_DTCS);
+
+                    action = UART_Received_cmd;
+                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                     break;
 
-                case UART_PIDS:
-                    PIDs_GRAB_LIVE_DATA(); //does both grabbing available PID bit-mask and PID data
+                case UART_PIDS_LIVE: 
+                    PIDs_GRAB_LIVE_DATA(SERV_PIDS_LIVE); //does both grabbing available PID bit-mask and PID data
+                    break;
+
+                case UART_PIDS_FREEZE:
+                    PIDs_GRAB_LIVE_DATA(SERV_PIDS_FREEZE); //does both grabbing available PID bit-mask and PID data
+                    break;
+
+                case UART_end_of_cmd:
+                    ESP_LOGI(TAG,"Received end command stoping and clearing queues.");
+
+                    //UART hardware reset
+                    uart_flush_input(UART_NUM_1);
+                    uart_wait_tx_done(UART_NUM_1, pdMS_TO_TICKS(100));
+
+                    //Queue clear
+                    xQueueReset(uart_send_queue);
+                    xQueueReset(uart_queue);
+
+                    //received command sent back
+                    action = UART_Received_cmd;
+                    xQueueSend(uart_send_queue, &action, portMAX_DELAY);
                     break;
 
                 default:
@@ -427,4 +453,12 @@ void UART_INIT()
     ESP_ERROR_CHECK(uart_set_pin(UART_PORT_NUM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS));
     xTaskCreate(UART_TX, "UART_TX_task", ECHO_TASK_STACK_SIZE, NULL, UART_Priority, NULL);
     xTaskCreate(UART_RX, "UART_RX", ECHO_TASK_STACK_SIZE, NULL, UART_RX_Priority, NULL);
+}
+
+uint8_t* get_live_data_buffer(void) {
+    return PID_VALUE;
+}
+
+uint8_t get_live_data_length(void) {
+    return (uint8_t)PID_NUM_BYTES;
 }
