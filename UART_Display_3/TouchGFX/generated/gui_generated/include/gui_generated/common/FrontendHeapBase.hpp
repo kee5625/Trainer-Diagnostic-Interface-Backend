@@ -20,8 +20,6 @@
 #include <gui/tc_screen_screen/TC_ScreenPresenter.hpp>
 #include <gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp>
 #include <gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp>
-#include <gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp>
-#include <gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp>
 
 
 /**
@@ -47,8 +45,7 @@ public:
     typedef touchgfx::meta::TypeList< Home_ScreenView,
             touchgfx::meta::TypeList< TC_ScreenView,
             touchgfx::meta::TypeList< Read_Live_Data_ScreenView,
-            touchgfx::meta::TypeList< Freeze_Frame_DataView,
-            touchgfx::meta::Nil > > >
+            touchgfx::meta::Nil > >
             > GeneratedViewTypes;
 
     /**
@@ -63,8 +60,7 @@ public:
     typedef touchgfx::meta::TypeList< Home_ScreenPresenter,
             touchgfx::meta::TypeList< TC_ScreenPresenter,
             touchgfx::meta::TypeList< Read_Live_Data_ScreenPresenter,
-            touchgfx::meta::TypeList< Freeze_Frame_DataPresenter,
-            touchgfx::meta::Nil > > >
+            touchgfx::meta::Nil > >
             > GeneratedPresenterTypes;
 
     /**

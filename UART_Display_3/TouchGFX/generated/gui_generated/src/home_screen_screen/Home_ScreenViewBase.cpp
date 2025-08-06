@@ -50,7 +50,6 @@ Home_ScreenViewBase::Home_ScreenViewBase() :
     freeze_data_button.setTextColors(touchgfx::Color::getColorFromRGB(255, 255, 255), touchgfx::Color::getColorFromRGB(255, 255, 255));
     freeze_data_button.setIconBitmaps(Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID), Bitmap(BITMAP_ICON_THEME_IMAGES_EDITOR_INSERT_DRIVE_FILE_50_50_E8F6FB_SVG_ID));
     freeze_data_button.setIconXY(24, 0);
-    freeze_data_button.setAction(flexButtonCallback);
     freeze_data_button.setPosition(192, 136, 97, 64);
     add(freeze_data_button);
 
@@ -105,12 +104,5 @@ void Home_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButt
         //When Read_live_data_Start_button clicked change screen to Read_Live_Data_Screen
         //Go to Read_Live_Data_Screen with no screen transition
         application().gotoRead_Live_Data_ScreenScreenNoTransition();
-    }
-    if (&src == &freeze_data_button)
-    {
-        //Interaction1
-        //When freeze_data_button clicked change screen to Freeze_Frame_Data
-        //Go to Freeze_Frame_Data with screen transition towards East
-        application().gotoFreeze_Frame_DataScreenWipeTransitionEast();
     }
 }

@@ -19,7 +19,7 @@ void TC_ScreenPresenter::set_dtcs(char ** dtcs_model, int dtcs_num_model){
 }
 
 void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t ser){
-	if (ser == UART_DTCs_Reset_cmd || ser == UART_end_of_cmd){ //here crash before model-> call
+	if (ser == UART_DTCs_Reset_cmd || ser == UART_end_of_cmd){
 	}
 	model->Model_Set_Service(ser);
 }

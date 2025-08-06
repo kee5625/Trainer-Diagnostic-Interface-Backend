@@ -284,19 +284,6 @@
               "ScreenTransitionType": "ScreenTransitionNone",
               "ActionComponent": "Read_Live_Data_Screen"
             }
-          },
-          {
-            "InteractionName": "Interaction1",
-            "Trigger": {
-              "Type": "TriggerClicked",
-              "TriggerComponent": "freeze_data_button"
-            },
-            "Action": {
-              "Type": "ActionGotoScreen",
-              "ScreenTransitionType": "ScreenTransitionWipe",
-              "ScreenTransitionDirection": "East",
-              "ActionComponent": "Freeze_Frame_Data"
-            }
           }
         ]
       },
@@ -834,105 +821,6 @@
         "Interactions": [
           {
             "InteractionName": "home_Button_int",
-            "Trigger": {
-              "Type": "TriggerClicked",
-              "TriggerComponent": "home_button"
-            },
-            "Action": {
-              "Type": "ActionGotoScreen",
-              "ScreenTransitionType": "ScreenTransitionWipe",
-              "ScreenTransitionDirection": "East",
-              "ActionComponent": "Home_Screen"
-            }
-          }
-        ]
-      },
-      {
-        "Name": "Freeze_Frame_Data",
-        "Components": [
-          {
-            "Type": "Box",
-            "Name": "blue_background",
-            "Width": 480,
-            "Height": 272,
-            "LockPosition": true,
-            "Color": {
-              "Red": 8,
-              "Green": 14,
-              "Blue": 87
-            }
-          },
-          {
-            "Type": "ScrollList",
-            "Name": "Freeze_data",
-            "Y": 59,
-            "Width": 480,
-            "Height": 213,
-            "LockPosition": true,
-            "ItemTemplateName": "rowItem_Data",
-            "NumberofItems": 10,
-            "Easing": "Back",
-            "EasingOption": "Out",
-            "SwipeAcceleration": 1.0,
-            "DragAcceleration": 1.0,
-            "OverShootPercentage": 75
-          },
-          {
-            "Type": "ScalableImage",
-            "Name": "ATech_Logo",
-            "X": 359,
-            "Width": 121,
-            "Height": 59,
-            "LockPosition": true,
-            "Filename": "images.png",
-            "ScalingAlgorithm": "Nearest-neighbor"
-          },
-          {
-            "Type": "FlexButton",
-            "Name": "home_button",
-            "Width": 62,
-            "Height": 59,
-            "LockPosition": true,
-            "ButtonTrigger": {
-              "Type": "ClickButtonTrigger"
-            },
-            "ButtonStyles": [
-              {
-                "Type": "IconButtonStyle",
-                "X": 2,
-                "IconReleased": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png",
-                "IconPressed": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png"
-              },
-              {
-                "Type": "BoxWithBorderButtonStyle",
-                "Width": 62,
-                "Height": 59,
-                "LockToFlexButtonSize": true,
-                "BorderSize": 3,
-                "ColorReleased": {
-                  "Green": 102,
-                  "Blue": 153
-                },
-                "ColorPressed": {
-                  "Green": 153,
-                  "Blue": 204
-                },
-                "ColorBorderReleased": {
-                  "Green": 51,
-                  "Blue": 102
-                },
-                "ColorBorderPressed": {
-                  "Red": 51,
-                  "Green": 102,
-                  "Blue": 153
-                }
-              }
-            ]
-          }
-        ],
-        "Interactions": [
-          {
-            "InteractionName": "home_button_int",
             "Trigger": {
               "Type": "TriggerClicked",
               "TriggerComponent": "home_button"

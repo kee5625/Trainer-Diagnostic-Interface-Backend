@@ -226,12 +226,6 @@
     <Filter Include="Source Files\gui\freeze_frame_data_screen">
       <UniqueIdentifier>ABBA7A49-2251-4C7A-2065-18DCF6A4B691</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\generated\gui_generated\freeze_frame_data_screen">
-      <UniqueIdentifier>D318944D-3E37-BD01-AAFF-4E81AE0596C2</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\generated\gui_generated\freeze_frame_data_screen">
-      <UniqueIdentifier>9095828D-5ACF-78F8-8730-63CE72B10815</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -308,9 +302,6 @@
     </ClCompile>
     <ClCompile Include="..\..\gui\src\freeze_frame_data_screen\Freeze_Frame_DataView.cpp">
       <Filter>Source Files\gui\freeze_frame_data_screen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\generated\gui_generated\src\freeze_frame_data_screen\Freeze_Frame_DataViewBase.cpp">
-      <Filter>Source Files\generated\gui_generated\freeze_frame_data_screen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\gui\src\containers\rowItem_Data.cpp">
       <Filter>Source Files\gui\containers</Filter>
@@ -804,9 +795,6 @@
     </ClInclude>
     <ClInclude Include="..\..\gui\include\gui\freeze_frame_data_screen\Freeze_Frame_DataView.hpp">
       <Filter>Header Files\gui\freeze_frame_data_screen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\freeze_frame_data_screen\Freeze_Frame_DataViewBase.hpp">
-      <Filter>Header Files\generated\gui_generated\freeze_frame_data_screen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\gui\include\gui\containers\rowItem_Data.hpp">
       <Filter>Header Files\gui\containers</Filter>

@@ -111,9 +111,6 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
  ../../Core/Inc/PIDs_Library.hpp \
  ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp \
- ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp \
- ../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp \
- ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp \
  ../../TouchGFX/generated/images/include/BitmapDatabase.hpp \
  ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/VectorFontRendererImpl.hpp \
@@ -277,9 +274,6 @@ Application/User/TouchGFX/target/generated/TouchGFXConfiguration.o: \
 ../../Core/Inc/PIDs_Library.hpp:
 ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp:
-../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:
-../../TouchGFX/generated/gui_generated/include/gui_generated/freeze_frame_data_screen/Freeze_Frame_DataViewBase.hpp:
-../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataPresenter.hpp:
 ../../TouchGFX/generated/images/include/BitmapDatabase.hpp:
 ../../TouchGFX/generated/images/include/images/BitmapDatabase.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/VectorFontRendererImpl.hpp:

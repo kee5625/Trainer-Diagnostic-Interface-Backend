@@ -790,11 +790,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/containers/rowItem_dtcsBase.cpp</locationURI>
 		</link>
 		<link>
-			<name>Application/User/generated/Freeze_Frame_DataViewBase.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/freeze_frame_data_screen/Freeze_Frame_DataViewBase.cpp</locationURI>
-		</link>
-		<link>
 			<name>Application/User/generated/Home_ScreenViewBase.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/TouchGFX/generated/gui_generated/src/home_screen_screen/Home_ScreenViewBase.cpp</locationURI>
