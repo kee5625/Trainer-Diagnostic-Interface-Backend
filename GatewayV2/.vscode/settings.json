@@ -24,6 +24,7 @@
     "string_view": "c",
     "span": "c",
     "twia_tc.h": "c",
-    "tc_ref.h": "c"
+    "tc_ref.h": "c",
+    "random": "c"
   }
 }

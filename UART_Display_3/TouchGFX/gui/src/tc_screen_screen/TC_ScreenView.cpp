@@ -7,6 +7,7 @@
 #include "UART_COMMS.hpp"
 extern "C" {
     #include "FreeRTOS.h"
+	#include "cmsis_os.h"
 }
 
 int tick_count = 0;
@@ -101,7 +102,7 @@ void TC_ScreenView::setupScreen()
 void TC_ScreenView::handleTickEvent(){
 	//at least 3 sec wait and DTC ready(tick_count reset when loading box = visible)
 
-	if (pendingDTCUpdate && tick_count >= 60 && (screen_Phase == Phase::loading || screen_Phase == Phase::no_dtcs)){
+	if (pendingDTCUpdate && tick_count >= 30 && (screen_Phase == Phase::loading || screen_Phase == Phase::no_dtcs)){
 		int dtcs_num = presenter->get_Num_DTCs();
 		if (dtcs_num != 0){
 			screen_Phase = Phase::display;
@@ -110,10 +111,12 @@ void TC_ScreenView::handleTickEvent(){
 			pendingDTCUpdate = false;
 			DTCS_.setVisible(true);//Show_DTCs_list
 			Clear_DTCS_button.setVisible(true);//show clear DTCs option
+
 		}else if (screen_Phase != Phase::no_dtcs){
 			screen_Phase = Phase::no_dtcs;
 			tick_count = -30;
 			Unicode::strncpy(status_TBBuffer, "No DTCs", sizeof("No DTCs."));
+
 		}else{
 			status_TB.setVisible(false);
 			status_TB.invalidate();
@@ -176,6 +179,7 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& s
     	if (&source == &LD_Button) {
 
     		presenter->Pres_Set_Service(UART_end_of_cmd); //stop UART
+    		osDelay(pdMS_TO_TICKS(25)); //giving time for UART to stop
     		application().gotoRead_Live_Data_ScreenScreenWipeTransitionEast();
 
     	}

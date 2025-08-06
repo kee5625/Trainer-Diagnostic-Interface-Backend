@@ -40,7 +40,7 @@ Read_Live_Data_ScreenPresenter::Read_Live_Data_ScreenPresenter(Read_Live_Data_Sc
 
 void Read_Live_Data_ScreenPresenter::activate()
 {
-
+	set_Service(UART_PIDS_LIVE);
 }
 
 void Read_Live_Data_ScreenPresenter::deactivate()

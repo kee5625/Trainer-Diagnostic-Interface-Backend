@@ -25,26 +25,9 @@ void setModelInstance(Model* model)
 
 //change so that passes pointer and this is done in presenter of dtc screen
 //codes comes in with every code being 5 digit with only one \0 at the end
-void DTCs_GUI_Pass(const char* codes, int num_codes)
+void DTCs_GUI_Pass(char** codes, int num_codes)
 {
-	char **temp = NULL;
-	temp = static_cast<char **>(pvPortMalloc(sizeof(char*) * num_codes));
-	if (!temp && num_codes != 0) return;
-    if (modelInstance)
-    {
-    	for (int i = 0; i < num_codes; i ++){
-    		temp[i] = static_cast<char *>(pvPortMalloc(6));
-    		if (!temp[i]) break;  // handle malloc failure
-
-    		memcpy(temp[i],&codes[i * 5], 5);
-    		temp[i][5] = 0;
-    	}
-    	modelInstance->dtcs_Set(temp, num_codes);  // call into the GUI // @suppress("Invalid arguments")
-    	for (int i = 0; i < num_codes; i ++) {
-    	    vPortFree(temp[i]);
-    	}
-    	vPortFree(temp);
-    }
+	modelInstance->dtcs_Set(codes, num_codes);
 }
 
 

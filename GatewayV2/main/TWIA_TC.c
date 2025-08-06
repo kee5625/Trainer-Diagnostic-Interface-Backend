@@ -120,16 +120,16 @@ static inline uint8_t mode_identify(twai_message_t msg, uint8_t last_service){
     return last_service;  //note: This mean its a CF frame
 }
 
-static inline twai_message_t req_msg_create(uint8_t request){
+static inline twai_message_t DTC_MSG_Req(uint8_t request){
     twai_message_t msg = TWAI_Request_msg;
     msg.data[1] = request;
     return msg;
 }
 
-static inline twai_message_t PID_MSG_REQ(uint8_t PID){
+static inline twai_message_t PID_MSG_REQ(uint8_t PID, uint8_t modeByte){
     twai_message_t msg = TWAI_Request_msg;
     msg.data[0] = 0x02;
-    msg.data[1] = SHOW_LIVE_DATA_REQ;
+    msg.data[1] = modeByte;
     msg.data[2] = PID;
     return msg;
 }
@@ -214,8 +214,8 @@ static int Live_Data_Get(twai_message_t data){
      
     while (1){
 
-       
-        if (IS_BIT_MASK || (data.data[0] < 0x8 && data.data[1] == SHOW_LIVE_DATA_RESP && (data.data[2] == get_Req_PID())) ){ //bit-mask frame or single frame
+       ESP_LOGI(TAG,"In loop: %i", data.data[1]);   //here not checking if it's the right response for the request
+        if (IS_BIT_MASK || (data.data[0] < 0x8 && (data.data[1] == SHOW_LIVE_DATA_RESP || data.data[1] == SHOW_FREEZE_FRAME_RESP) && (data.data[2] == get_Req_PID())) ){ //bit-mask frame or single frame
             if (IS_BIT_MASK){ //Available PID bit-mask only for now 
                 int num_bitmask = (data.data[2] / 0x20); 
                
@@ -233,7 +233,7 @@ static int Live_Data_Get(twai_message_t data){
             }
 
             return 0; //return for pid data 
-        }else if (data.data[0] == MULT_FRAME_FIRST && data.data[2] == SHOW_LIVE_DATA_RESP && get_Req_PID() == data.data[3]){ //below this is data responses 
+        }else if (data.data[0] == MULT_FRAME_FIRST && (data.data[2] == SHOW_LIVE_DATA_RESP || data.data[2] == SHOW_FREEZE_FRAME_RESP) && get_Req_PID() == data.data[3]){ //below this is data responses 
             PID_VALUE = (uint8_t *)pvPortMalloc(data.data[1]);
             PID_VALUE_BYTES = data.data[1] - 2;
             for (int i = 0; i < 4; i++){
@@ -254,9 +254,13 @@ static int Live_Data_Get(twai_message_t data){
             }
 
         }
-        if (twai_receive(&data,pdMS_TO_TICKS(1000)) == ESP_ERR_TIMEOUT && resetflag){
-            return -1; //return for reset
-        }   
+        
+        data.identifier = 0x00; //to get into while loop
+        while (data.identifier < ID_ECU && data.identifier > ID_ECU_Second){
+            if (twai_receive(&data,pdMS_TO_TICKS(1000)) == ESP_ERR_TIMEOUT && resetflag){
+                return -1; //return for reset
+            }   
+        }
     }
 
 }
@@ -272,7 +276,7 @@ static void twai_receive_task()
     int next_dtc = 4;
 
     while (1) {
-        rec_successful = twai_receive(&RX_Data,pdMS_TO_TICKS(3000));
+        rec_successful = twai_receive(&RX_Data,pdMS_TO_TICKS(500));
 
         if (rec_successful == ESP_OK){
 
@@ -338,58 +342,71 @@ static void twai_transmit_task()
 {
     tx_task_action_t action;
     twai_message_t TX_output;
+    uint8_t Cur_Serv = 0;
+
     while (1) {
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
         switch(action){
-            case TX_REQUEST_PIDS: //grabs all in a row
-                for (int i = 0x00; i < 0x20; i += 0x20){ //0xC8
-                    TX_output = PID_MSG_REQ( i);
-                    twai_transmit(&TX_output, portMAX_DELAY);
-                    xSemaphoreTake(BIT_MASK_ROW_GRABED, portMAX_DELAY);
-                    if (resetflag) break;
-                }
 
-                Set_PID_Bitmask(PIDs_Supported); //here might want this line skipped if resetflag 
-                xSemaphoreGive(TWAI_COMPLETE); // here changed to twai complete from done
-                break;
+        case TX_REQUEST_PIDS_Live:                                              //grabs full bit-mask for live data
+        case TX_REQUEST_PIDS_Freeze: 
 
-            case TX_REQUEST_DATA:
-                TX_output = PID_MSG_REQ(get_Req_PID()); //grab current request PID from main 
+            if (action == TX_REQUEST_PIDS_Live){
+                Cur_Serv = SHOW_LIVE_DATA_REQ;
+            }else{
+                Cur_Serv = SHOW_FREEZE_FRAME_REQ;
+            }
+    
+
+            for (int i = 0x00; i < MAX_BITMASK_NUM; i += 0x20){                 //MAX_BITMASK_NUM set in TWAI_TC.h
+                TX_output = PID_MSG_REQ( i, Cur_Serv);
                 twai_transmit(&TX_output, portMAX_DELAY);
-                break;
+                xSemaphoreTake(BIT_MASK_ROW_GRABED, portMAX_DELAY);
+                ESP_LOGI(TAG,"Cur_Serv %i",Cur_Serv);
+                if (resetflag) break;
+            }
 
-            case TX_REQUEST_STORED_DTCS:
-                TX_output = req_msg_create(STORED_DTCS_REQ);
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent stored DTCs request ");
-                break;
+            Set_PID_Bitmask(PIDs_Supported);                                    //here might want this line skipped if resetflag 
+            xSemaphoreGive(TWAI_COMPLETE);                                      // here changed to twai complete from done
+            break;
 
-            case TX_REQUEST_PENDING_DTCS:
-                TX_output = req_msg_create(PENDING_DTCS_REQ);
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent pending dtcs request");
-                break;
+        case TX_REQUEST_DATA:
+            TX_output = PID_MSG_REQ(get_Req_PID(), Cur_Serv);                   //grab current request PID from main 
+            twai_transmit(&TX_output, portMAX_DELAY);
+            break;
 
-            case TX_REQUEST_PERM_DTCS:
-                TX_output = req_msg_create(PERM_DTCS_REQ);
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent perminate dtcs request");
-                break;
+        case TX_REQUEST_STORED_DTCS:
+            TX_output = DTC_MSG_Req(STORED_DTCS_REQ);
+            twai_transmit(&TX_output, portMAX_DELAY);
+            ESP_LOGI(TAG,"Sent stored DTCs request ");
+            break;
 
-            case TX_FLOW_CONTROL_RESPONSE:
-                TX_output = TWAI_Response_FC;
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent flow control");
-                break;
+        case TX_REQUEST_PENDING_DTCS:
+            TX_output = DTC_MSG_Req(PENDING_DTCS_REQ);
+            twai_transmit(&TX_output, portMAX_DELAY);
+            ESP_LOGI(TAG,"Sent pending dtcs request");
+            break;
 
-            case TX_RESET_DTCs:
-                TX_output = TWAI_Clear_DTCS;
-                twai_transmit(&TX_output, portMAX_DELAY);
-                ESP_LOGI(TAG,"Sent DTCS reset request");
-                break;
+        case TX_REQUEST_PERM_DTCS:
+            TX_output = DTC_MSG_Req(PERM_DTCS_REQ);
+            twai_transmit(&TX_output, portMAX_DELAY);
+            ESP_LOGI(TAG,"Sent perminate dtcs request");
+            break;
 
-            default:
-                break;
+        case TX_FLOW_CONTROL_RESPONSE:
+            TX_output = TWAI_Response_FC;
+            twai_transmit(&TX_output, portMAX_DELAY);
+            ESP_LOGI(TAG,"Sent flow control");
+            break;
+
+        case TX_RESET_DTCs:
+            TX_output = TWAI_Clear_DTCS;
+            twai_transmit(&TX_output, portMAX_DELAY);
+            ESP_LOGI(TAG,"Sent DTCS reset request");
+            break;
+
+        default:
+            break;
         }
 
     }
@@ -428,6 +445,7 @@ static void TWAI_Services()
     
     while(1){
         xQueueReceive(service_queue,&current_serv,portMAX_DELAY);
+
         twai_get_status_info(&status);
         if (status.state == TWAI_STATE_STOPPED){
             ESP_LOGI(TAG,"TWAI started");
@@ -435,14 +453,22 @@ static void TWAI_Services()
         }
 
         switch (current_serv){
-            case SERV_PIDS:
-                tx_action = TX_REQUEST_PIDS;
+            case SERV_PIDS_LIVE:
+                tx_action = TX_REQUEST_PIDS_Live;
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
                 ESP_LOGI(TAG,"SENT PID request");
 
                 xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
                 break;
-                
+            
+            case SERV_PIDS_FREEZE:
+                tx_action = TX_REQUEST_PIDS_Freeze;
+                xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
+                ESP_LOGI(TAG,"SENT PID request");
+
+                xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
+                break;
+
             case SERV_DATA:
                 tx_action = TX_REQUEST_DATA;
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
@@ -451,6 +477,7 @@ static void TWAI_Services()
                 break;
 
             case SERV_FREEZE_DATA:
+
                 break;
 
             case SERV_STORED_DTCS:
@@ -458,9 +485,7 @@ static void TWAI_Services()
                 xQueueSend(tx_task_queue,&tx_action, portMAX_DELAY);
               
                 xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
-                // for (int i = 0; i < curr_BYTES; i+= 2){
-                //     ESP_LOGI(TAG, "Trouble code 0x%02X 0x%02X", dtcs[i],dtcs[i + 1]);
-                // }
+
                 Set_DTCs(dtcs,curr_BYTES); //passing trouble_code to the main function
 
                 /**
@@ -486,10 +511,7 @@ static void TWAI_Services()
 
                 xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
                 count = 1;
-                // for (int i = 0; i < curr_BYTES; i+= 2){
-                //     ESP_LOGI(TAG, "Diagnostic Trouble code %i is 0x%02X 0x%02X", count, dtcs[i],dtcs[i + 1]);
-                //     count ++;
-                // }
+
                 Set_DTCs(dtcs,curr_BYTES); //passing trouble_code to the main function
 
                 /**
@@ -506,10 +528,7 @@ static void TWAI_Services()
 
                 xSemaphoreTake(TWAI_COMPLETE,portMAX_DELAY);
                 count = 1;
-                // for (int i = 0; i < curr_BYTES; i+= 2){
-                //     ESP_LOGI(TAG, "Diagnostic Trouble code %i is 0x%02X 0x%02X", count, dtcs[i],dtcs[i + 1]);
-                //     count ++;
-                // }
+
                 Set_DTCs(dtcs,curr_BYTES); //passing trouble_code to the main function
 
                 /**

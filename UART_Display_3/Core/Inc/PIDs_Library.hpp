@@ -18,6 +18,18 @@ extern "C" {
 #include "FreeRTOS.h"
 }
 
+#define num_Descriptions          224 //number of descriptions hard coded/loaded on device
+
+struct PID { //PID = Parameter Identifier: object used in presenter for GUI screens
+    uint8_t pidCode = 0;
+    const char* description = nullptr;
+    const char* unit = nullptr; //empty if string displayed
+    char* value = nullptr;
+
+    PID(uint8_t code, const char* desc, const char* u, char* val)
+            : pidCode(code), description(desc), unit(u), value(val) {}
+};
+
 typedef char* (*DecoderFunc)(const uint8_t* value);
 
 struct PIDDecoder {

@@ -15,7 +15,6 @@ void Read_Live_Data_ScreenView::setupScreen()
 	Read_Live_Data_ScreenViewBase::setupScreen();
 	data.setDrawables(dataListItems, wr_Update_Item_CB);
 	home_button.setAction(wr_Button_Press_CB);
-	presenter->set_Service(UART_PIDS);
 	data.setVisible(false);
 }
 

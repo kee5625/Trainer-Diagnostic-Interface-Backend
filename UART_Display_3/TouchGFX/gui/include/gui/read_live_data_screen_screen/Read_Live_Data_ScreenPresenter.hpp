@@ -7,19 +7,6 @@
 #include <vector>
 #include "PIDs_Library.hpp"
 
-struct PID { //PID = Parameter Identifier
-    uint8_t pidCode = 0;
-    const char* description = nullptr;
-    const char* unit = nullptr; //empty if string displayed
-    char* value = nullptr;
-
-    PID(uint8_t code, const char* desc, const char* u, char* val)
-            : pidCode(code), description(desc), unit(u), value(val) {}
-};
-
-
-#define num_Descriptions          224 //number of descriptions hard coded/loaded on device
-
 using namespace touchgfx;
 
 class Read_Live_Data_ScreenView;

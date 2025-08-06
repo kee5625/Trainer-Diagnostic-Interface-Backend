@@ -78,7 +78,8 @@ int Set_TWAI_Serv(service_request_t req){
     int status = 0;
 
     switch(req){
-        case SERV_PIDS:
+        case SERV_PIDS_LIVE:
+        case SERV_PIDS_FREEZE:
         case SERV_DATA:
         case SERV_FREEZE_DATA:
         case SERV_STORED_DTCS:
@@ -91,16 +92,21 @@ int Set_TWAI_Serv(service_request_t req){
             ESP_LOGI("MAIN","Request was %i", req);
 
             //Loop until TWAI completes service
-            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(5000)) != pdTRUE){
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(1500)) != pdTRUE){
 
-                if (timeout_count >= 5) {
+                if (timeout_count >= 2) {
                     req = TWAI_ERROR;
+                    TWAI_RESET(req); //stop TWIA
                     status = -1; //timeout error
+                    ESP_LOGI("MAIN", "TWAI error");
+                    break;
                 }
 
                 TWAI_RESET(req); //restart TWAI completely
+
+                timeout_count++;
             }
-        
+            break;
         default:
             break;
     }

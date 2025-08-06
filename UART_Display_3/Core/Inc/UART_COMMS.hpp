@@ -12,7 +12,25 @@
 extern "C" {
 #endif
 
-// Example: Diagnostic command codes
+#include "cmsis_os.h"
+
+extern osMutexId DTCList_MUT; //here(unused because 1 task should end before another starts see UART_CONTROl())
+
+
+
+/**
+ * Command expected order and packing for general request(others will be defined above their respective function).
+ *
+ *
+ * From Display      				:     				From Gateway
+ * ***************************************************************************
+ * UART_Start_cmd(start) 			:     				UART_Received_cmd
+ * UART_Retry_cmd(start)			:     				Resend data
+ * Resend request    				:     				UART_Retry_cmd(start)
+ * UART_end_of_cmd(start)			: 					UART_Received_cmd
+ */
+
+
 typedef enum {
 	//general UART commands
     UART_Start_cmd             = 1,
@@ -20,23 +38,24 @@ typedef enum {
 	UART_Retry_cmd   		   = 3,
 
 	//DTC service commands
-    UART_DTCs_REQ_STORED_cmd   = 4,    //stored dtcs
-	UART_DTCs_REQ_PENDING_cmd  = 5,    //pending dtcs
-	UART_DTCs_REQ_PERM_cmd     = 6,    //perminate dtcs
-	UART_DTC_next_cmd          = 7,
-	UART_DTC_Received_cmd      = 8,
-	UART_DTCs_End_cmd          = 9,
-    UART_DTCs_Reset_cmd        = 10,
-	UART_DTCS_Num_cmd          = 11,
+    UART_DTCs_REQ_STORED_cmd   = 4,    //service/mode 3 stored dtcs
+	UART_DTCs_REQ_PENDING_cmd  = 5,    //service/mode 7 pending dtcs
+	UART_DTCs_REQ_PERM_cmd     = 6,    //service/mode A perminate dtcs
+	UART_DTC_next_cmd          = 7,	   //tells TX for UART to send next dtc(can probably change to UART_DTC_Received_cmd)
+	UART_DTC_Received_cmd      = 8,	   //1 dtc received ready for next
+	UART_DTCs_End_cmd          = 9,	   //All dtcs sent(uneeded because num dtcs sent before dtcs)
+    UART_DTCs_Reset_cmd        = 10,   //service/mode 4 reset/clear dtcs
+	UART_DTCS_Num_cmd          = 11,   //tells UART to send number of DTCs(not needed because could just have function send number first)
 
 	//Data service commands for Live and Freeze frame data
-	UART_PIDS    		       = 14, //grab PIDs bit-mask of available PIDs
-	UART_DATA_PID 			   = 15, //grab individual PID
+	UART_PIDS_LIVE    		   = 14, //service/mode 1: grabs PIDs available bit-mask for live data
+	UART_PIDS_FREEZE		   = 15, //service/mode 2: grabs PIDS available bit-mask for freeze frame data
+	UART_DATA_PID 			   = 16, //grab individual PID data
 
 	//More general UART commands
-	UART_SERVICE_RUNNING       = 16,   //used for switch statement to start grabbing DTCs in display code
-	UART_end_of_cmd            = 17,
-	UART_SERVICE_IDLE          = 18,
+	UART_SERVICE_RUNNING       = 17,   //used for switch statement to start grabbing DTCs in display code
+	UART_end_of_cmd            = 18,   //used to reset UART, TWAI, everything from GUI input
+	UART_SERVICE_IDLE          = 19,   //used for timeouts when idle
 	UART_CMD_MAX,
 }uart_comms_t;
 

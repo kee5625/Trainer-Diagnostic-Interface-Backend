@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 
-void DTCs_GUI_Pass(const char* data, int size); // Function to call from C
+void DTCs_GUI_Pass(char** data, int size); // Function to call from C
 void UART_REST_DTCs();
 void UART_Set_Service(uart_comms_t ser, int pid); //sets service for UART
 void GUI_Set_PIDs(int pid, uint8_t *value, uint8_t (*mask)[4], int num_bytes);

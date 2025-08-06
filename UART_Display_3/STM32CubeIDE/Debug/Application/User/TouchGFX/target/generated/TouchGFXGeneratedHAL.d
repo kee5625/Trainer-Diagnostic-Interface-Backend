@@ -52,6 +52,17 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../TouchGFX/gui/include/gui/model/Model.hpp \
  ../../TouchGFX/gui/include/gui/model/ModelListener.hpp \
  ../../Core/Inc/UART_COMMS.hpp \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
+ ../../Core/Inc/FreeRTOSConfig.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenView.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/home_screen_screen/Home_ScreenViewBase.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp \
@@ -97,13 +108,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp \
  ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp \
  ../../Core/Inc/PIDs_Library.hpp \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- ../../Core/Inc/FreeRTOSConfig.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
  ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp \
  ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp \
  ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp \
@@ -137,10 +141,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
  ../../TouchGFX/target/generated/MJPEGDecoder.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/VideoController.hpp \
  ../../TouchGFX/target/generated/STM32DMA.hpp \
- ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../../TouchGFX/target/generated/DirectFrameBufferVideoController.hpp \
  ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/VideoWidget.hpp \
  ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
@@ -237,6 +237,17 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../TouchGFX/gui/include/gui/model/Model.hpp:
 ../../TouchGFX/gui/include/gui/model/ModelListener.hpp:
 ../../Core/Inc/UART_COMMS.hpp:
+../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
+../../Core/Inc/FreeRTOSConfig.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 ../../TouchGFX/gui/include/gui/home_screen_screen/Home_ScreenView.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/home_screen_screen/Home_ScreenViewBase.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:
@@ -282,13 +293,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp:
 ../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp:
 ../../Core/Inc/PIDs_Library.hpp:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
-../../Core/Inc/FreeRTOSConfig.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
 ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:
 ../../TouchGFX/generated/gui_generated/include/gui_generated/containers/rowItem_DataBase.hpp:
 ../../TouchGFX/gui/include/gui/freeze_frame_data_screen/Freeze_Frame_DataView.hpp:
@@ -322,10 +326,6 @@ Application/User/TouchGFX/target/generated/TouchGFXGeneratedHAL.o: \
 ../../TouchGFX/target/generated/MJPEGDecoder.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/VideoController.hpp:
 ../../TouchGFX/target/generated/STM32DMA.hpp:
-../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 ../../TouchGFX/target/generated/DirectFrameBufferVideoController.hpp:
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/VideoWidget.hpp:
 ../../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
