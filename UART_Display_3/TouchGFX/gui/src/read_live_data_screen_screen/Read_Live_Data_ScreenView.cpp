@@ -5,6 +5,7 @@
 //none for now
 int ticks = 0;
 
+
 Read_Live_Data_ScreenView::Read_Live_Data_ScreenView():
 	wr_Button_Press_CB(this, &Read_Live_Data_ScreenView::Button_Press_CB),
 	wr_Update_Item_CB(this,  &Read_Live_Data_ScreenView::Update_Item_CB)
@@ -12,10 +13,11 @@ Read_Live_Data_ScreenView::Read_Live_Data_ScreenView():
 
 void Read_Live_Data_ScreenView::setupScreen()
 {
-	Read_Live_Data_ScreenViewBase::setupScreen();
+
 	data.setDrawables(dataListItems, wr_Update_Item_CB);
 	home_button.setAction(wr_Button_Press_CB);
 	data.setVisible(false);
+	Read_Live_Data_ScreenViewBase::setupScreen();
 }
 
 void Read_Live_Data_ScreenView::tearDownScreen()
@@ -30,16 +32,19 @@ void Read_Live_Data_ScreenView::handleTickEvent(){
 		touchgfx::Application::getInstance()->invalidate();
 	}
 
+	//updating values
+	if ((data.getNumberOfItems() != 0) && (ticks % 60 == 0)){
 
-	if (data.getNumberOfItems() != 0 && ticks % 60 == 0){
-		//setting number of items to be updated in this update run
-		int num_Items = (data.getNumberOfItems() >= 6) ? 6 : data.getNumberOfItems();
+		int num_Items = (data.getNumberOfItems() >= 6) ? 6 : data.getNumberOfItems(); 						//setting number of items to be updated in this update run
 
-		for (int i = 0; i < num_Items; i ++){//6 items visible on scroll list at a time
+		for (int i = 0; i < num_Items; i ++){                                                            	//6 items visible on scroll list at a time
 			presenter->set_Service(UART_DATA_PID, presenter->get_PIDCode(i));
 		}
-//		presenter->set_Service(UART_DATA_PID, presenter->get_PIDCode(1));
+
 	}
+
+
+
 	ticks ++;
 }
 

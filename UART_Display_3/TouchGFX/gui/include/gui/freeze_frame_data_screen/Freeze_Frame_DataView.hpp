@@ -16,9 +16,9 @@ public:
     void set_List_Num_Items(int num_items = -1);
     void Update_List(int index, int pid);
 protected:
-    touchgfx::Callback<Freeze_Frame_DataView, const touchgfx::AbstractButtonContainer&> wr_Button_Press_CB;
+    touchgfx::Callback<Freeze_Frame_DataView, const touchgfx::AbstractButtonContainer&> wr_Button_CB;
     void Button_Press_CB(const touchgfx::AbstractButtonContainer& src);
-    touchgfx::Callback<Freeze_Frame_DataView, touchgfx::DrawableListItemsInterface*, int16_t, int16_t> wr_Update_Item_CB;
+    touchgfx::Callback<Freeze_Frame_DataView, touchgfx::DrawableListItemsInterface*, int16_t, int16_t> wr_Update_CB;
     void Update_Item_CB(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex);
 
 private:

@@ -84,18 +84,6 @@ const osThreadAttr_t blinkTask_attributes = {
  * --------------------------------------------------------------Helper functions---------------------------------------------------------------------------------
  */
 
-static inline bool Sum_Check(uint8_t localSum, uint8_t externalSum){
-	uint8_t rx_data;
-	if (~localSum == externalSum){
-		//failed checksum retrying
-		HAL_UART_Receive_IT(&huart1,&rx_data,1);
-		uint8_t byte = UART_Start_cmd;
-		osMessageQueuePut(send_task_queue, &byte, 0, 0);
-		return false;
-	}
-	return true;
-}
-
 static inline void UART_Reset(){
 
 	if (huart1.gState != HAL_UART_STATE_READY || huart1.RxState != HAL_UART_STATE_READY)
@@ -198,18 +186,8 @@ static void DTC_Decode(uint8_t first_byte, uint8_t second_byte) {
  *   Byte N+1   : DTC N (second half DTC)
  *   Final Byte : END Command (e.g., 0xEE)
  *
- * bit packing (commands):
- *   Bit 0     : Start Command 1
- *   Bit 1     : UART command see UART_TC.h
- *   Bit 2     : ^
- *   Bit 3     : ^
- *   Bit 4     : ^
- *   Bit 5     : 1 (uart_end_pad)
- *   Bit 6     : 1 (uart_end_pad)
- *   Bit 7     : 0 (uart_end_pad)
  *
- *
- * Encoded DTC: 00      00   0111 / 0000 0011
+ * DTC Encoding: 00      00   0111 / 0000 0011
  *              ^letter ^num ^num   ^num ^num
  *              P        0   B      0    3
  *
@@ -229,15 +207,6 @@ static void DTC_Decode(uint8_t first_byte, uint8_t second_byte) {
  * Byte 2+ Num_bytes    : DTC Received cmd
  *
  *
- * Bit packing (commands):
- *   Bit 0     : Start Command 1
- *   Bit 1     : UART command see UART_TC.h
- *   Bit 2     : ^
- *   Bit 3     : ^
- *   Bit 4     : ^
- *   Bit 5     : 1 (uart_end_pad)
- *   Bit 6     : 1 (uart_end_pad)
- *   Bit 7     : 0 (uart_end_pad)
  *
  */
 
@@ -334,14 +303,20 @@ static void Read_Codes(){
 static void Get_PID_BitMask(){
 	int row = 0;
 	int col = 0;
+	uint8_t tx_byte = 0;
 	uint8_t checksum = 0;
+	bool checksum_failed = false;
 
 	while (1){
+
+		if (resetFlag) {
+			osSemaphoreRelease(SERV_DONE_sem); //ready for next service
+			return;
+		}
 
 		if (row != 7){
 			pid_bitmask[row][col] = rx_byte;
 			checksum += rx_byte;
-			HAL_UART_Receive_IT(&huart1,&rx_byte,1);
 		}
 
 		//setting up for next call
@@ -350,27 +325,47 @@ static void Get_PID_BitMask(){
 			col = 0;
 
 		}else if (row == 7){
-			if (Sum_Check(checksum,rx_byte)) {
+			checksum = ~ checksum;
+			if (checksum == rx_byte) {
 				break;
+
 			}
 
+			checksum_failed = true;
 			row = 0;
 			col = 0;
 			checksum = 0;
-
-			rx_byte = cur_service;
-			HAL_UART_Transmit_IT(&huart1,&rx_byte,1); //retry request
 
 		}else{
 			col += 1;
 		}
 
-		osMessageQueueGet(receive_task_queue, &rx_byte, NULL,osWaitForever);
+		//if failed the while loop below will start command chain again
+		if(checksum_failed){
+			tx_byte = 0x20; //exit PID data grab task
+			osMessageQueuePut(send_task_queue, &tx_byte, 0, 0);
+			osDelay(pdMS_TO_TICKS(25));
+			tx_byte = UART_Start_cmd; //start over grabbing bit-mask
+			osMessageQueuePut(send_task_queue, &tx_byte, 0, 0);
+			osDelay(pdMS_TO_TICKS(25));
+		}
 
-		if (resetFlag) {
-			osSemaphoreRelease(SERV_DONE_sem); //ready for next service
-			return;
+		if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+		while((osMessageQueueGet(receive_task_queue, &rx_byte, NULL,pdMS_TO_TICKS(500)) != osOK) && (rx_byte != UART_Received_cmd && checksum_failed)){
+			if (resetFlag) {
+				break;
+			}
 
+			if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+			if (checksum_failed){
+				HAL_UART_Transmit_IT(&huart1,&tx_byte,1); //re-sending start command
+			}
+			osDelay(pdMS_TO_TICKS(5));
+		}
+
+		if (checksum_failed){ //send request after sending start command and receiving received command
+			tx_byte = cur_service;
+			HAL_UART_Transmit_IT(&huart1,&tx_byte,1); //retry request
 		}
 	}
 
@@ -456,6 +451,7 @@ static void get_Data_PID(uint8_t data){
 			}
 
 			if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+			osDelay(pdMS_TO_TICKS(5));
 		}
 
 	}
@@ -643,6 +639,8 @@ static void UART_TX(){
 
 		}
 
+
+		//deals with timeout
 		if (retry_last){
 			timeouts ++;
 

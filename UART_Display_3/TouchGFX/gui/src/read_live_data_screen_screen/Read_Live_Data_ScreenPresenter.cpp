@@ -40,12 +40,16 @@ Read_Live_Data_ScreenPresenter::Read_Live_Data_ScreenPresenter(Read_Live_Data_Sc
 
 void Read_Live_Data_ScreenPresenter::activate()
 {
-	set_Service(UART_PIDS_LIVE);
+	if(get_isLIVE()){
+		set_Service(UART_PIDS_LIVE);
+	}else{
+		set_Service(UART_PIDS_FREEZE);
+	}
 }
 
 void Read_Live_Data_ScreenPresenter::deactivate()
 {
-
+	model->set_isLIVE(false);
 }
 
 //******************************************************set/get functions************************
@@ -61,6 +65,10 @@ const char *Read_Live_Data_ScreenPresenter::get_Value(int PID){
 	int index = Find_PID_INDEX(PID);
 	return static_cast<const char *>(pidList[index].value);
 
+}
+
+bool Read_Live_Data_ScreenPresenter::get_isLIVE(){
+	return model->isLIVE_get();
 }
 
 //sets either mask or value when called.
@@ -106,14 +114,16 @@ void Read_Live_Data_ScreenPresenter::PID_List_init(uint8_t (*mask)[4]){
 	pidList = (PID *)pvPortMalloc(num_PIDs * sizeof(PID));
 	if (!pidList) return;//malloc failure
 
+	//********************************************defining
 	while(index < num_PIDs){
 		while (bitIndex < num_Descriptions) {
 			int row = bitIndex / 32;
 			int col = (bitIndex % 32) / 8;
 			int bit = bitIndex % 8;
 
+			//checking if index is an available PID
 			if (((mask[row][col] >> bit) & 0x01) == 1) {
-				PID temp = PID{(uint8_t)bitIndex, pid_desc_bank[bitIndex], unit_LUT[bitIndex], nullptr};
+				PID temp = PID{(uint8_t)bitIndex, PIDInfoTable[bitIndex].description, PIDInfoTable[bitIndex].unit, nullptr};
 				pidList[index] = temp;
 				pidListSize ++;
 				break;

@@ -80,16 +80,16 @@ static inline twai_message_t TWAI_Clear_DTCS(){ //good and bad response not impl
     return msg;
 }
 
-static twai_message_t PID_Grab(uint8_t pid){
+static twai_message_t PID_Grab(uint8_t pid, int modeResp){
     twai_message_t response = TWAI_MSG;
     ESP_LOGI(TAG,"PID %i", pid);
     if (pid % 0x20 == 0){ //is bitmask request
         response.data[0] = 0x06;
-        response.data[1] = SHOW_LIVE_DATA_RESP;
+        response.data[1] = modeResp;
         response.data[2] = pid;
         for (int i = 0; i < 4; i ++){
             response.data[i + 3] = PIDs_Supported[pid / 0x20][i];
-            ESP_LOGI(TAG,"PID mod %i and i is %i", pid % 0x20, i);
+            ESP_LOGI(TAG,"PID mod %i and i is %i", pid / 0x20, i);
         }
         return response;
     }else{
@@ -102,14 +102,14 @@ static twai_message_t PID_Grab(uint8_t pid){
         if (numbytes >= 0x06){ //multiframe message setup
             response.data[0] = MULT_FRAME_FIRST;
             response.data[1] = numbytes + 2;
-            response.data[2] = SHOW_LIVE_DATA_RESP;
+            response.data[2] = modeResp;
             response.data[3] = pid;
             for (int i = 0; i < 4; i ++){
                 response.data[i+4] = pid_Data[i];
             }
         }else { //single frame setup
             response.data[0] = numbytes + 2;
-            response.data[1] = SHOW_LIVE_DATA_RESP;
+            response.data[1] = modeResp;
             response.data[2] = pid;
             for (int i = 0; i < numbytes; i ++){
                 response.data[i+3] = pid_Data[i];
@@ -205,8 +205,13 @@ static void twai_receive_task(void *arg)
 
             switch(mode_req){
                 case SHOW_LIVE_DATA_REQ:
-                    tx_action = PID_Grab(rx_action.data[2]);
+                    tx_action = PID_Grab(rx_action.data[2],SHOW_LIVE_DATA_RESP);
                     ESP_LOGI(TAG,"Received live data request.");
+                    xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
+                    break;
+                case SHOW_FREEZE_FRAME_REQ:
+                    tx_action = PID_Grab(rx_action.data[2],SHOW_FREEZE_FRAME_RESP);
+                    ESP_LOGI(TAG,"Received freeze frame request.");
                     xQueueSend(tx_task_queue,&tx_action,portMAX_DELAY);
                     break;
                 case STORED_DTCS_REQ:

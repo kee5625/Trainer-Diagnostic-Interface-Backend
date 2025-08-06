@@ -19,7 +19,9 @@ public:
     void tick();
 
     void dtcs_Set(char** str, int dtcs_size);
+    void set_isLIVE(bool);
     bool Get_DTCs_Status();
+    bool isLIVE_get();
     void Model_Set_Service(uart_comms_t ser, int pid = 0);
     int dtcs_num_get();
     char** dtcs_get();
@@ -30,6 +32,7 @@ protected:
     char ** dtcs_list_model;
     int dtcs_num_model = 0;
     bool DTCs_Ready = false;
+    bool isLIVE = false;
 };
 
 #endif // MODEL_HPP

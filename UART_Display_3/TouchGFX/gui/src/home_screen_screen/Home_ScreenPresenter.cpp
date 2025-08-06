@@ -16,3 +16,7 @@ void Home_ScreenPresenter::deactivate()
 {
 
 }
+
+void Home_ScreenPresenter::set_isLIVE(bool isLIVE){
+	model->set_isLIVE(isLIVE);
+}

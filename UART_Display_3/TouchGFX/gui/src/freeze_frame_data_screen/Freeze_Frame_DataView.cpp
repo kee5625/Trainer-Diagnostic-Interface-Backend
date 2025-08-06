@@ -5,8 +5,8 @@ int freeze_ticks= 0;
 
 
 Freeze_Frame_DataView::Freeze_Frame_DataView():
-		wr_Button_Press_CB(this, &Freeze_Frame_DataView::Button_Press_CB),
-		wr_Update_Item_CB(this,  &Freeze_Frame_DataView::Update_Item_CB)
+		wr_Button_CB(this, &Freeze_Frame_DataView::Button_Press_CB),
+		wr_Update_CB(this,  &Freeze_Frame_DataView::Update_Item_CB)
 {
 
 }
@@ -14,8 +14,8 @@ Freeze_Frame_DataView::Freeze_Frame_DataView():
 void Freeze_Frame_DataView::setupScreen()
 {
 	Freeze_Frame_DataViewBase::setupScreen();
-	Freeze_data.setDrawables(Freeze_dataListItems, wr_Update_Item_CB);
-	home_button.setAction(wr_Button_Press_CB);
+	Freeze_data.setDrawables(Freeze_dataListItems, wr_Update_CB);
+	home_button.setAction(wr_Button_CB);
 	Freeze_data.setVisible(false);
 }
 

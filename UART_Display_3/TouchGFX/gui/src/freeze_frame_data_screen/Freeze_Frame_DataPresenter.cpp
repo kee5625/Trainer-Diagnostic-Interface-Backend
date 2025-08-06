@@ -15,21 +15,13 @@ Freeze_Frame_DataPresenter::Freeze_Frame_DataPresenter(Freeze_Frame_DataView& v)
 
 void Freeze_Frame_DataPresenter::activate()
 {
-	set_Service(UART_PIDS_FREEZE, 0);
+	set_Service(UART_PIDS_FREEZE);
 }
 
 void Freeze_Frame_DataPresenter::deactivate()
 {
 
 }
-
-
-void Freeze_Frame_DataPresenter::set_Service(uart_comms_t ser, uint8_t pid)
-{
-	model->Model_Set_Service(ser,pid);
-}
-
-
 
 static inline int Num_Supported_PIDs(uint8_t (*mask)[4]){
 	int count = 0;
@@ -70,6 +62,11 @@ const char *Freeze_Frame_DataPresenter::get_Value(int PID){
 }
 
 //sets either mask or value when called.
+void Freeze_Frame_DataPresenter::set_Service(uart_comms_t ser, uint8_t pid)
+{
+	model->Model_Set_Service(ser,pid);
+}
+
 void Freeze_Frame_DataPresenter::set_Data(int pid, uint8_t *value, uint8_t (*mask)[4], int num_bytes){
 	if (mask){
 		PID_List_init(mask);
@@ -115,7 +112,7 @@ void Freeze_Frame_DataPresenter::PID_List_init(uint8_t (*mask)[4]){
 			int bit = bitIndex % 8;
 
 			if (((mask[row][col] >> bit) & 0x01) == 1) {
-				PID temp = PID{(uint8_t)bitIndex, pid_desc_bank[bitIndex], unit_LUT[bitIndex], nullptr};
+				PID temp = PID{(uint8_t)bitIndex, PIDInfoTable[bitIndex].description, PIDInfoTable[bitIndex].unit, nullptr};
 				pidList[index] = temp;
 				pidListSize ++;
 				break;

@@ -3,8 +3,10 @@
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:13:1:Model::Model()	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:18:6:void Model::tick()	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:24:6:void Model::dtcs_Set(char**, int)	2
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:30:6:void Model::Model_Set_Service(uart_comms_t, int)	3
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:35:6:void Model::Model_Set_Data(int, uint8_t*, uint8_t (*)[4], int)	2
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:39:6:bool Model::Get_DTCs_Status()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:43:5:int Model::dtcs_num_get()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:47:8:char** Model::dtcs_get()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:30:6:void Model::set_isLIVE(bool)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:34:6:void Model::Model_Set_Service(uart_comms_t, int)	3
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:39:6:void Model::Model_Set_Data(int, uint8_t*, uint8_t (*)[4], int)	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:44:6:bool Model::Get_DTCs_Status()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:48:5:int Model::dtcs_num_get()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:52:8:char** Model::dtcs_get()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/model/Model.cpp:56:6:bool Model::isLIVE_get()	1

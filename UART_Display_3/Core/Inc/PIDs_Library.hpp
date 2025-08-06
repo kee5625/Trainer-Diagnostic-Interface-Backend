@@ -18,8 +18,16 @@ extern "C" {
 #include "FreeRTOS.h"
 }
 
+
+
+
 #define num_Descriptions          224 //number of descriptions hard coded/loaded on device
 
+
+
+/**
+ * Object used to hold all info on PID. Used by GUI (presenter/view files)
+ */
 struct PID { //PID = Parameter Identifier: object used in presenter for GUI screens
     uint8_t pidCode = 0;
     const char* description = nullptr;
@@ -32,11 +40,21 @@ struct PID { //PID = Parameter Identifier: object used in presenter for GUI scre
 
 typedef char* (*DecoderFunc)(const uint8_t* value);
 
+
+
+
+/**
+ * Used by PIDInfoTable to hold all necessary decoding values for PIDs.
+ */
 struct PIDDecoder {
     const char* unit;
     const char *description;
     DecoderFunc decode;
 };
+
+
+
+
 
 inline char* bit_Mask_Request(const uint8_t* value){
 	float newVal = -9999;
@@ -196,7 +214,7 @@ inline char* decode_ThrottlePosition(const uint8_t* value){
 	return buf;
 }
 
-//PID code = index 0x01 = 1
+//To avoid search algorithm the index should = PID. PID 0x01 = index 1. There will be filler values when doing it this way but faster.
 const PIDDecoder PIDInfoTable[]{
 		{"", "PIDs supported [$01 - $20]", bit_Mask_Request},       										//0
 		{"", "Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL), status and number of DTCs, components tests, DTC readiness checks)",bit_Map_Request},//1
@@ -383,363 +401,6 @@ const PIDDecoder PIDInfoTable[]{
 //		{"Bit", "NOx Control Diagnostic (NCD) and Particulate Control Diagnostic (PCD) Warning Lamp status", 42^},//C8
 
 
-};
-
-constexpr const char * const pid_desc_bank[num_PIDS] = {
-		"PIDs supported [$01 - $20]",                                                                       //0x0
-		"Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL), status and number of DTCs, components tests, DTC readiness checks)",//0x1
-		"DTC that caused freeze frame to be stored.",                                                       //0x2
-		"Fuel system status",                                                                               //0x3
-		"Calculated engine load",                                                                           //0x4
-		"Engine coolant temperature",                                                                       //0x5
-		"Short term fuel trim (STFT)—Bank 1",                                                               //0x6
-		"Long term fuel trim (LTFT)—Bank 1",                                                                //0x7
-		"Short term fuel trim (STFT)—Bank 2",                                                               //0x8
-		"Long term fuel trim (LTFT)—Bank 2",                                                                //0x9
-		"Fuel pressure (gauge pressure)",                                                                   //0x0A
-		"Intake manifold absolute pressure",                                                                //0x0B
-		"Engine speed",                                                                                     //0x0C
-		"Vehicle speed",                                                                                    //0x0D
-		"Timing advance",                                                                                   //0x0E
-		"Intake air temperature",                                                                           //0x0F
-		"Mass air flow sensor (MAF) air flow rate",                                                         //0x10
-		"Throttle position",                                                                                //0x11
-		"Commanded secondary air status",                                                                   //0x12
-		"Oxygen sensors present (in 2 banks)",                                                              //0x13
-		"Oxygen Sensor 1",                                                                                  //0x14
-		"Oxygen Sensor 2",                                                                                  //0x15
-		"Oxygen Sensor 3",                                                                                  //0x16
-		"Oxygen Sensor 4",                                                                                  //0x17
-		"Oxygen Sensor 5",                                                                                  //0x18
-		"Oxygen Sensor 6",                                                                                  //0x19
-		"Oxygen Sensor 7",                                                                                  //0x1A
-		"Oxygen Sensor 8",                                                                                  //0x1B
-		"OBD standards this vehicle conforms to",                                                           //0x1C
-		"Oxygen sensors present (in 4 banks)",                                                              //0x1D
-		"Auxiliary input status",                                                                           //0x1E
-		"Run time since engine start",                                                                      //0x1F
-		"PIDs supported [$21 - $40]",                                                                       //0x20
-		"Distance traveled with malfunction indicator lamp (MIL) on",                                       //0x21
-		"Fuel Rail Pressure (relative to manifold vacuum)",                                                 //0x22
-		"Fuel Rail Gauge Pressure (diesel, or gasoline direct injection)",                                  //0x23
-		"Oxygen Sensor 1",                                                                                  //0x24
-		"Oxygen Sensor 2",                                                                                  //0x25
-		"Oxygen Sensor 3",                                                                                  //0x26
-		"Oxygen Sensor 4",                                                                                  //0x27
-		"Oxygen Sensor 5",                                                                                  //0x28
-		"Oxygen Sensor 6",                                                                                  //0x29
-		"Oxygen Sensor 7",                                                                                  //0x2A
-		"Oxygen Sensor 8",                                                                                  //0x2B
-		"Commanded EGR",                                                                                    //0x2C
-		"EGR Error",                                                                                        //0x2D
-		"Commanded evaporative purge",                                                                      //0x2E
-		"Fuel Tank Level Input",                                                                            //0x2F
-		"Warm-ups since codes cleared",                                                                     //0x30
-		"Distance traveled since codes cleared",                                                            //0x31
-		"Evap. System Vapor Pressure",                                                                      //0x32
-		"Absolute Barometric Pressure",                                                                     //0x33
-		"Oxygen Sensor 1",                                                                                  //0x34
-		"Oxygen Sensor 2",                                                                                  //0x35
-		"Oxygen Sensor 3",                                                                                  //0x36
-		"Oxygen Sensor 4",                                                                                  //0x37
-		"Oxygen Sensor 5",                                                                                  //0x38
-		"Oxygen Sensor 6",                                                                                  //0x39
-		"Oxygen Sensor 7",                                                                                  //0x3A
-		"Oxygen Sensor 8",                                                                                  //0x3B
-		"Catalyst Temperature: Bank 1, Sensor 1",                                                           //0x3C
-		"Catalyst Temperature: Bank 2, Sensor 1",                                                           //0x3D
-		"Catalyst Temperature: Bank 1, Sensor 2",                                                           //0x3E
-		"Catalyst Temperature: Bank 2, Sensor 2",                                                           //0x3F
-		"PIDs supported [$41 - $60]",                                                                       //0x40
-		"Monitor status this drive cycle",                                                                  //0x41
-		"Control module voltage",                                                                           //0x42
-		"Absolute load value",                                                                              //0x43
-		"Commanded Air-Fuel Equivalence Ratio (lambda,?)",                                                  //0x44
-		"Relative throttle position",                                                                       //0x45
-		"Ambient air temperature",                                                                          //0x46
-		"Absolute throttle position B",                                                                     //0x47
-		"Absolute throttle position C",                                                                     //0x48
-		"Accelerator pedal position D",                                                                     //0x49
-		"Accelerator pedal position E",                                                                     //0x4A
-		"Accelerator pedal position F",                                                                     //0x4B
-		"Commanded throttle actuator",                                                                      //0x4C
-		"Time run with MIL on",                                                                             //0x4D
-		"Time since trouble codes cleared",                                                                 //0x4E
-		"Maximum value for Fuel–Air equivalence ratio, oxygen sensor voltage, oxygen sensor current, and intake manifold absolute pressure",//0x4F
-		"Maximum value for air flow rate from mass air flow sensor",                                        //0x50
-		"Fuel Type",                                                                                        //0x51
-		"Ethanol fuel %",                                                                                   //0x52
-		"Absolute Evap system Vapor Pressure",                                                              //0x53
-		"Evap system vapor pressure",                                                                       //0x54
-		"Short term secondary oxygen sensor trim, A: bank 1, B: bank 3",                                    //0x55
-		"Long term secondary oxygen sensor trim, A: bank 1, B: bank 3",                                     //0x56
-		"Short term secondary oxygen sensor trim, A: bank 2, B: bank 4",                                    //0x57
-		"Long term secondary oxygen sensor trim, A: bank 2, B: bank 4",                                     //0x58
-		"Fuel rail absolute pressure",                                                                      //0x59
-		"Relative accelerator pedal position",                                                              //0x5A
-		"Hybrid battery pack remaining life",                                                               //0x5B
-		"Engine oil temperature",                                                                           //0x5C
-		"Fuel injection timing",                                                                            //0x5D
-		"Engine fuel rate",                                                                                 //0x5E
-		"Emission requirements to which vehicle is designed",                                               //0x5F
-		"PIDs supported [$61 - $80]",                                                                       //0x60
-		"Driver's demand engine - percent torque",                                                          //0x61
-		"Actual engine - percent torque",                                                                   //0x62
-		"Engine reference torque",                                                                          //0x63
-		"Engine percent torque data",                                                                       //0x64
-		"Auxiliary input / output supported",                                                               //0x65
-		"Mass air flow sensor",                                                                             //0x66
-		"Engine coolant temperature",                                                                       //0x67
-		"Intake air temperature sensor",                                                                    //0x68
-		"Actual EGR, Commanded EGR, and EGR Error",                                                         //0x69
-		"Commanded Diesel intake air flow control and relative intake air flow position",                   //0x6A
-		"Exhaust gas recirculation temperature",                                                            //0x6B
-		"Commanded throttle actuator control and relative throttle position",                               //0x6C
-		"Fuel pressure control system",                                                                     //0x6D
-		"Injection pressure control system",                                                                //0x6E
-		"Turbocharger compressor inlet pressure",                                                           //0x6F
-		"Boost pressure control",                                                                           //0x70
-		"Variable Geometry turbo (VGT) control",                                                            //0x71
-		"Wastegate control",                                                                                //0x72
-		"Exhaust pressure",                                                                                 //0x73
-		"Turbocharger RPM",                                                                                 //0x74
-		"Turbocharger temperature",                                                                         //0x75
-		"Turbocharger temperature",                                                                         //0x76
-		"Charge air cooler temperature (CACT)",                                                             //0x77
-		"Exhaust Gas temperature (EGT) Bank 1",                                                             //0x78
-		"Exhaust Gas temperature (EGT) Bank 2",                                                             //0x79
-		"Diesel particulate filter (DPF)",                                                                  //0x7A
-		"Diesel particulate filter (DPF)",                                                                  //0x7B
-		"Diesel Particulate filter (DPF) temperature",                                                      //0x7C
-		"NOx NTE (Not-To-Exceed) control area status",                                                      //0x7D
-		"PM NTE (Not-To-Exceed) control area status",                                                       //0x7E
-		"Engine run time [b]",                                                                              //0x7F
-		"PIDs supported [$81 - $A0]",                                                                       //0x80
-		"Engine run time for Auxiliary Emissions Control Device(AECD)",                                     //0x81
-		"Engine run time for Auxiliary Emissions Control Device(AECD)",                                     //0x82
-		"NOx sensor",                                                                                       //0x83
-		"Manifold surface temperature",                                                                     //0x84
-		"NOx reagent system",                                                                               //0x85
-		"Particulate matter (PM) sensor",                                                                   //0x86
-		"Intake manifold absolute pressure",                                                                //0x87
-		"SCR Induce System",                                                                                //0x88
-		"Run Time for AECD #11-#15",                                                                        //0x89
-		"Run Time for AECD #16-#20",                                                                        //0x8A
-		"Diesel Aftertreatment",                                                                            //0x8B
-		"O2 Sensor (Wide Range)",                                                                           //0x8C
-		"Throttle Position G",                                                                              //0x8D
-		"Engine Friction - Percent Torque",                                                                 //0x8E
-		"PM Sensor Bank 1 & 2",                                                                             //0x8F
-		"WWH-OBD Vehicle OBD System Information",                                                           //0x90
-		"WWH-OBD Vehicle OBD System Information",                                                           //0x91
-		"Fuel System Control",                                                                              //0x92
-		"WWH-OBD Vehicle OBD Counters support",                                                             //0x93
-		"NOx Warning And Inducement System",                                                                //0x94
-		"Exhaust Gas Temperature Sensor",                                                                   //0x98
-		"Exhaust Gas Temperature Sensor",                                                                   //0x99
-		"Hybrid/EV Vehicle System Data, Battery, Voltage",                                                  //0x9A
-		"Diesel Exhaust Fluid Sensor Data",                                                                 //0x9B
-		"O2 Sensor Data",                                                                                   //0x9C
-		"Engine Fuel Rate",                                                                                 //0x9D
-		"Engine Exhaust Flow Rate",                                                                         //0x9E
-		"Fuel System Percentage Use",                                                                       //0x9F
-		"PIDs supported [$A1 - $C0]",                                                                       //0xA0
-		"NOx Sensor Corrected Data",                                                                        //0xA1
-		"Cylinder Fuel Rate",                                                                               //0xA2
-		"Evap System Vapor Pressure",                                                                       //0xA3
-		"Transmission Actual Gear",                                                                         //0xA4
-		"Commanded Diesel Exhaust Fluid Dosing",                                                            //0xA5
-		"Odometer [c]",                                                                                     //0xA6
-		"NOx Sensor Concentration Sensors 3 and 4",                                                         //0xA7
-		"NOx Sensor Corrected Concentration Sensors 3 and 4",                                               //0xA8
-		"ABS Disable Switch State",                                                                         //0xA9
-		"PIDs supported [$C1 - $E0]",                                                                       //0xC0
-		"Fuel Level Input A/B",                                                                             //0xC3
-		"Exhaust Particulate Control System Diagnostic Time/Count",                                         //0xC4
-		"Fuel Pressure A and B",                                                                            //0xC5
-		"Byte 1 - Particulate control - driver inducement system status",                                   //0xC6
-		"Distance Since Reflash or Module Replacement",                                                     //0xC7
-		"NOx Control Diagnostic (NCD) and Particulate Control Diagnostic (PCD) Warning Lamp status",        //0xC8
-
-
-};
-
-//blanks mean it is a string return value, bit map, etc...
-constexpr const char * const unit_LUT[num_PIDS] = {
-		"",                                               //0x0
-		"",                                               //0x1
-		"",                                               //0x2
-		"",                                               //0x3
-		"%",                                              //0x4
-		"°C",                                             //0x5
-		"%",                                              //0x6
-		"%",                                              //0x7
-		"%",                                              //0x8
-		"%",                                              //0x9
-		"kPa",                                            //0x0A
-		"kPa",                                            //0x0B
-		"rpm",                                            //0x0C
-		"km/h",                                           //0x0D
-		"° before TDC",                                   //0x0E
-		"°C",                                             //0x0F
-		"g/s",                                            //0x10
-		"%",                                              //0x11
-		"",                                               //0x12
-		"",                                               //0x13
-		"V",                                              //0x14
-		"V",                                              //0x15
-		"V",                                              //0x16
-		"V",                                              //0x17
-		"V",                                              //0x18
-		"V",                                              //0x19
-		"V",                                              //0x1A
-		"V",                                              //0x1B
-		"",                                               //0x1C
-		"",                                               //0x1D
-		"",                                               //0x1E
-		"s",                                              //0x1F
-		"",                                               //0x20
-		"km",                                             //0x21
-		"kPa",                                            //0x22
-		"kPa",                                            //0x23
-		"ratio",                                          //0x24
-		"ratio",                                          //0x25
-		"ratio",                                          //0x26
-		"ratio",                                          //0x27
-		"ratio",                                          //0x28
-		"ratio",                                          //0x29
-		"ratio",                                          //0x2A
-		"ratio",                                          //0x2B
-		"%",                                              //0x2C
-		"%",                                              //0x2D
-		"%",                                              //0x2E
-		"%",                                              //0x2F
-		"",                                               //0x30
-		"km",                                             //0x31
-		"Pa",                                             //0x32
-		"kPa",                                            //0x33
-		"ratio",                                          //0x34
-		"ratio",                                          //0x35
-		"ratio",                                          //0x36
-		"ratio",                                          //0x37
-		"ratio",                                          //0x38
-		"ratio",                                          //0x39
-		"ratio",                                          //0x3A
-		"ratio",                                          //0x3B
-		"°C",                                             //0x3C
-		"°C",                                             //0x3D
-		"°C",                                             //0x3E
-		"°C",                                             //0x3F
-		"",                                               //0x40
-		"",                                               //0x41
-		"V",                                              //0x42
-		"%",                                              //0x43
-		"ratio",                                          //0x44
-		"%",                                              //0x45
-		"°C",                                             //0x46
-		"%",                                              //0x47
-		"%",                                              //0x48
-		"%",                                              //0x49
-		"%",                                              //0x4A
-		"%",                                              //0x4B
-		"%",                                              //0x4C
-		"min",                                            //0x4D
-		"min",                                            //0x4E
-		"ratio, V, mA, kPa",                              //0x4F
-		"g/s",                                            //0x50
-		"",                                               //0x51
-		"%",                                              //0x52
-		"kPa",                                            //0x53
-		"Pa",                                             //0x54
-		"%",                                              //0x55
-		"%",                                              //0x56
-		"%",                                              //0x57
-		"%",                                              //0x58
-		"kPa",                                            //0x59
-		"%",                                              //0x5A
-		"%",                                              //0x5B
-		"°C",                                             //0x5C
-		"°",                                              //0x5D
-		"L/h",                                            //0x5E
-		"",                                               //0x5F
-		"",                                               //0x60
-		"%",                                              //0x61
-		"%",                                              //0x62
-		"N?m",                                            //0x63
-		"%",                                              //0x64
-		"",                                               //0x65
-		"g/s",                                            //0x66
-		"°C",                                             //0x67
-		"°C",                                             //0x68
-		"",                                               //0x69
-		"",                                               //0x6A
-		"",                                               //0x6B
-		"",                                               //0x6C
-		"",                                               //0x6D
-		"",                                               //0x6E
-		"",                                               //0x6F
-		"",                                               //0x70
-		"",                                               //0x71
-		"",                                               //0x72
-		"",                                               //0x73
-		"",                                               //0x74
-		"",                                               //0x75
-		"",                                               //0x76
-		"",                                               //0x77
-		"",                                               //0x78
-		"",                                               //0x79
-		"",                                               //0x7A
-		"",                                               //0x7B
-		"°C",                                             //0x7C
-		"",                                               //0x7D
-		"",                                               //0x7E
-		"s",                                              //0x7F
-		"",                                               //0x80
-		"",                                               //0x81
-		"",                                               //0x82
-		"",                                               //0x83
-		"",                                               //0x84
-		"%",                                              //0x85
-		"",                                               //0x86
-		"",                                               //0x87
-		"",                                               //0x88
-		"",                                               //0x89
-		"",                                               //0x8A
-		"",                                               //0x8B
-		"",                                               //0x8C
-		"%",                                              //0x8D
-		"%",                                              //0x8E
-		"",                                               //0x8F
-		"h",                                              //0x90
-		"h",                                              //0x91
-		"",                                               //0x92
-		"h",                                              //0x93
-		"",                                               //0x94
-		"",                                               //0x98
-		"",                                               //0x99
-		"",                                               //0x9A
-		"%",                                              //0x9B
-		"",                                               //0x9C
-		"g/s",                                            //0x9D
-		"kg/h",                                           //0x9E
-		"",                                               //0x9F
-		"",                                               //0xA0
-		"ppm",                                            //0xA1
-		"mg/stroke",                                      //0xA2
-		"Pa",                                             //0xA3
-		"ratio",                                          //0xA4
-		"%",                                              //0xA5
-		"km",                                             //0xA6
-		"",                                               //0xA7
-		"",                                               //0xA8
-		"",                                               //0xA9
-		"",                                               //0xC0
-		"%",                                              //0xC3
-		"seconds / Count",                                //0xC4
-		"kPa",                                            //0xC5
-		"h",                                              //0xC6
-		"km",                                             //0xC7
-		"Bit",                                            //0xC8
 };
 
 #endif //C++ funtions

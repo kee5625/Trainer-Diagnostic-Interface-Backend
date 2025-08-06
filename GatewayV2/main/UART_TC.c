@@ -122,9 +122,7 @@ static void Read_Codes(uint8_t data){
     uint8_t send_byte = 0;
     int timeout = 0;
 
-    timeout = Set_TWAI_Serv(data); 
-
-    if (timeout == -1) return; //TWAI timeout error
+    if (Set_TWAI_Serv(data) == ERROR_TIMEOUT) return; //TWAI timeout error
 
     dtcs = get_dtcs();
     num_bytes_dtcs = get_dtcs_bytes();  
@@ -136,7 +134,6 @@ static void Read_Codes(uint8_t data){
     send_byte = num_bytes_dtcs / 2;
     uart_write_bytes(UART_PORT_NUM, &send_byte,1);
     
-    timeout = 0;
     while (1){
         timeout = uart_read_bytes(UART_PORT_NUM, &data, 1, pdMS_TO_TICKS(5000)); 
         ESP_LOGI(TAG,"timeout %i", timeout);
@@ -203,7 +200,10 @@ static void Read_Codes(uint8_t data){
 static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
     uint8_t rx_data = 0x00;
 
-    Set_TWAI_Serv(mode); //grabs bit-mask
+     if (Set_TWAI_Serv(mode) == ERROR_TIMEOUT) {
+        ESP_LOGI(TAG,"Timed out of BITmask grab");
+        return; //grabs bit-mask
+     }
     ESP_LOGI(TAG,"PIDs bitmask grabbed. %i", mode);
 
     uint8_t * temp_row;
@@ -238,7 +238,10 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
     while (1){
         ESP_LOGI(TAG,"Waiting on PID...");
 
-        if (uart_read_bytes(UART_PORT_NUM, &rx_data, 1,pdMS_TO_TICKS(5000))== 0) break;
+        if (uart_read_bytes(UART_PORT_NUM, &rx_data, 1,pdMS_TO_TICKS(5000))== 0) {
+             ESP_LOGI(TAG,"Timed out of PID data grab");
+            break;
+        }
         
 
         if (rx_data == 0x20) { //exit condition 
@@ -250,7 +253,7 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
 
         Set_Req_PID(rx_data); //set pid in main
         ESP_LOGI(TAG,"Grabbing next PID 0x%02X", rx_data);
-        Set_TWAI_Serv(SERV_DATA); //Thread blocked until TWAI grabs data
+        if (Set_TWAI_Serv(SERV_DATA) == ERROR_TIMEOUT) return; //Thread blocked until TWAI grabs data
 
        
         uint8_t checksum = 0;
@@ -378,7 +381,7 @@ static void UART_RX(){
                     dtcs = NULL;
                     num_bytes_dtcs = 0;
                     vTaskDelay(pdMS_TO_TICKS(100));
-                    Set_TWAI_Serv(SERV_CLEAR_DTCS);
+                    if (Set_TWAI_Serv(SERV_CLEAR_DTCS) == ERROR_TIMEOUT) break;
 
                     action = UART_Received_cmd;
                     xQueueSend(uart_send_queue, &action, portMAX_DELAY);

@@ -13,7 +13,7 @@ extern "C" {
 int tick_count = 0;
 
 
-static const DTCEntry dtc_table[] = {
+static const DTCEntry dtc_table[] = { //here make this it's own file with all the descriptions
    		{"P0304", "Misfire in cylinder 4"},
    		{"P0200", "Injector Circuit/Open"},
 		{"P0480", "Cooling Fan 1 Control Circuit"},
@@ -177,7 +177,7 @@ void TC_ScreenView::onMyButtonPressed(const touchgfx::AbstractButtonContainer& s
     	if (presenter->get_Num_DTCs() != 0) Select_Phase_Set();
 
     	if (&source == &LD_Button) {
-
+    		presenter->set_ISLIVE(true);
     		presenter->Pres_Set_Service(UART_end_of_cmd); //stop UART
     		osDelay(pdMS_TO_TICKS(25)); //giving time for UART to stop
     		application().gotoRead_Live_Data_ScreenScreenWipeTransitionEast();

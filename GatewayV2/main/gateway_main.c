@@ -97,7 +97,7 @@ int Set_TWAI_Serv(service_request_t req){
                 if (timeout_count >= 2) {
                     req = TWAI_ERROR;
                     TWAI_RESET(req); //stop TWIA
-                    status = -1; //timeout error
+                    status = ERROR_TIMEOUT; 
                     ESP_LOGI("MAIN", "TWAI error");
                     break;
                 }
@@ -127,7 +127,7 @@ uint8_t get_dtcs_bytes(){
 }
 
 uint8_t get_Req_PID(){
-    return 0x0D; //here
+    // return 0x0D; //here
     return req_PID;
 }
 

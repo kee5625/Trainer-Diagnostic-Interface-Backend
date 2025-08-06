@@ -34,6 +34,7 @@ public:
     uint8_t get_PIDCode(int index);
     const char * const get_data_title(int index);
     const char *get_Value(int PID);
+    bool get_isLIVE();
     void set_Service(uart_comms_t serv,uint8_t pid = 0);
     void set_Data(int pid = 0, uint8_t *value = NULL, uint8_t (*mask)[4] = NULL, int num_bytes = 0) override;
 

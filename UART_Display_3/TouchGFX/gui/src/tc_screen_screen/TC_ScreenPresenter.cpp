@@ -24,6 +24,10 @@ void TC_ScreenPresenter::Pres_Set_Service(uart_comms_t ser){
 	model->Model_Set_Service(ser);
 }
 
+void TC_ScreenPresenter::set_ISLIVE(bool islive){
+	model->set_isLIVE(islive);
+}
+
 void TC_ScreenPresenter::activate()
 {
 }
@@ -48,5 +52,7 @@ const char *TC_ScreenPresenter::GetDtcs(int increment){
 	}
 	return dtcs_list[increment];
 }
+
+
 
 

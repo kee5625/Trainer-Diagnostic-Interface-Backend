@@ -114,7 +114,7 @@ extern void TouchGFX_Task(void *argument);
   * @retval int
   */
 int main(void)
-{
+ {
 
   /* USER CODE BEGIN 1 */
 

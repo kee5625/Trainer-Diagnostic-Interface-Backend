@@ -42,6 +42,10 @@ static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 static const twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(TX_GPIO_NUM, RX_GPIO_NUM, TWAI_MODE_NORMAL);
 
+
+
+
+
 //**********************************Trouble Code */
 static const twai_message_t TWAI_Request_msg = {
     // Message type and format settings
@@ -87,6 +91,8 @@ static const twai_message_t TWAI_Response_FC = { //only after FF unless ECU send
 };
 
 
+
+
 /* --------------------------- Tasks and Functions TWAI-------------------------- */
 static QueueHandle_t tx_task_queue;
 static SemaphoreHandle_t TWAI_COMPLETE; //marks when TWAI done with curr_service
@@ -97,6 +103,11 @@ static uint8_t PIDs_Supported[7][4]; //filled with 0's in init (0 = unsupported,
 static uint8_t *PID_VALUE;
 static uint8_t PID_VALUE_BYTES = 0;
 static bool resetflag = false;
+
+
+
+
+//*****************************************************Helper functions********************************************************/
 
 static inline void send_FC_Frame(){
     twai_message_t TX_output = TWAI_Response_FC;
@@ -134,6 +145,8 @@ static inline twai_message_t PID_MSG_REQ(uint8_t PID, uint8_t modeByte){
     return msg;
 }
 
+
+//********************************************Functions for services/modes*********************************************************************************/
 
 /**
  * Function Description: Comptelete all frame reading for all DTC modes (Pending, Stored, and Perminate).
@@ -211,15 +224,19 @@ static int Live_Data_Get(twai_message_t data){
     tx_task_action_t tx_response;
     int byte_count = 0;
     bool IS_BIT_MASK = data.data[2] % 0x20 == 0; //availability bit-masks not other data bit-masks for now 
+
+
+    memset(PIDs_Supported, 0, sizeof(PIDs_Supported)); //reset bitmask
      
+
     while (1){
 
-       ESP_LOGI(TAG,"In loop: %i", data.data[1]);   //here not checking if it's the right response for the request
-        if (IS_BIT_MASK || (data.data[0] < 0x8 && (data.data[1] == SHOW_LIVE_DATA_RESP || data.data[1] == SHOW_FREEZE_FRAME_RESP) && (data.data[2] == get_Req_PID())) ){ //bit-mask frame or single frame
-            if (IS_BIT_MASK){ //Available PID bit-mask only for now 
+       ESP_LOGI(TAG,"In loop: %i", data.data[1]);                        //here not checking if it's the right response for the request create check in main that is set by UART
+        if (IS_BIT_MASK || (data.data[0] < SINGLE_FRAME && (data.data[1] == SHOW_LIVE_DATA_RESP || data.data[1] == SHOW_FREEZE_FRAME_RESP) && (data.data[2] == get_Req_PID())) ){ //bit-mask frame or single frame
+            if (IS_BIT_MASK){                                            //Available PID bit-mask only for now 
                 int num_bitmask = (data.data[2] / 0x20); 
                
-                for(int i = 0; i < 4; i++){ //right here changed 4 to 1 change back **********************************************
+                for(int i = 0; i < 4; i++){                           
                     PIDs_Supported[num_bitmask][i] = data.data[i + 3]; 
                 }
                 return 1;//bitmask return
@@ -256,14 +273,20 @@ static int Live_Data_Get(twai_message_t data){
         }
         
         data.identifier = 0x00; //to get into while loop
-        while (data.identifier < ID_ECU && data.identifier > ID_ECU_Second){
-            if (twai_receive(&data,pdMS_TO_TICKS(1000)) == ESP_ERR_TIMEOUT && resetflag){
-                return -1; //return for reset
+        while (data.identifier < ID_ECU || data.identifier > ID_ECU_Second){
+            ESP_LOGI(TAG,"Grabbing next message");
+
+            twai_receive(&data,pdMS_TO_TICKS(1000));
+            if (resetflag){
+                return ERROR_TIMEOUT; //return for reset
             }   
         }
     }
 
 }
+
+
+//******************************************************General TWAI functions*****************************************************************/
 
 static void twai_receive_task()
 {
@@ -273,9 +296,11 @@ static void twai_receive_task()
     uint8_t current_service = STORED_DTCS_RESP;
     twai_message_t RX_Data;
     esp_err_t rec_successful;
+    int dataType = 0;
     int next_dtc = 4;
 
     while (1) {
+        
         rec_successful = twai_receive(&RX_Data,pdMS_TO_TICKS(500));
 
         if (rec_successful == ESP_OK){
@@ -289,12 +314,14 @@ static void twai_receive_task()
                     
                     if (num_bytes == 0){
                         next_dtc = 4;
+                        ESP_LOGI(TAG,"DONE with dtcs");
                         xSemaphoreGive(TWAI_COMPLETE);
                     }else if (temp_bytes != 0){
                         next_dtc += temp_bytes - num_bytes;
                     }
 
                 }else if (current_service == CLEAR_DTCS_GOOD_RESP){
+                    ESP_LOGI(TAG,"DONE with clear dtcs");
                     xSemaphoreGive(TWAI_COMPLETE);
 
                 }else if (current_service == CLEAR_DTCS_BAD_RESP){
@@ -305,7 +332,7 @@ static void twai_receive_task()
                         ESP_LOGI(TAG, "data %i: 0x%02X", i, RX_Data.data[i]);
                     }
 
-                    int dataType = Live_Data_Get(RX_Data);
+                    dataType = Live_Data_Get(RX_Data);
 
                     if (dataType == 1){ //grabbing bitmask
                         xSemaphoreGive(BIT_MASK_ROW_GRABED);
@@ -313,14 +340,33 @@ static void twai_receive_task()
                     }else if (dataType == 0){ //grabbing PID data
                         xSemaphoreGive(TWAI_COMPLETE);
 
-                    }else{//error resetting
+                    }else if (dataType == ERROR_TIMEOUT){//error resetting
                         xSemaphoreGive(BIT_MASK_ROW_GRABED);
                         xSemaphoreGive(TWAI_COMPLETE);
 
                     }
 
                 }else if (current_service == SHOW_FREEZE_FRAME_RESP){
+                    for (int i = 0; i < 8; i ++){
+                        ESP_LOGI(TAG, "data %i: 0x%02X", i, RX_Data.data[i]);
+                    }
 
+                    dataType = Live_Data_Get(RX_Data);
+
+                    if (dataType == 1){ //grabbing bitmask
+                        ESP_LOGI(TAG,"done with bitmask row");
+                        xSemaphoreGive(BIT_MASK_ROW_GRABED);
+
+                    }else if (dataType == 0){ //grabbing PID data
+                        ESP_LOGI(TAG,"done with data grab");
+                        xSemaphoreGive(TWAI_COMPLETE);
+
+                    }else if (dataType == ERROR_TIMEOUT){//error resetting
+                        ESP_LOGI(TAG,"TIMOUT sending semaphores");
+                        xSemaphoreGive(BIT_MASK_ROW_GRABED);
+                        xSemaphoreGive(TWAI_COMPLETE);
+
+                    }
                 }else{
                     ESP_LOGI(TAG,"TX_output rx: ID: %li, Data length: %i", RX_Data.identifier,RX_Data.data_length_code);
                     for (int i = 0; i < 8; i++){
@@ -330,9 +376,12 @@ static void twai_receive_task()
             }else{
                 // ESP_LOGI(TAG,"Wrong identifier. ID: %li", RX_Data.identifier);
             }
+
         }else if (rec_successful == ESP_ERR_TIMEOUT){
             if (resetflag){
-                xSemaphoreGive(TWAI_COMPLETE); //give to service queue to give to reset function
+                ESP_LOGI(TAG,"RX reset time");
+                xSemaphoreGive(TWAI_COMPLETE);
+                xSemaphoreGive(BIT_MASK_ROW_GRABED); //give to service queue to give to reset function
             }
         }
     }
@@ -345,6 +394,7 @@ static void twai_transmit_task()
     uint8_t Cur_Serv = 0;
 
     while (1) {
+        ESP_LOGI(TAG,"Waiting for transmit*******************************************************************************");
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
         switch(action){
 
@@ -366,8 +416,8 @@ static void twai_transmit_task()
                 if (resetflag) break;
             }
 
-            Set_PID_Bitmask(PIDs_Supported);                                    //here might want this line skipped if resetflag 
-            xSemaphoreGive(TWAI_COMPLETE);                                      // here changed to twai complete from done
+            Set_PID_Bitmask(PIDs_Supported);                                   
+            xSemaphoreGive(TWAI_COMPLETE);                                      
             break;
 
         case TX_REQUEST_DATA:
@@ -422,14 +472,16 @@ void TWAI_RESET(service_request_t req){
     resetflag = true;
     xSemaphoreTake(TWAI_DONE_sem, portMAX_DELAY); //current service done and TWAI turned off 
     resetflag = false;
+
     xSemaphoreTake(TWAI_COMPLETE, 0);        //taking pending semaphores
     xSemaphoreTake(BIT_MASK_ROW_GRABED, 0);
 
     if (req != TWAI_ERROR){
         //sending command again
-        ESP_LOGI(TAG,"Reseting.");
+        ESP_LOGI(TAG,"Reset done.");
         xQueueSend(service_queue, &req, portMAX_DELAY); //start command in queue
     }else{
+        xQueueReset(tx_task_queue);
         xSemaphoreGive(TWAI_COMPLETE);
     }
      
@@ -565,13 +617,9 @@ void TWAI_INIT(){
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(TAG, "Driver installed");
 
-    // ESP_ERROR_CHECK(twai_start());
-    // ESP_LOGI(TAG,"TWAI started.");
-
     xTaskCreatePinnedToCore(twai_receive_task, "TWAI_rx", 4096, NULL, RX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(twai_transmit_task, "TWAI_tx", 4096, NULL, TX_TASK_PRIO, NULL, tskNO_AFFINITY);
     xTaskCreatePinnedToCore(TWAI_Services, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
     vTaskDelay(pdMS_TO_TICKS(75));
-    memset(PIDs_Supported, 0, sizeof(PIDs_Supported)); //set bitmask to 0 initially
 }

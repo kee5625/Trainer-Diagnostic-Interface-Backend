@@ -27,6 +27,8 @@ public:
 
     virtual ~Home_ScreenPresenter() {}
 
+    void set_isLIVE(bool);
+
 private:
     Home_ScreenPresenter();
 

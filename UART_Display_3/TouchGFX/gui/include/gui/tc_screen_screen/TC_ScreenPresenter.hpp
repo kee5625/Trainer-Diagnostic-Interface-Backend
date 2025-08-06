@@ -32,6 +32,7 @@ public:
 
     bool Get_DTCs_Status();
     void Pres_Set_Service(uart_comms_t ser);
+    void set_ISLIVE(bool islive);
     const char * GetDtcs(int increment);
     int get_Num_DTCs();
 

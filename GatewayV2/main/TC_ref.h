@@ -10,6 +10,8 @@
 
 #define tc_size 5
 
+#define ERROR_TIMEOUT   -1
+
 typedef enum {
     SERV_PIDS_LIVE      = 0, //PID bitmask live data
     SERV_PIDS_FREEZE    = 1, //PID bitmask freeze frame data
