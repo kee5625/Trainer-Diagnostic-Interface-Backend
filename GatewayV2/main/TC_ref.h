@@ -14,9 +14,9 @@ typedef enum {
     SERV_PIDS_LIVE      = 0, //PID bitmask live data
     SERV_PIDS_FREEZE    = 1, //PID bitmask freeze frame data
     SERV_DATA           = 2, //individual PID value
-    SERV_FREEZE_DATA    = 3,
-    SERV_STORED_DTCS    = 4,
-    SERV_CLEAR_DTCS     = 5,
+    SERV_FREEZE_DATA    = 3, //freeze frame
+    SERV_STORED_DTCS    = 4, //get stored dtcs
+    SERV_CLEAR_DTCS     = 5, //
     SERV_PENDING_DTCS   = 6,
     SERV_PERM_DTCS      = 7,
     TWAI_ERROR          = 10,
@@ -26,7 +26,6 @@ typedef enum {
 extern SemaphoreHandle_t TWAI_DONE_sem;
 extern QueueHandle_t service_queue;
 extern uint8_t req_PID;
-
 
 void Set_Req_PID(int PID);
 void Set_DTCs(uint8_t *codes, int num_codes);

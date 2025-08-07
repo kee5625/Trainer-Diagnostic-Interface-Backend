@@ -1,11 +1,3 @@
-/**
- * Coder: Noah Batcher
- * Last updated: 6/11/2025
- * Project: Trainer Fault Code Diagnostic Gatway
- * 
- * 
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "freertos/FreeRTOS.h"
@@ -35,19 +27,20 @@
 //static copies
 static uint8_t *dtcs;
 static uint8_t dtcs_bytes;
-static uint8_t supported_Bitmask[7][4];
+static uint8_t supported_Bitmask[7][4]; // stores supported PID availability bitmask
 
-uint8_t req_PID = 0;
+uint8_t req_PID = 0; // currently requested PID for live data
 
 SemaphoreHandle_t TWAI_DONE_sem;
 QueueHandle_t service_queue;
 
-
+// Reset buffer state
 void DTCS_reset(){
     dtcs = NULL;
     dtcs_bytes = 0; 
 }
 
+// Store returned DTC in local buffer 
 void Set_DTCs(uint8_t *codes, int codes_bytes){
     dtcs = pvPortMalloc(codes_bytes);
     dtcs_bytes = codes_bytes;
@@ -59,7 +52,6 @@ void Set_DTCs(uint8_t *codes, int codes_bytes){
     }
 }
 
-//
 void Set_Req_PID(int PID){
     req_PID = PID;
 }
@@ -113,7 +105,7 @@ int Set_TWAI_Serv(service_request_t req){
     return status;
 }
 
-
+// retrieve one row of the stored PID availability bitmask
 uint8_t *get_bitmask_row(int row){
     return supported_Bitmask[row]; //single row of bitmask
 }
@@ -135,6 +127,8 @@ void app_main(void)
 {  
     service_queue = xQueueCreate(3, sizeof(service_request_t));
     TWAI_DONE_sem = xSemaphoreCreateBinary();
+
+    // Iniatilize everything
     TWAI_INIT();
     UART_INIT();
     BLE_init();

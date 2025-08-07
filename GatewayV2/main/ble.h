@@ -11,24 +11,31 @@
 #include "TC_ref.h"
 #include "TWIA_TC.h"
 
+#define CMD_DTC_PENDING     0x01
+#define CMD_DTC_STORED      0x02
+#define CMD_DTC_PERM        0x03
+#define CMD_DTC_CLEAR       0x04
+#define CMD_STATUS          0x05
+#define CMD_LIVE_START      0x06
+#define CMD_LIVE_STOP       0x07
+
 void BLE_init(void);
 
-/* Push a freshly-received DTC blob up to the mobile / web app             */
-/* - returns true if a Central is connected & notifications are enabled    */
+
 bool BLE_push_dtcs(const uint8_t *bytes, uint8_t len);
 
-/* Inform the UI that “clear DTC” has succeeded (optional helper)          */
+/* Inform the UI that “clear DTC” has succeeded        */
 void BLE_notify_clear(void);
 
-typedef struct {                       /* ■ BLE profile bookkeeping                */
-    esp_gatts_cb_t      gatts_cb;      /* callback we registered                   */
+typedef struct {                       /* BLE profile bookkeeping                */
+    esp_gatts_cb_t      gatts_cb;      /* callback                   */
     esp_gatt_if_t       gatts_if;      /* interface assigned by stack              */
     uint16_t            app_id;        /* 0 … just one profile                     */
 
     /* Populated later: */
     uint16_t            conn_id;       /* on ESP_GATTS_CONNECT_EVT                 */
     uint16_t            service_hdl;   /* on ESP_GATTS_CREATE_EVT                  */
-    esp_gatt_srvc_id_t  service_id;    /* we filled before create_service()        */
+    esp_gatt_srvc_id_t  service_id;    
 } trainer_profile_t;
 
 typedef struct {
