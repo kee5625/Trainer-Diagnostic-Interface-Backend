@@ -13,6 +13,7 @@ public:
 
     void setTitle(const char *str);
     void setValue(const char *str);
+    void setUnit(const char *str);
     void setCount(int count);
 protected:
 };

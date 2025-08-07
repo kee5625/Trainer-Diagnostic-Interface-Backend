@@ -25,6 +25,7 @@
     "span": "c",
     "twia_tc.h": "c",
     "tc_ref.h": "c",
-    "random": "c"
+    "random": "c",
+    "cstddef": "c"
   }
 }

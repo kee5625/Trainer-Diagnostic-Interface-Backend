@@ -37,7 +37,7 @@ protected:
     touchgfx::Box blue_background;
     touchgfx::ScalableImage ATech_Logo;
     touchgfx::ScrollList data;
-    touchgfx::DrawableListItems<rowItem_Data, 7> dataListItems;
+    touchgfx::DrawableListItems<rowItem_Data, 4> dataListItems;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  home_button;
 
 private:

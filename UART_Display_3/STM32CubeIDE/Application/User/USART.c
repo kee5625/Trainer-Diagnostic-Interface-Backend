@@ -190,7 +190,8 @@ static void DTC_Decode(uint8_t first_byte, uint8_t second_byte) {
  * DTC Encoding: 00      00   0111 / 0000 0011
  *              ^letter ^num ^num   ^num ^num
  *              P        0   B      0    3
- *
+ *	See https://en.wikipedia.org/wiki/OBD-II_PIDs for further explanation
+ * 	of PID encoding.
  *
  * ------------------------------------------------------------------------
  * From Display (to ECU / Trainer)
@@ -280,7 +281,7 @@ static void Read_Codes(){
 }
 
 /**
- * This funciton gets available PIDs bit-mask only. Get_Data_PID gets the individual PID value
+ * This funciton gets available PIDs bit-mask only. get_PID_Value gets the individual PID value
  *
  * UART Protocol Overview
  * ======================
@@ -360,7 +361,7 @@ static void Get_PID_BitMask(){
 			if (checksum_failed){
 				HAL_UART_Transmit_IT(&huart1,&tx_byte,1); //re-sending start command
 			}
-			osDelay(pdMS_TO_TICKS(5));
+			osDelay(pdMS_TO_TICKS(50));
 		}
 
 		if (checksum_failed){ //send request after sending start command and receiving received command
@@ -391,13 +392,14 @@ static void Get_PID_BitMask(){
  *
  * From Display (to Gateway):
  *   Byte 0   : Start Command (e.g. 0x20)
- *   Byte 1   : UART_PIDS Request Flag
+ *   Byte 1   : UART_PIDS Request
  *   Byte 2+  : Sequence of PIDs requested (1 byte each)
  *   Final    : 0x20 sent
  */
-static void get_Data_PID(uint8_t data){
+static void get_PID_Value(uint8_t data){
 	uint8_t checksum = 0;
 	int i = -1; //index
+	int err_count = 0;
 
 	while(1){
 
@@ -418,7 +420,7 @@ static void get_Data_PID(uint8_t data){
 			if (data > 0 && pid_bytes != data){ //if the sizes are the same just overwrite pointer
 				ptrFree((void **) &PID_VALUE);
 				PID_VALUE = (uint8_t *)pvPortMalloc(data);
-				if (!PID_VALUE) Error_Handler();
+				if (!PID_VALUE) Error_Handler();        //kills UART thread
 
 				pid_bytes = data; //set global size
 			}
@@ -427,13 +429,23 @@ static void get_Data_PID(uint8_t data){
 			PID_VALUE[i] = data;
 			checksum += data;
 
-		}else{
+		}else{ //checksum checking and dealing with restart or skiping
 			checksum = ~checksum;
 
-			if (checksum == data){
+			if (checksum == data){															//done, correct checksum
 				break;
 
-			}else{
+			}else if (err_count >= 1){          											//skipping
+				ptrFree((void**)&PID_VALUE);
+				PID_VALUE = (uint8_t *)pvPortMalloc(1);
+				if (!PID_VALUE) Error_Handler();	//kills UART thread
+
+				PID_VALUE[0] = 0;
+				pid_bytes = 1;
+				break;
+
+			}else{																			//retrying
+				err_count ++;
 				checksum = 0;
 				i = -2;
 				ptrFree((void**)&PID_VALUE);
@@ -441,6 +453,7 @@ static void get_Data_PID(uint8_t data){
 
 			}
 		}
+
 		i ++;
 
 		if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
@@ -451,7 +464,7 @@ static void get_Data_PID(uint8_t data){
 			}
 
 			if (huart1.RxState == HAL_UART_STATE_READY)  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
-			osDelay(pdMS_TO_TICKS(5));
+			osThreadYield();
 		}
 
 	}
@@ -574,6 +587,7 @@ static void UART_CONTROl(){
 				}
 
 			}else if (cur_service == UART_DTCs_Reset_cmd || cur_service == UART_DATA_PID) { //reseting DTCs
+				retry_last = false;
 				HAL_UART_Receive_IT(&huart1,&rx_byte, 1);
 				byte = cur_service;
 				osMessageQueuePut(send_task_queue, &byte, 0, 0);
@@ -683,7 +697,7 @@ static void UART_RX(){
 		if(rx_Queue_Get == osOK && rx_byte != UART_end_of_cmd ){ //end command sent by display to display no padding
 
 			if (cur_service == UART_DATA_PID){ //PIDs coming without commands
-				get_Data_PID(rx_byte);
+				get_PID_Value(rx_byte);
 				osSemaphoreRelease(SERV_DONE_sem); //ready for next service
 				continue;
 

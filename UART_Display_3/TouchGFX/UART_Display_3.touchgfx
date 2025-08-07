@@ -313,8 +313,9 @@
           {
             "Type": "ScrollList",
             "Name": "DTCS_",
+            "X": 16,
             "Y": 59,
-            "Width": 480,
+            "Width": 448,
             "Height": 213,
             "Visible": false,
             "ItemTemplateName": "rowItem_dtcs",
@@ -767,6 +768,7 @@
             "Y": 59,
             "Width": 480,
             "Height": 213,
+            "Visible": false,
             "LockPosition": true,
             "ItemTemplateName": "rowItem_Data",
             "Easing": "Back",
@@ -839,12 +841,12 @@
       {
         "Name": "rowItem_Data",
         "Width": 480,
-        "Height": 36,
+        "Height": 72,
         "Components": [
           {
             "Type": "TextArea",
             "Name": "Value_TB",
-            "X": 424,
+            "X": 417,
             "Width": 56,
             "Height": 36,
             "TextId": "__SingleUse_LRP1",
@@ -856,6 +858,26 @@
             },
             "Wildcard1": {
               "TextId": "__SingleUse_R4U0",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "UNIT_TB",
+            "X": 417,
+            "Y": 36,
+            "Width": 56,
+            "Height": 36,
+            "TextId": "__SingleUse_VWQ5",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_YLMX",
               "UseBuffer": true,
               "BufferSize": 10
             }
@@ -883,8 +905,8 @@
             "Type": "TextArea",
             "Name": "Title_TB",
             "X": 84,
-            "Width": 340,
-            "Height": 36,
+            "Width": 322,
+            "Height": 72,
             "TextId": "__SingleUse_V6KV",
             "TextRotation": "0",
             "Color": {
@@ -944,7 +966,8 @@
       },
       {
         "Name": "rowItem_dtcs",
-        "Width": 480,
+        "X": 16,
+        "Width": 448,
         "Height": 136,
         "Components": [
           {
@@ -967,7 +990,7 @@
           {
             "Type": "TextArea",
             "Name": "dtcs_TB",
-            "X": 44,
+            "X": 13,
             "Width": 183,
             "Height": 50,
             "TextId": "__SingleUse_FNEY",
@@ -986,8 +1009,9 @@
           {
             "Type": "TextArea",
             "Name": "dtcs_Desc_TB",
+            "X": 13,
             "Y": 50,
-            "Width": 480,
+            "Width": 422,
             "Height": 86,
             "TextId": "__SingleUse_WCDW",
             "TextRotation": "0",

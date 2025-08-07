@@ -14,10 +14,6 @@ extern "C" {
 
 #include "cmsis_os.h"
 
-extern osMutexId DTCList_MUT; //here(unused because 1 task should end before another starts see UART_CONTROl())
-
-
-
 /**
  * Command expected order and packing for general request(others will be defined above their respective function).
  *

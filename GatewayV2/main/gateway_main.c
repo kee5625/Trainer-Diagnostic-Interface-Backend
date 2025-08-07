@@ -36,17 +36,23 @@
 static uint8_t *dtcs;
 static uint8_t dtcs_bytes;
 static uint8_t supported_Bitmask[7][4];
-
-uint8_t req_PID = 0;
+static uint8_t req_PID = 0;
+static uint8_t cur_serv = 0;
 
 SemaphoreHandle_t TWAI_DONE_sem;
 QueueHandle_t service_queue;
 
-
-void DTCS_reset(){
+/**
+ * *********************************************************************Helper Functions*********************************************
+ */
+static void DTCS_reset(){
     dtcs = NULL;
     dtcs_bytes = 0; 
 }
+
+/**
+ * *********************************************************************Set Functions*********************************************
+ */
 
 void Set_DTCs(uint8_t *codes, int codes_bytes){
     dtcs = pvPortMalloc(codes_bytes);
@@ -59,7 +65,6 @@ void Set_DTCs(uint8_t *codes, int codes_bytes){
     }
 }
 
-//
 void Set_Req_PID(int PID){
     req_PID = PID;
 }
@@ -72,48 +77,9 @@ void Set_PID_Value(uint8_t *data,int num_bytes){
     UART_PID_VALUE(data,num_bytes);
 }
 
-//controlls TWAI based on req
-int Set_TWAI_Serv(service_request_t req){
-    int timeout_count = 0;
-    int status = 0;
-
-    switch(req){
-        case SERV_PIDS_LIVE:
-        case SERV_PIDS_FREEZE:
-        case SERV_DATA:
-        case SERV_FREEZE_DATA:
-        case SERV_STORED_DTCS:
-        case SERV_CLEAR_DTCS: //intentional fall through
-            DTCS_reset();
-        case SERV_PENDING_DTCS:
-        case SERV_PERM_DTCS:
-
-            xQueueSend(service_queue, &req, portMAX_DELAY);
-            ESP_LOGI("MAIN","Request was %i", req);
-
-            //Loop until TWAI completes service
-            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(1500)) != pdTRUE){
-
-                if (timeout_count >= 2) {
-                    req = TWAI_ERROR;
-                    TWAI_RESET(req); //stop TWIA
-                    status = ERROR_TIMEOUT; 
-                    ESP_LOGI("MAIN", "TWAI error");
-                    break;
-                }
-
-                TWAI_RESET(req); //restart TWAI completely
-
-                timeout_count++;
-            }
-            break;
-        default:
-            break;
-    }
-    return status;
-}
-
-
+/**
+ * *********************************************************************Get Functions*********************************************
+ */
 uint8_t *get_bitmask_row(int row){
     return supported_Bitmask[row]; //single row of bitmask
 }
@@ -130,6 +96,47 @@ uint8_t get_Req_PID(){
     // return 0x0D; //here
     return req_PID;
 }
+
+uint8_t get_Cur_Serv(){
+    return cur_serv;
+}
+
+
+//controlls TWAI based on req
+int Set_TWAI_Serv(service_request_t req){
+    int status = 0;
+
+    switch(req){
+        case SERV_PIDS_LIVE:
+        case SERV_PIDS_FREEZE:
+        case SERV_DATA:
+        case SERV_STORED_DTCS:
+        case SERV_CLEAR_DTCS: //intentional fall through
+            DTCS_reset();
+        case SERV_PENDING_DTCS:
+        case SERV_PERM_DTCS:
+
+            cur_serv = req;
+
+            xQueueSend(service_queue, &req, portMAX_DELAY);
+            ESP_LOGI("MAIN","Request was %i \nPID: %i", req, req_PID);
+
+            //Loop until TWAI completes service
+            while (xSemaphoreTake(TWAI_DONE_sem, pdMS_TO_TICKS(5000)) != pdTRUE){
+
+                ESP_LOGI("MAIN", "TWAI error");
+                req = TWAI_ERROR;
+                TWAI_RESET(req); //stopping TWAI
+                status = ERROR_TIMEOUT; 
+                return status;
+            }
+            break;
+        default:
+            break;
+    }
+    return status;
+}
+
 
 void app_main(void)
 {  

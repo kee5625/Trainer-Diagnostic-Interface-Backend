@@ -46,7 +46,7 @@ static QueueHandle_t uart_send_queue;
 void UART_PID_VALUE(uint8_t *data,int num_bytes){
     PID_VALUE = data;
     PID_NUM_BYTES = num_bytes;
-
+     ESP_LOGI(TAG,"HERE1");
 }
 
 /**
@@ -238,12 +238,11 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
     while (1){
         ESP_LOGI(TAG,"Waiting on PID...");
 
-        if (uart_read_bytes(UART_PORT_NUM, &rx_data, 1,pdMS_TO_TICKS(5000))== 0) {
-             ESP_LOGI(TAG,"Timed out of PID data grab");
-            break;
-        }
+        if (uart_read_bytes(UART_PORT_NUM, &rx_data, 1,portMAX_DELAY)== 0) { // could get stuck waiting for 0x20 to exit if display crashes
+            ESP_LOGI(TAG,"Timed out of PID data grab");
+            return;
+            }
         
-
         if (rx_data == 0x20) { //exit condition 
             uart_comms_t action;
             action = UART_Received_cmd; 
@@ -252,8 +251,7 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
         }
 
         Set_Req_PID(rx_data); //set pid in main
-        ESP_LOGI(TAG,"Grabbing next PID 0x%02X", rx_data);
-        if (Set_TWAI_Serv(SERV_DATA) == ERROR_TIMEOUT) return; //Thread blocked until TWAI grabs data
+        if (Set_TWAI_Serv(SERV_DATA) == ERROR_TIMEOUT) return; 
 
        
         uint8_t checksum = 0;
@@ -263,7 +261,7 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
         for (int i = 0; i < PID_NUM_BYTES; i++){
             uint8_t temp = PID_VALUE[i];
             uart_write_bytes(UART_PORT_NUM, &temp,1);
-            ESP_LOGI(TAG,"Wrote: %i", temp);
+            // ESP_LOGI(TAG,"Wrote: %i", temp);
             uart_wait_tx_done(UART_PORT_NUM, portMAX_DELAY);
                
 

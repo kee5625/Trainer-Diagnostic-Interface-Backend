@@ -25,6 +25,7 @@ protected:
      * Member Declarations
      */
     touchgfx::TextAreaWithOneWildcard Value_TB;
+    touchgfx::TextAreaWithOneWildcard UNIT_TB;
     touchgfx::TextAreaWithOneWildcard count_TB;
     touchgfx::TextAreaWithOneWildcard Title_TB;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  Graph_Button;
@@ -34,6 +35,8 @@ protected:
      */
     static const uint16_t VALUE_TB_SIZE = 10;
     touchgfx::Unicode::UnicodeChar Value_TBBuffer[VALUE_TB_SIZE];
+    static const uint16_t UNIT_TB_SIZE = 10;
+    touchgfx::Unicode::UnicodeChar UNIT_TBBuffer[UNIT_TB_SIZE];
     static const uint16_t COUNT_TB_SIZE = 6;
     touchgfx::Unicode::UnicodeChar count_TBBuffer[COUNT_TB_SIZE];
     static const uint16_t TITLE_TB_SIZE = 75;

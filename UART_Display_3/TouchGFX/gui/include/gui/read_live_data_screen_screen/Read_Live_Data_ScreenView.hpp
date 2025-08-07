@@ -5,6 +5,12 @@
 #include <gui/read_live_data_screen_screen/Read_Live_Data_ScreenPresenter.hpp>
 #include "PIDs_Library.hpp"
 
+
+#define NUM_VISIBLE_DATA_LINES   3
+#define NUM_VISIBLE_CONTAINERS 	 4
+
+//******^ this dictates how many values are updated at a time
+
 class Read_Live_Data_ScreenView : public Read_Live_Data_ScreenViewBase
 {
 public:
@@ -14,6 +20,8 @@ public:
     virtual void tearDownScreen();
     void handleTickEvent();
 
+
+    int inline find_container(int index);
     void set_List_Num_Items(int num_items = -1);
     void Update_List(int index, int pid);
 protected:
@@ -24,7 +32,7 @@ protected:
 
 private:
     bool PendingListUpdate = false;
-    int update_items[8] = {0,1,2,3,4,5,6,7}; //warning: doesn't use size of array
+    int containers[NUM_VISIBLE_CONTAINERS];
 };
 
 #endif // READ_LIVE_DATA_SCREENVIEW_HPP

@@ -21,7 +21,9 @@ extern "C" {
 
 
 
-#define num_Descriptions          224 //number of descriptions hard coded/loaded on device
+#define num_Descriptions          224 	//number of descriptions hard coded/loaded on device
+#define LAST_PID				  0xC8
+#define FIRST_PID				  0
 
 
 
@@ -54,12 +56,16 @@ struct PIDDecoder {
 
 
 
-
+/**
+ * PID value byte decoding functions
+ */
 
 inline char* bit_Mask_Request(const uint8_t* value){
 	float newVal = -9999;
+
 	char* buf = (char*)pvPortMalloc(16);
 	if (!buf) return nullptr;
+
 	int intPart = (int)newVal;
 	int fracPart = (int)((newVal - intPart) * 100);
 	snprintf(buf, 16, "%d.%02d", intPart, fracPart);
@@ -68,11 +74,14 @@ inline char* bit_Mask_Request(const uint8_t* value){
 
 inline char* bit_Map_Request(const uint8_t* value){
 	float newVal = -8888;
+
 	char* buf = (char*)pvPortMalloc(16);
 	if (!buf) return nullptr;
+
 	int intPart = (int)newVal;
 	int fracPart = (int)((newVal - intPart) * 100);
 	snprintf(buf, 16, "%d.%02d", intPart, fracPart);
+
 	return buf;
 }
 
@@ -179,11 +188,10 @@ inline char* decode_Percent255(const uint8_t* value) {
 	snprintf(buf, 16, "%d.%02d", intPart, fracPart);
 
 	return buf;
-//    return {DecodeType::FLOAT, .floatValue = (100.0f / 255.0f) * value[0]};
 }
 
 inline char* decode_PercentDualBanks(const uint8_t* value) {
-    float newVal = (100.0f / 128.0f) * value[0] - 100;
+    float newVal = (100.0f / 128.0f) * value[0] - 100.0f;
 	char* buf = (char*)pvPortMalloc(16);
 	if (!buf) return nullptr;
 	int intPart = (int)newVal;
@@ -214,7 +222,11 @@ inline char* decode_ThrottlePosition(const uint8_t* value){
 	return buf;
 }
 
-//To avoid search algorithm the index should = PID. PID 0x01 = index 1. There will be filler values when doing it this way but faster.
+
+/**
+ * To avoid search algorithm the index should = PID. PID 0x01 = index 1. There will be filler values because some are not available on the Wikipedia website but might exist elsewhere.
+ * Also any PID % 0x20 == 0 will be a request for available PID bit-masks and should be filler.
+ */
 const PIDDecoder PIDInfoTable[]{
 		{"", "PIDs supported [$01 - $20]", bit_Mask_Request},       										//0
 		{"", "Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL), status and number of DTCs, components tests, DTC readiness checks)",bit_Map_Request},//1
@@ -222,30 +234,30 @@ const PIDDecoder PIDInfoTable[]{
 		{"", "Fuel system status",bit_Map_Request},                                                         //3
 		{"%", "Calculated engine load", decode_EngineLoad},                                                 //4
 		{"°C", "Engine coolant temperature",decode_EngineTemp},                                             //5
-		{"%", "Short term fuel trim (STFT)—Bank 1",decode_PercentDualBanks},                                //6
+		{"%", "Short term fuel trim (STFT)—Bank 1",decode_PercentDualBanks},                                //6 here************** decode function here needs work to decode correctly and display both two values
 		{"%", "Long term fuel trim (LTFT)—Bank 1",decode_PercentDualBanks},                                 //7
 		{"%", "Short term fuel trim (STFT)—Bank 2",decode_PercentDualBanks},                                //8
-		{"%", "Long term fuel trim (LTFT)—Bank 2",decode_PercentDualBanks},                                 //9
+		{"%", "Long term fuel trim (LTFT)—Bank 2",decode_PercentDualBanks},                                 //9 here**************
 		{"kPa", "Fuel pressure (gauge pressure)",decode_FuelPressure},                                      //0A
 		{"kPa", "Intake manifold absolute pressure",decode_ManifoldABSPressure},                            //0B
 		{"rpm", "Engine speed",decode_EngineSpeed},                                                         //0C
-		{"km/h", "Vehicle speed",decode_ManifoldABSPressure},                                               //0D
-		{"° before TDC", "Timing advance",decode_VechicleSpeed},                                            //0E
-		{"°C", "Intake air temperature",decode_EngineTemp},                                                 //0E
+		{"km/h", "Vehicle speed",decode_VechicleSpeed},                                               		//0D
+		{"° before TDC", "Timing advance",decode_TimeingAdvance},                                           //0E
 		{"°C", "Intake air temperature", decode_intakeAirTemp},                                             //0F
 		{"g/s", "Mass air flow sensor (MAF) air flow rate", decode_EngineSpeed},                            //10
 		{"%", "Throttle position", decode_ThrottlePosition},                                                //11
 		{"", "Commanded secondary air status", bit_Map_Request},                                            //12
-		{"", "Oxygen sensors present (in 2 banks)", decode_PercentDualBanks},								//13  not the right function
+		{"", "Oxygen sensors present (in 2 banks)", decode_PercentDualBanks},								//13   here not the right function and there are two different return values from this and some others (did not think about this)
+		{"V", "Oxygen Sensor 1", bit_Map_Request},                                                          //14  here ************ all in-between the heres are put to something random for testing
+		{"V", "Oxygen Sensor 2", bit_Map_Request},                                                          //15
+		{"V", "Oxygen Sensor 3", bit_Map_Request},                                                          //16
+		{"V", "Oxygen Sensor 4", bit_Map_Request},                                                          //17
+		{"V", "Oxygen Sensor 5", bit_Map_Request},                                                          //18
+		{"V", "Oxygen Sensor 6", bit_Map_Request},                                                          //19
+		{"V", "Oxygen Sensor 7", bit_Map_Request},                                                          //1A here *************
 
 
 
-//		{"°C", "Intake air temperature", 4^},                                                               //0F
-//		{"g/s", "Mass air flow sensor (MAF) air flow rate", 10^},                                           //10
-//		{"%", "Throttle position", 11^},                                                                    //11
-//		{"", "Commanded secondary air status", 1^},                                                         //12
-//		{"", "Oxygen sensors present (in 2 banks)", 12^},                                                   //13
-//		{"V", "Oxygen Sensor 1", 13^},                                                                      //14
 //		{"V", "Oxygen Sensor 2", 13^},                                                                      //15
 //		{"V", "Oxygen Sensor 3", 13^},                                                                      //16
 //		{"V", "Oxygen Sensor 4", 13^},                                                                      //17

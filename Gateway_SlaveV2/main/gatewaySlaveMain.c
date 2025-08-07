@@ -46,13 +46,13 @@ static SemaphoreHandle_t TC_sent_sem;
 static SemaphoreHandle_t FC_Frame_sem;
 static SemaphoreHandle_t start_sem;
 static uint8_t PIDs_Supported[7][4] = {
-    {0xDA,0x00,0x00,0x00},
+    {0xFF,0x00,0x00,0x00},
+    {0x00,0x00,0x00,0x00},
+    {0xFF,0xFF,0x00,0x00},
     {0x00,0x00,0x00,0x00},
     {0x00,0x00,0x00,0x00},
-    {0x00,0x00,0x00,0x00},
-    {0x00,0x00,0x00,0x00},
-    {0x00,0x00,0x00,0x00},
-    {0x00,0x00,0x00,0x00},
+    {0x00,0x00,0xFF,0x00},
+    {0x00,0x00,0x00,0xFF},
 };
 
 static const twai_message_t TWAI_MSG = {
@@ -97,7 +97,7 @@ static twai_message_t PID_Grab(uint8_t pid, int modeResp){
         ESP_LOGI(TAG,"NUM bytes: %i", numbytes);
         pid_Data = (uint8_t *)pvPortMalloc(numbytes);
         for(int i = 0; i < numbytes; i++){
-            pid_Data[i] = (uint8_t) (i + 15);
+            pid_Data[i] = (uint8_t) (pid);
         }
         if (numbytes >= 0x06){ //multiframe message setup
             response.data[0] = MULT_FRAME_FIRST;

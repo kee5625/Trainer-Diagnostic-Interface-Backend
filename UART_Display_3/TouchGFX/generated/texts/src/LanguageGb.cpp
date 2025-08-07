@@ -10,7 +10,9 @@ KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE;
 // Remap all strings
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
-    243, // T___SINGLEUSE_T5Z7: "0:\n"
+    237, // T___SINGLEUSE_YLMX: "UNIT\n"
+    216, // T___SINGLEUSE_VWQ5: "<>"
+    249, // T___SINGLEUSE_T5Z7: "0:\n"
     216, // T___SINGLEUSE_LYG4: "<>"
     100, // T___SINGLEUSE_S0ZG: "Loading DTCs..."
     183, // T___SINGLEUSE_WYQT: "Freeze Data"
@@ -31,5 +33,5 @@ KEEP extern const uint32_t indicesGb[] TEXT_LOCATION_FLASH_ATTRIBUTE = {
     195, // T___SINGLEUSE_0MCX: "Read Codes"
     206, // T___SINGLEUSE_VXGB: "Live Data"
     171, // T_ERASE_TC_TEXT: "Erase Codes"
-    237  // T_TC_TEXTBOX_BUFFER: "xxxxx"
+    243  // T_TC_TEXTBOX_BUFFER: "xxxxx"
 };

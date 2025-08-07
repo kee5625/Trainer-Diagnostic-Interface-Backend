@@ -23,7 +23,7 @@ TC_ScreenViewBase::TC_ScreenViewBase() :
     ATech_Logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(ATech_Logo);
 
-    DTCS_.setPosition(0, 59, 480, 213);
+    DTCS_.setPosition(16, 59, 448, 213);
     DTCS_.setHorizontal(false);
     DTCS_.setCircular(false);
     DTCS_.setEasingEquation(touchgfx::EasingEquations::backEaseOut);

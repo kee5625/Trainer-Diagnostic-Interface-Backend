@@ -10,6 +10,8 @@
 #define ID_DT_ECM               0x7E0 //From teseter to engine ECM only
 #define ID_ECU                  0x7E8 //Engine Control Module response
 #define ID_ECU_Second           0x7EF //ECU IDs = 0x7E8 - 0x7EF
+#define ID_ECU_MASK             0x7F8
+#define ID_NEGATIVE_RESP        0x7F  //request denied
 
 //request and responses to/from diagnostic tool
 #define SHOW_LIVE_DATA_REQ      0x01  //service 01 - request live/current data

@@ -1,6 +1,6 @@
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:54:43:const touchgfx::TypedText::TypedTextData* TypedTextDatabase::getInstance(touchgfx::LanguageId)	0	static
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:59:10:uint16_t TypedTextDatabase::getInstanceSize()	0	static
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:64:24:const touchgfx::Font** TypedTextDatabase::getFonts()	0	static
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:69:23:const touchgfx::Font* TypedTextDatabase::setFont(touchgfx::FontId, const touchgfx::Font*)	0	static
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:76:6:void TypedTextDatabase::resetFont(touchgfx::FontId)	8	static
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:91:1:cpp)	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:56:43:const touchgfx::TypedText::TypedTextData* TypedTextDatabase::getInstance(touchgfx::LanguageId)	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:61:10:uint16_t TypedTextDatabase::getInstanceSize()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:66:24:const touchgfx::Font** TypedTextDatabase::getFonts()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:71:23:const touchgfx::Font* TypedTextDatabase::setFont(touchgfx::FontId, const touchgfx::Font*)	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:78:6:void TypedTextDatabase::resetFont(touchgfx::FontId)	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/TypedTextDatabase.cpp:93:1:cpp)	8	static

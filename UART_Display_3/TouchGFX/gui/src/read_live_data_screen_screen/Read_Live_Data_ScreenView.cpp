@@ -26,26 +26,29 @@ void Read_Live_Data_ScreenView::tearDownScreen()
 }
 
 void Read_Live_Data_ScreenView::handleTickEvent(){
-	if (PendingListUpdate == true){
+	if (PendingListUpdate){
 		PendingListUpdate = false;
 		data.setVisible(true);
 		touchgfx::Application::getInstance()->invalidate();
 	}
 
+
 	//updating values
-	if ((data.getNumberOfItems() != 0) && (ticks % 60 == 0)){
+	if ((data.getNumberOfItems() != 0) && (ticks % 45 == 0)){
 
-		int num_Items = (data.getNumberOfItems() >= 6) ? 6 : data.getNumberOfItems(); 						//setting number of items to be updated in this update run
-
-		for (int i = 0; i < num_Items; i ++){                                                            	//6 items visible on scroll list at a time
+		for (int i = containers[0]; i <= containers[NUM_VISIBLE_CONTAINERS - 2] ; i ++){                                                            	//6 items visible on scroll list at a time
 			presenter->set_Service(UART_DATA_PID, presenter->get_PIDCode(i));
 		}
 
 	}
-
-
-
 	ticks ++;
+}
+
+int Read_Live_Data_ScreenView::find_container(int index){
+	for (int i = 0; i < NUM_VISIBLE_CONTAINERS; i ++){
+		if (index == containers[i]) return i;
+	}
+	return -1;
 }
 
 //******************************Set/Get functions*************************************************************
@@ -59,19 +62,23 @@ void Read_Live_Data_ScreenView::set_List_Num_Items(int num_items){
 	}
 }
 
-
-
 void Read_Live_Data_ScreenView::Update_List(int index, int pid){
-	dataListItems[index].setValue(presenter->get_Value(pid));
+
+	int tempContainer = find_container(index);
+
+	if (tempContainer == -1)	return; //not found in containers
+
+	dataListItems[tempContainer].setValue(presenter->get_Value(index));
 	PendingListUpdate = true;
 }
+
 
 //******************************CallBacks*************************************************************
 
 void Read_Live_Data_ScreenView::Button_Press_CB(const touchgfx::AbstractButtonContainer& src){
 	if (&src == &home_button)
 	{
-		presenter->set_Service(UART_DATA_PID, 0x20);
+		presenter->set_Service(UART_DATA_PID, 0x20); //0x20 = exit condition for live data
 		application().gotoHome_ScreenScreenWipeTransitionEast();
 	}
 }
@@ -79,10 +86,18 @@ void Read_Live_Data_ScreenView::Button_Press_CB(const touchgfx::AbstractButtonCo
 
 void Read_Live_Data_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex)
 {
-    if (items == &dataListItems && itemIndex < data.getNumberOfItems())
+	if (containerIndex < NUM_VISIBLE_CONTAINERS){
+		containers[containerIndex] = itemIndex;
+	}
+
+    if (items == &dataListItems)
     {
     	dataListItems[containerIndex].setCount(itemIndex + 1);
     	dataListItems[containerIndex].setTitle(presenter->get_data_title(itemIndex));
+    	dataListItems[containerIndex].setValue(presenter->get_Value(itemIndex));
+    	dataListItems[containerIndex].setUnit(presenter->get_data_unit(itemIndex));
+    	dataListItems[containerIndex].invalidate();
+    	PendingListUpdate = true;
     }
 }
 

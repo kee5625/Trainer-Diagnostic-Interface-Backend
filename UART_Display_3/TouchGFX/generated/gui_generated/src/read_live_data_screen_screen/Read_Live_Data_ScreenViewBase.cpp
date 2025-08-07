@@ -32,8 +32,9 @@ Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase() :
     data.setPadding(0, 0);
     data.setSnapping(false);
     data.setOvershootPercentage(75);
-    data.setDrawableSize(36, 0);
+    data.setDrawableSize(72, 0);
     data.setDrawables(dataListItems, updateItemCallback);
+    data.setVisible(false);
     add(data);
 
     home_button.setBoxWithBorderPosition(0, 0, 62, 59);

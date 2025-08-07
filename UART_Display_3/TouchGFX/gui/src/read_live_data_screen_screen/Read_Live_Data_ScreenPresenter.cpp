@@ -8,7 +8,7 @@
 
 
 
-const char * Read_Live_Data_ScreenPresenter::Descriptions[num_Descriptions] = {};
+
 
 //******************************************************helper functions************************
 static inline int Num_Supported_PIDs(uint8_t (*mask)[4]){
@@ -26,10 +26,9 @@ static inline int Num_Supported_PIDs(uint8_t (*mask)[4]){
 inline int Read_Live_Data_ScreenPresenter::Find_PID_INDEX(uint8_t pid){
 	int index = 0;
 	for (; index < pidListSize; index++){
-		if (pid == pidList[index].pidCode) break;
+		if (pid == pidList[index].pidCode) return index;
 	}
-	if (index >= pidListSize - 1) return -1; //not found
-	return index;
+	return -1;
 }
 
 Read_Live_Data_ScreenPresenter::Read_Live_Data_ScreenPresenter(Read_Live_Data_ScreenView& v)
@@ -57,12 +56,15 @@ const char * const Read_Live_Data_ScreenPresenter::get_data_title(int index){
 	return pidList[index].description;
 }
 
+const char * const Read_Live_Data_ScreenPresenter::get_data_unit(int index){
+	return pidList[index].unit;
+}
+
 uint8_t Read_Live_Data_ScreenPresenter::get_PIDCode(int index){
 	return pidList[index].pidCode;
 }
 
-const char *Read_Live_Data_ScreenPresenter::get_Value(int PID){
-	int index = Find_PID_INDEX(PID);
+const char *Read_Live_Data_ScreenPresenter::get_Value(int index){
 	return static_cast<const char *>(pidList[index].value);
 
 }
@@ -78,14 +80,18 @@ void Read_Live_Data_ScreenPresenter::set_Data(int pid, uint8_t *value, uint8_t (
 	}
 	if (value){
 		int index = Find_PID_INDEX(pid);
-		if (pid == -1) return; //PID not found in list
+
+		if (index == -1) return; //PID not found in list
 
 		if (pidList[index].value != NULL){
 			vPortFree(pidList[index].value); //clear old value
 			pidList[index].value = NULL;
 		}
 
-		pidList[index].value = PIDInfoTable[pidList[index].pidCode].decode(value);			//get new value
+		char *decoded_Val = PIDInfoTable[pidList[index].pidCode].decode(value);
+		if (decoded_Val == NULL) return;
+
+		pidList[index].value = decoded_Val;			//get new value
 		view.Update_List(index , pid); 	//needs PID pasted
 	}
 
@@ -123,11 +129,13 @@ void Read_Live_Data_ScreenPresenter::PID_List_init(uint8_t (*mask)[4]){
 
 			//checking if index is an available PID
 			if (((mask[row][col] >> bit) & 0x01) == 1) {
-				PID temp = PID{(uint8_t)bitIndex, PIDInfoTable[bitIndex].description, PIDInfoTable[bitIndex].unit, nullptr};
+
+				int decodedIndex = bitIndex + 1 + 1 * (bitIndex / 0x20);
+				PID temp = PID{(uint8_t)decodedIndex, PIDInfoTable[decodedIndex].description, PIDInfoTable[decodedIndex].unit, nullptr};
 				pidList[index] = temp;
-				pidListSize ++;
 				break;
 			}
+
 			bitIndex++;
 		}
 

@@ -21,6 +21,12 @@ void rowItem_Data::setValue(const char *str){
 	invalidate();
 }
 
+
+void rowItem_Data::setUnit(const char *str){
+	Unicode::strncpy(UNIT_TBBuffer, static_cast<const char *>(str), UNIT_TB_SIZE);
+	invalidate();
+}
+
 void rowItem_Data::setCount(int count){
 	 char temp[5];
 	    snprintf(temp, sizeof(temp), "%d:", count);

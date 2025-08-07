@@ -9,14 +9,22 @@
 rowItem_DataBase::rowItem_DataBase()
 {
     setWidth(480);
-    setHeight(36);
-    Value_TB.setPosition(424, 0, 56, 36);
+    setHeight(72);
+    Value_TB.setPosition(417, 0, 56, 36);
     Value_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     Value_TB.setLinespacing(0);
     Unicode::snprintf(Value_TBBuffer, VALUE_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_R4U0).getText());
     Value_TB.setWildcard(Value_TBBuffer);
     Value_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_LRP1));
     add(Value_TB);
+
+    UNIT_TB.setPosition(417, 36, 56, 36);
+    UNIT_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    UNIT_TB.setLinespacing(0);
+    Unicode::snprintf(UNIT_TBBuffer, UNIT_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_YLMX).getText());
+    UNIT_TB.setWildcard(UNIT_TBBuffer);
+    UNIT_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_VWQ5));
+    add(UNIT_TB);
 
     count_TB.setPosition(51, 0, 33, 36);
     count_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
@@ -26,7 +34,7 @@ rowItem_DataBase::rowItem_DataBase()
     count_TB.setTypedText(touchgfx::TypedText(T___SINGLEUSE_LYG4));
     add(count_TB);
 
-    Title_TB.setPosition(84, 0, 340, 36);
+    Title_TB.setPosition(84, 0, 322, 72);
     Title_TB.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     Title_TB.setLinespacing(0);
     Unicode::snprintf(Title_TBBuffer, TITLE_TB_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_TECY).getText());

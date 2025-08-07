@@ -15,5 +15,6 @@
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:4:1:rowItem_Data::rowItem_Data()	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:14:6:void rowItem_Data::setTitle(const char*)	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:19:6:void rowItem_Data::setValue(const char*)	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:24:6:void rowItem_Data::setCount(int)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:25:6:void rowItem_Data::setUnit(const char*)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:30:6:void rowItem_Data::setCount(int)	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/containers/rowItem_Data.cpp:9:6:virtual void rowItem_Data::initialize()	1

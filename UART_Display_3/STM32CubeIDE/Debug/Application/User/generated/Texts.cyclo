@@ -15,6 +15,6 @@ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:31:32:touchgfx::Unicode::UnicodeChar touchgfx::TextProvider::getNextLigature(touchgfx::TextDirection)	6
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:45:6:void touchgfx::TextProvider::initializeInternal()	1
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:50:6:)	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:103:6:static void touchgfx::Texts::setLanguage(touchgfx::LanguageId)	4
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:133:6:static void touchgfx::Texts::setTranslation(touchgfx::LanguageId, const void*)	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:138:39:const touchgfx::Unicode::UnicodeChar* touchgfx::Texts::getText(touchgfx::TypedTextId) const	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:104:6:static void touchgfx::Texts::setLanguage(touchgfx::LanguageId)	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:134:6:static void touchgfx::Texts::setTranslation(touchgfx::LanguageId, const void*)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/texts/src/Texts.cpp:139:39:const touchgfx::Unicode::UnicodeChar* touchgfx::Texts::getText(touchgfx::TypedTextId) const	1

@@ -10,12 +10,12 @@ C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:396:18:bool touchgfx::Callback<dest_type, T1, void, void>::isValid() const [with dest_type = Read_Live_Data_ScreenView; T1 = const touchgfx::AbstractButtonContainer&]	3
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:357:8:virtual touchgfx::Callback<Read_Live_Data_ScreenView, const touchgfx::AbstractButtonContainer&>::~Callback()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:218:8:virtual touchgfx::Callback<Read_Live_Data_ScreenView, touchgfx::DrawableListItemsInterface*, short int, short int>::~Callback()	1
-../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:12:13:Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	1
-../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:12:13:virtual Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:71:6:void Read_Live_Data_ScreenView::Button_Press_CB(const touchgfx::AbstractButtonContainer&)	2
+../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:18:13:Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	1
+../../TouchGFX/gui/include/gui/read_live_data_screen_screen/Read_Live_Data_ScreenView.hpp:18:13:virtual Read_Live_Data_ScreenView::~Read_Live_Data_ScreenView()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:87:6:void Read_Live_Data_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface*, int16_t, int16_t)	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:78:6:void Read_Live_Data_ScreenView::Button_Press_CB(const touchgfx::AbstractButtonContainer&)	2
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:9:1:Read_Live_Data_ScreenView::Read_Live_Data_ScreenView()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:64:6:void Read_Live_Data_ScreenView::Update_List(int, int)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:65:6:void Read_Live_Data_ScreenView::Update_List(int, int)	5
 C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:14:6:virtual void Read_Live_Data_ScreenView::setupScreen()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:28:6:virtual void Read_Live_Data_ScreenView::handleTickEvent()	7
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:80:6:void Read_Live_Data_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface*, int16_t, int16_t)	3
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:54:6:void Read_Live_Data_ScreenView::set_List_Num_Items(int)	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:28:6:virtual void Read_Live_Data_ScreenView::handleTickEvent()	6
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/gui/src/read_live_data_screen_screen/Read_Live_Data_ScreenView.cpp:57:6:void Read_Live_Data_ScreenView::set_List_Num_Items(int)	2
