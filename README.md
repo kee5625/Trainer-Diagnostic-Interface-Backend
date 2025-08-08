@@ -10,7 +10,8 @@ To properly setup the development in your system, follow these steps:
 2. Clone the repository into a local folder.
 3. The "ESP-IDF Welcome" page will be automatically prompted by ESP-IDF (If not, type ">ESP-IDF: Configure ESP-IDF Extension" onto the search bar).
 4. Select "Configure extension".
-5. Choose the "Express" mode (unless a configuration already exists; then select "Use Existing Setup") and follow the steps to configure the extension.
+5. Make sure to update the paths for idf.espIdfPathWin, idf.toolsPathWin, and idf.pythonInstallPath in settings.json
+6. Choose the "Express" mode (unless a configuration already exists; then select "Use Existing Setup") and follow the steps to configure the extension.
 Note: See General help Build and Flash for help flashing from ESP-IDF onto ESP32s
 
 # Breadboard Setup
