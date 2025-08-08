@@ -3,7 +3,7 @@ This project aims to create a diagnostic interface for all future trainers. To d
 The gateway will communicate with the trainer through CAN (see diagram in repo for layout). The functionality of this interface will allow it to display trouble codes, 
 reset trouble codes, and display live data to user.
 
-# Gateway test setup
+# Gateway test setup -------------
 ## Getting Started
 To properly setup the development in your system, follow these steps:
 1. If using VS Code, install the "ESP-IDF" Extension.
@@ -14,7 +14,7 @@ To properly setup the development in your system, follow these steps:
 6. Choose the "Express" mode (unless a configuration already exists; then select "Use Existing Setup") and follow the steps to configure the extension.
 Note: See General help Build and Flash for help flashing from ESP-IDF onto ESP32s
 
-## Breadboard Setup
+## Breadboard Setup 
 Use two esp32 or one esp32 or using an esp32, trainer, and app/display for testing. Current code is setup only for two esp32's.
 1. Set up esp32 so they are powered and respective programs onto them (see build and flashing).
 2. Create a can bus using 2 transeivers and 2 terminating resistors.
@@ -23,7 +23,7 @@ Use two esp32 or one esp32 or using an esp32, trainer, and app/display for testi
 Note: If using external display and trainer then step 4 will not apply. With trainer, connect trainer to CAN bus. With a dispaly connect it to the gateway through uart. 
 If using bt connect dispaly/app through bt.
 
-# Display Setup
+# Display Setup -------------
 1. Have STMCUBE IDE installed and open it(also have touchgfx installed)
 2. Once in touchgfx go to file->Open Projects From Files Systems
 3. Once in the Import Projects from File Systems or Archive window press the Directory button.
@@ -33,7 +33,7 @@ If using bt connect dispaly/app through bt.
 7. Go to Application->User then the files in this folder are the user files for this project. The GUI folder and touchgfx folder also have user made files in them.
 8. Connect stm link on STM32H750B-DK to computer and click the run button(if an error pops up try changing debug/run config)
 
-# General Help
+# General Help -------------
 ## Build and Flash
 (NOTE: Make sure you open the sub-folder with the main.c file in vs code BEFORE building. Trying to build the entire repo will NOT work.)
 1. Re-configure ESP-IDF Extension after opening the sub-folder.
@@ -47,12 +47,12 @@ If the board does not automatically leave bootloader mode:
 2. Press RESET/RST (EN) button. If button not present, manually connect the "EN" pin to GND and disconnect.
 
 
-# BLE Setup 
+# BLE Setup -------------
 1. Once cloned all files, add "ble.c" to CmakeLists and remove any BT_SPP related code
 2. Open menuconfig, disable Bluetooth Classic under bluedroid, enable BLE, and enable BLE ONLY in controller options
 3. Reconfigure, build, and pray
 
-# Modes/Services Description
+# Modes/Services Description -------------
 
 ## Integrated/Supported Services/Modes 
 01	Show current data                                                                                           Integrated(see bug section below)
@@ -66,7 +66,7 @@ If the board does not automatically leave bootloader mode:
 09	Request vehicle information                                                                                 Not Integrated
 0A	Permanent Diagnostic Trouble Codes (DTCs) (Cleared DTCs)                                                    Integrated
 
-# Steps to operate modes
+# Steps to operate modes -------------
 
 ## Mode 01- Show Current Data (Live Data)
 
@@ -98,7 +98,7 @@ If the board does not automatically leave bootloader mode:
 2. Press it to have the display tell the Gateway to send the clear codes request to CAN network (See CAN and UART section)
 
 
-# CAN Communication Outline
+# CAN Communication Outline -------------
 CAN frames are used made of up of 8 sections each with a number of bytes 1-11. The only parts that change based on request during communication is the ID and the data section.
 * The data section is always held at 8 bytes in length with padding bytes added if needed. 
 * The ID for the requester is between 0x7DF - 0x7E0. 0x7DF is a request that will be checked by all ECUs on the network while all the others will request to a specific ECU(0x7E0 is for the ECM). The data will change based on the service requested see below.
@@ -205,7 +205,7 @@ Byte 5: 0x00        ; Padding
 Byte 6: 0x00        ; Padding
 Byte 7: 0x00        ; Padding
 
-# UART Communication Outline
+# UART Communication Outline -------------
 
 ## UART - Display interaction
 UART is used to communicate with the Gateway chip which will provide data request by the display. See UART_COMMS.hpp for UART commands. Note that this is currently not just one file included by all but in three different locations. For Display it is the UART_COMMS.hpp, for Gateway it is in the UART header, and for slave it is in the UART header.
@@ -242,5 +242,6 @@ flow_ctrl: disabled
 1. https://en.wikipedia.org/wiki/OBD-II_PIDs
 
 2. https://circuitlabs.net/automotive-diagnostics-with-can-obd-ii/?utm_source
+
 
 
