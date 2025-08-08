@@ -102,6 +102,13 @@ CAN frames are used made of up of 8 sections each with a number of bytes 1-11. T
 * The data section is always held at 8 bytes in length with padding bytes added if needed. 
 * The ID for the requester is between 0x7DF - 0x7E0. 0x7DF is a request that will be checked by all ECUs on the network while all the others will request to a specific ECU(0x7E0 is for the ECM). The data will change based on the service requested see below.
 
+# CAN/TWAI SPECS
+Speed  : 500k
+Filter :  0x7E8 to 0x7EF
+CAN MSG-----------
+*always 8 data bytes per frame as required by standards (0x00 used as padding)
+*ID = 0x7E8 to request to all ECUs and 0x7E8 – 0x7EF
+
 # Service 0x01 Request 
 Service 1 request will use the 0x7DF ID to ping all ECUs. The 0th data byte will be a 2 representing the number of data bytes excluding itself. The 1st data byte
 will represent the requested mode/service(mode byte which is 0x01 for mode 1). The next byte is the Parameter Identifications(PID) requested.
@@ -202,6 +209,12 @@ Byte 7: 0x00        ; Padding
 # UART - Display interaction
 UART is used to communicate with the Gateway chip which will provide data request by the display. See UART_COMMS.hpp for UART commands. Note that this is currently not just one file included by all but in three different locations. For Display it is the UART_COMMS.hpp, for Gateway it is in the UART header, and for slave it is in the UART header.
 
+#UART SPECS
+Baud Rate: 112500
+Data Bits: 8
+Parity   : Even
+stop bits: 1
+flow_ctrl: disabled
 
 * UART command flow to start services (Services 1 and 2)
 note: services are the ones defined in CAN communcation section

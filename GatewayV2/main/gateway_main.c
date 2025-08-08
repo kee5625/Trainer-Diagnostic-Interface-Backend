@@ -39,6 +39,7 @@ static uint8_t supported_Bitmask[7][4];
 static uint8_t req_PID = 0;
 static uint8_t cur_serv = 0;
 
+//Externally used(TWAI/UART)
 SemaphoreHandle_t TWAI_DONE_sem;
 QueueHandle_t service_queue;
 

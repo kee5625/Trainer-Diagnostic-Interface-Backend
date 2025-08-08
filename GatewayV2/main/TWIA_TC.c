@@ -102,17 +102,21 @@ static const twai_message_t TWAI_Response_FC = { //only after FF unless ECU send
 };
 
 
-
-
-/* --------------------------- Tasks and Functions TWAI-------------------------- */
+/* --------------------------- Global Static Varaibles-------------------------- */
 static QueueHandle_t tx_task_queue;
 static SemaphoreHandle_t TWAI_COMPLETE; //marks when TWAI done with curr_service
 static SemaphoreHandle_t BIT_MASK_ROW_GRABED; //only for getting bitmask
+
+//Globals for DTCs
 static uint8_t *dtcs = NULL;
 static int curr_BYTES = 0;
+
+//Globals for Live data/Freeze Frame
 static uint8_t PIDs_Supported[7][4]; //filled with 0's in init (0 = unsupported, 1 = supported)
 static uint8_t *PID_VALUE;
 static uint8_t PID_VALUE_BYTES = 0;
+
+//General globals
 static bool resetflag = false;
 static bool PIDBYTE   = false;
 static uint8_t Req_Serv = 0;
@@ -159,7 +163,10 @@ static inline twai_message_t PID_MSG_REQ(uint8_t PID, uint8_t modeByte){
 }
 
 
-//********************************************Functions for services/modes*********************************************************************************/
+/************************************************************************************************************************************************************/
+/****************************************************************Functions for services/modes****************************************************************/
+/************************************************************************************************************************************************************/
+
 
 /**
  * Function Description: Comptelete all frame reading for all DTC modes (Pending, Stored, and Perminate).
@@ -346,9 +353,13 @@ static int Live_Data_Get(twai_message_t data){
 
 }
 
-
+/**********************************************************************************************************************************************/
 //******************************************************General TWAI functions*****************************************************************/
+/**********************************************************************************************************************************************/
 
+/**
+ * Sends frame to the correct function to be interpreted
+ */
 static void twai_receive_task()
 {
     uint8_t num_bytes = 0;
@@ -526,6 +537,9 @@ static void twai_transmit_task()
     }
 }
 
+/**
+ * Exits current tasks and rest TWAI either sending another request or Terminating TWAI and stopping current service. 
+ */
 void TWAI_RESET(service_request_t req){
     ESP_LOGI(TAG,"Reseting.");
 
@@ -555,7 +569,7 @@ void TWAI_RESET(service_request_t req){
      
 }
 
-//service_queue for external use to contorl TWIA
+//service_queue for external use(UART) to contorl TWIA
 static void TWAI_Services()
 {
     service_request_t current_serv;

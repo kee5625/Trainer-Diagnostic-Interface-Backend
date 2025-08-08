@@ -49,6 +49,14 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
      ESP_LOGI(TAG,"HERE1");
 }
 
+
+
+/************************************************************************************************************************************************************/
+/****************************************************************Functions for services/modes****************************************************************/
+/************************************************************************************************************************************************************/
+
+
+
 /**
  * UART Protocol: DTC (Diagnostic Trouble Codes) Communication
  * ===========================================================
@@ -261,9 +269,16 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
     ESP_LOGI(TAG,"PID service complete.");
 }
 
+
+/**********************************************************************************************************************************************/
+//******************************************************General UART functions*****************************************************************/
+/**********************************************************************************************************************************************/
+
+
+
 /**
  * Fucntion Description: Queue up and send beginning request. 
- * Note: Only for PID data this function will be responsible for all sending.
+ * Note: Only for DTCs will this function send all UART transmitions instead of service functions.
  */
 static void UART_TX(){
     uart_send_queue = xQueueCreate(1, sizeof(uart_comms_t));

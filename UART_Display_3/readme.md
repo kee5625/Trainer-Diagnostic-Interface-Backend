@@ -30,6 +30,7 @@ flow_ctrl: disabled
     *Some decode functions are wrong or just filler for now(all bit-mask/bit-map are just set to update to -9999 or -8888 respectively)
     *Some will have two values that represent two different things for this case the UNIT for that item couldbe made to have two units and the decode function could print two values in the char pointer. This way it could be VAL, VAL with UNIT, UNIT under it
     *There are also a lot of commented out ones because the Gateway code right now has been change to only request the first 32 PIDs(for loop range changed for testing)
+7. For Freeze Frame data populating an array of all the values so the UART doesn't have to keep grabbing them. This would avoid unecessary requesting from ECU which may ignore request if it marks them as spam. 
     
 
 

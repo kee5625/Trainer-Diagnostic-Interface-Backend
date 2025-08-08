@@ -9,7 +9,7 @@
 
 /**
  * Command expected order and packing for general request(others will be defined above their respective function).
- * 
+ * See other read me for entire project for more info
  * 
  * From Display      				:     				From Gateway
  * ***************************************************************************
