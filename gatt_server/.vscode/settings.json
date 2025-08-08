@@ -1,6 +1,0 @@
-{
-  "C_Cpp.intelliSenseEngine": "default",
-  "idf.espIdfPathWin": "c:\\ESP-IDF\\v5.4.1\\esp-idf",
-  "idf.toolsPathWin": "c:\\ESP-IDF\\ESP-IDF_tools",
-  "idf.pythonInstallPath": "c:\\ESP-IDF\\ESP-IDF_tools\\tools\\idf-python\\3.11.2\\python.exe"
-}
