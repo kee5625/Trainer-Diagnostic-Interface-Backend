@@ -1,0 +1,16 @@
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:185:9:BSP_I2C4_Init	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:228:9:BSP_I2C4_DeInit	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:256:26:MX_I2C4_Init	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:302:9:BSP_I2C4_WriteReg	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:333:9:BSP_I2C4_ReadReg	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:364:9:BSP_I2C4_WriteReg16	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:395:9:BSP_I2C4_ReadReg16	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:425:9:BSP_I2C4_IsReady	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:441:9:BSP_GetTick	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:517:17:I2C_GetTiming	32	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:555:13:I2C_Compute_PRESC_SCLDEL_SDADEL	64	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:636:17:I2C_Compute_SCLL_SCLH	80	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:714:13:I2C4_MspInit	48	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:759:13:I2C4_MspDeInit	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:785:16:I2C4_WriteReg	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_bus.c:804:16:I2C4_ReadReg	40	static

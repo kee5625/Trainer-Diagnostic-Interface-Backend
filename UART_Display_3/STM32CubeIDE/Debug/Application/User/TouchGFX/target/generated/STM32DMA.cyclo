@@ -1,0 +1,22 @@
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/DMA.hpp:138:18:virtual void touchgfx::DMA_Interface::flush()	1
+../../TouchGFX/target/generated/STM32DMA.hpp:97:31:virtual touchgfx::DMAType STM32DMA::getDMAType()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:45:17:void DMA2D_XferErrorCallback(DMA2D_HandleTypeDef*)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:61:1:STM32DMA::~STM32DMA()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:67:6:virtual void STM32DMA::initialize()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:152:16:virtual touchgfx::BlitOperations STM32DMA::getBlitCaps()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:61:1:virtual STM32DMA::~STM32DMA()	1
+../../TouchGFX/target/generated/STM32DMA.hpp:133:18:virtual void STM32DMA::signalDMAInterrupt()	9
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:344:6:virtual void STM32DMA::setupDataFill(const touchgfx::BlitOp&)	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:175:6:virtual void STM32DMA::setupDataCopy(const touchgfx::BlitOp&)	19
+../../TouchGFX/target/generated/STM32DMA.hpp:159:18:virtual void STM32DMA::start()	7
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:39:17:void DMA2D_XferCpltCallback(DMA2D_HandleTypeDef*)	10
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:55:1:STM32DMA::STM32DMA()	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:412:6:void touchgfx::paint::setL8Palette(const uint8_t*)	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:423:6:void touchgfx::paint::tearDown()	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:436:6:void touchgfx::paint::flushLine(uint32_t*, int)	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:452:6:void touchgfx::paint::invalidateTextureCache()	1
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:464:6:void touchgfx::paint::rgb565::lineFromColor(uint16_t*, unsigned int, uint32_t, uint8_t, uint32_t)	3
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:514:6:void touchgfx::paint::rgb565::lineFromRGB565(uint16_t*, const uint16_t*, unsigned int, uint8_t)	3
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:558:6:void touchgfx::paint::rgb565::lineFromARGB8888(uint16_t*, const uint32_t*, unsigned int, uint8_t)	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:591:6:void touchgfx::paint::rgb565::lineFromL8RGB888(uint16_t*, const uint8_t*, unsigned int, uint8_t)	5
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/generated/STM32DMA.cpp:656:6:void touchgfx::paint::rgb565::lineFromL8ARGB8888(uint16_t*, const uint8_t*, unsigned int, uint8_t)	4

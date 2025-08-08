@@ -1,0 +1,3 @@
+GeneratedFont.hpp:11:7:touchgfx::GeneratedFont::~GeneratedFont()	0	static
+GeneratedFont.hpp:11:7:virtual touchgfx::GeneratedFont::~GeneratedFont()	8	static
+Table_verdana_10_4bpp.cpp:23:26:touchgfx::GeneratedFont& getFont_verdana_10_4bpp()	72	static

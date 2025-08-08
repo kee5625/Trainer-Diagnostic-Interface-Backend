@@ -1,0 +1,7 @@
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:39:1:jpeg_write_coefficients	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:64:1:jpeg_copy_critical_parameters	16
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:163:1:transencode_master_selection	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:221:1:start_iMCU_row	3
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:249:1:start_pass_coef	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:272:1:compress_output	12
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Middlewares/Third_Party/LibJPEG/source/jctrans.c:357:1:transencode_coef_controller	2

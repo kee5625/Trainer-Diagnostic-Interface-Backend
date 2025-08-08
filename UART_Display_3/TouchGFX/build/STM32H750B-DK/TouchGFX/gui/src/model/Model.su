@@ -1,0 +1,6 @@
+Model.cpp:5:1:Model::Model()	8	static
+Model.cpp:10:6:void Model::tick()	0	static
+Model.cpp:15:6:void Model::TC_Set(const char*)	0	static
+Model.cpp:21:6:void Model::reset_TC()	0	static
+Model.cpp:25:6:bool Model::TC_Status()	0	static
+Model.cpp:31:6:void Model::TC_Give()	0	static

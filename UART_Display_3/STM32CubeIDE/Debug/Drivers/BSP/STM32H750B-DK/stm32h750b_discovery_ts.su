@@ -1,0 +1,12 @@
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:128:9:BSP_TS_Init	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:181:9:BSP_TS_DeInit	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:206:9:BSP_TS_GetCapabilities	24	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:227:9:BSP_TS_EnableIT	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:277:9:BSP_TS_DisableIT	40	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:309:6:BSP_TS_IRQHandler	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:319:13:BSP_TS_Callback	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:334:9:BSP_TS_GetState	48	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:597:9:BSP_TS_Set_Orientation	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:609:9:BSP_TS_Get_Orientation	16	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:627:16:FT5336_Probe	48	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/Drivers/BSP/STM32H750B-DK/stm32h750b_discovery_ts.c:672:13:TS_EXTI_Callback	8	static

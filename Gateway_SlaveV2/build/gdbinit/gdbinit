@@ -1,0 +1,2 @@
+source C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/gdbinit/symbols
+source C:/ESP-IDF/Gateway_updates/Gateway_SlaveV2/build/gdbinit/connect

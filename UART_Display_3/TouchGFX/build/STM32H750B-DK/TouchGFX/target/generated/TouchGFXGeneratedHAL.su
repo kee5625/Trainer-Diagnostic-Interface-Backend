@@ -1,0 +1,88 @@
+Drawable.hpp:121:18:virtual void touchgfx::Drawable::invalidateContent() const	0	static
+Drawable.hpp:147:23:virtual touchgfx::Drawable* touchgfx::Drawable::getFirstChild()	0	static
+Drawable.hpp:315:18:virtual void touchgfx::Drawable::setX(int16_t)	0	static
+Drawable.hpp:327:18:virtual void touchgfx::Drawable::setY(int16_t)	0	static
+Drawable.hpp:356:18:virtual void touchgfx::Drawable::setWidth(int16_t)	0	static
+Drawable.hpp:368:18:virtual void touchgfx::Drawable::setHeight(int16_t)	0	static
+Drawable.hpp:378:18:virtual void touchgfx::Drawable::childGeometryChanged()	0	static
+Drawable.hpp:389:18:virtual void touchgfx::Drawable::handleClickEvent(const touchgfx::ClickEvent&)	0	static
+Drawable.hpp:401:18:virtual void touchgfx::Drawable::handleGestureEvent(const touchgfx::GestureEvent&)	0	static
+Drawable.hpp:490:18:virtual void touchgfx::Drawable::handleDragEvent(const touchgfx::DragEvent&)	0	static
+Drawable.hpp:501:18:virtual void touchgfx::Drawable::handleTickEvent()	0	static
+Drawable.hpp:588:18:virtual void touchgfx::Drawable::moveTo(int16_t, int16_t)	4	static
+Drawable.hpp:703:18:virtual void touchgfx::Drawable::setupDrawChain(const touchgfx::Rect&, touchgfx::Drawable**)	0	static
+Widget.hpp:45:18:virtual void touchgfx::Widget::getLastChild(int16_t, int16_t, touchgfx::Drawable**)	0	static
+HAL.hpp:129:18:virtual void touchgfx::HAL::setDisplayOrientation(touchgfx::DisplayOrientation)	0	static
+HAL.hpp:240:18:virtual void touchgfx::HAL::submitGPU2D()	0	static
+HAL.hpp:715:18:virtual bool touchgfx::HAL::sampleKey(uint8_t&)	0	static
+HAL.hpp:782:18:virtual void touchgfx::HAL::setAnimationStorage(void*)	0	static
+HAL.hpp:820:18:virtual void touchgfx::HAL::waitForLTDCLines(uint16_t)	0	static
+HAL.hpp:943:30:virtual touchgfx::FlashDataReader* touchgfx::HAL::getFlashDataReader() const	0	static
+HAL.hpp:1105:18:virtual void touchgfx::HAL::taskDelay(uint16_t)	0	static
+HAL.hpp:1132:22:virtual uint16_t touchgfx::HAL::getTFTCurrentLine()	0	static
+HAL.hpp:1143:21:virtual touchgfx::DMAType touchgfx::HAL::getDMAType()	0	static
+HAL.hpp:1290:18:virtual void touchgfx::HAL::partialLTDCDeadlineMissed()	0	static
+HAL.hpp:1388:18:virtual void touchgfx::HAL::InvalidateTextureCache()	0	static
+AbstractPainter.hpp:61:34:virtual touchgfx::HAL::RenderingMethod touchgfx::AbstractPainter::getRenderingMethod() const	0	static
+AbstractPainter.hpp:78:18:virtual bool touchgfx::AbstractPainter::setup(const touchgfx::Rect&) const	0	static
+AbstractPainter.hpp:90:18:virtual void touchgfx::AbstractPainter::tearDown() const	0	static
+CanvasWidget.hpp:66:18:virtual void touchgfx::CanvasWidget::setAlpha(uint8_t)	0	static
+CanvasWidget.hpp:72:21:virtual uint8_t touchgfx::CanvasWidget::getAlpha() const	0	static
+CanvasWidget.hpp:118:18:virtual touchgfx::Rect touchgfx::CanvasWidget::getMinimalRect() const	8	static
+CanvasWidget.hpp:134:18:virtual touchgfx::Rect touchgfx::CanvasWidget::getSolidRect() const	0	static
+CWRVectorRenderer.hpp:67:18:virtual void touchgfx::CWRVectorRenderer::setMode(touchgfx::VectorRenderer::DrawMode)	0	static
+CWRVectorRenderer.hpp:72:18:virtual void touchgfx::CWRVectorRenderer::setStrokeMiterLimit(float)	0	static
+CWRVectorRenderer.hpp:77:18:virtual void touchgfx::CWRVectorRenderer::setStrokeLineJoin(touchgfx::VGStrokeLineJoin)	0	static
+CWRVectorRenderer.hpp:82:18:virtual void touchgfx::CWRVectorRenderer::setStrokeLineCap(touchgfx::VGStrokeLineCap)	0	static
+CWRVectorRenderer.hpp:199:22:virtual bool touchgfx::CWRVectorRenderer::CanvasWidgetProxy::drawCanvasWidget(const touchgfx::Rect&) const	0	static
+CWRVectorRenderer.hpp:310:44:virtual touchgfx::AbstractPainterLinearGradient& touchgfx::CWRVectorRendererRGB565::getLinearPainter()	0	static
+CWRVectorRenderer.hpp:315:35:virtual touchgfx::AbstractPainterColor& touchgfx::CWRVectorRendererRGB565::getColorPainterColor()	0	static
+CWRVectorRenderer.hpp:320:30:virtual touchgfx::AbstractPainter& touchgfx::CWRVectorRendererRGB565::getColorPainter()	0	static
+TouchGFXGeneratedHAL.cpp:84:6:virtual void TouchGFXGeneratedHAL::configureInterrupts()	0	static
+TouchGFXGeneratedHAL.cpp:102:6:virtual void TouchGFXGeneratedHAL::enableLCDControllerInterrupt()	0	static
+TouchGFXGeneratedHAL.cpp:123:11:virtual uint16_t* TouchGFXGeneratedHAL::getTFTFrameBuffer() const	0	static
+TouchGFXGeneratedHAL.cpp:128:6:virtual void TouchGFXGeneratedHAL::setTFTFrameBuffer(uint16_t*)	0	static
+DirectFrameBufferVideoController.hpp:32:7:DirectFrameBufferVideoController<1, (touchgfx::Bitmap::BitmapFormat)0>::~DirectFrameBufferVideoController()	0	static
+CWRVectorRenderer.hpp:308:7:touchgfx::CWRVectorRendererRGB565::~CWRVectorRendererRGB565()	0	static
+CWRVectorRenderer.hpp:197:11:touchgfx::CWRVectorRenderer::CanvasWidgetProxy::~CanvasWidgetProxy()	0	static
+TouchGFXGeneratedHAL.hpp:30:7:TouchGFXGeneratedHAL::~TouchGFXGeneratedHAL()	0	static
+HardwareMJPEGDecoder.hpp:45:7:HardwareMJPEGDecoder::~HardwareMJPEGDecoder()	0	static
+DirectFrameBufferVideoController.hpp:58:18:void DirectFrameBufferVideoController<no_streams, output_format>::unregisterVideoWidget(touchgfx::VideoController::Handle) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	0	static
+DirectFrameBufferVideoController.hpp:297:18:void DirectFrameBufferVideoController<no_streams, output_format>::setVideoFrameRateCompensation(bool) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	0	static
+TouchGFXGeneratedHAL.hpp:30:7:virtual TouchGFXGeneratedHAL::~TouchGFXGeneratedHAL()	8	static
+DirectFrameBufferVideoController.hpp:32:7:virtual DirectFrameBufferVideoController<1, (touchgfx::Bitmap::BitmapFormat)0>::~DirectFrameBufferVideoController()	8	static
+CWRVectorRenderer.hpp:197:11:virtual touchgfx::CWRVectorRenderer::CanvasWidgetProxy::~CanvasWidgetProxy()	8	static
+CWRVectorRenderer.hpp:308:7:virtual touchgfx::CWRVectorRendererRGB565::~CWRVectorRendererRGB565()	8	static
+HAL.hpp:765:18:virtual void touchgfx::HAL::setFrameBufferStartAddresses(void*, void*, void*)	8	static
+HAL.hpp:161:18:virtual void touchgfx::HAL::setFrameBufferSize(uint16_t, uint16_t)	8	static
+DirectFrameBufferVideoController.hpp:290:18:bool DirectFrameBufferVideoController<no_streams, output_format>::getIsPlaying(touchgfx::VideoController::Handle) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	8	static
+DirectFrameBufferVideoController.hpp:284:18:void DirectFrameBufferVideoController<no_streams, output_format>::getVideoInformation(touchgfx::VideoController::Handle, touchgfx::VideoInformation*) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	8	static
+DirectFrameBufferVideoController.hpp:276:22:uint32_t DirectFrameBufferVideoController<no_streams, output_format>::getCurrentFrameNumber(touchgfx::VideoController::Handle) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	8	static
+DirectFrameBufferVideoController.hpp:93:18:void DirectFrameBufferVideoController<no_streams, output_format>::setVideoData(touchgfx::VideoController::Handle, touchgfx::VideoDataReader&) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	16	static
+DirectFrameBufferVideoController.hpp:77:18:void DirectFrameBufferVideoController<no_streams, output_format>::setVideoData(touchgfx::VideoController::Handle, const uint8_t*, uint32_t) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	24	static
+DirectFrameBufferVideoController.hpp:63:18:void DirectFrameBufferVideoController<no_streams, output_format>::setFrameRate(touchgfx::VideoController::Handle, uint32_t, uint32_t) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	8	static
+TouchGFXGeneratedHAL.cpp:67:6:virtual void TouchGFXGeneratedHAL::initialize()	16	static
+TouchGFXGeneratedHAL.cpp:113:6:virtual bool TouchGFXGeneratedHAL::beginFrame()	0	static
+TouchGFXGeneratedHAL.cpp:118:6:virtual void TouchGFXGeneratedHAL::endFrame()	0	static
+TouchGFXGeneratedHAL.cpp:136:6:virtual void TouchGFXGeneratedHAL::flushFrameBuffer(const touchgfx::Rect&)	0	static
+TouchGFXGeneratedHAL.cpp:141:6:virtual bool TouchGFXGeneratedHAL::blockCopy(void*, const void*, uint32_t)	0	static
+HAL.hpp:683:18:virtual void touchgfx::HAL::backPorchExited()	8	static
+TouchGFXGeneratedHAL.hpp:119:18:virtual void TouchGFXGeneratedHAL::unlockFrameBuffer()	0	static
+TouchGFXGeneratedHAL.hpp:106:18:virtual void TouchGFXGeneratedHAL::flushFrameBuffer()	0	static
+HAL.hpp:356:28:virtual touchgfx::BlitOperations touchgfx::HAL::getBlitCaps()	0	static
+HAL.hpp:1341:18:virtual void touchgfx::HAL::performDisplayOrientationChange()	8	static
+TouchGFXGeneratedHAL.cpp:146:6:virtual void TouchGFXGeneratedHAL::InvalidateCache()	20	static
+TouchGFXGeneratedHAL.cpp:146:6:virtual void TouchGFXGeneratedHAL::InvalidateCache()	0	static
+TouchGFXGeneratedHAL.cpp:159:6:virtual void TouchGFXGeneratedHAL::FlushCache()	0	static
+DirectFrameBufferVideoController.hpp:109:18:void DirectFrameBufferVideoController<no_streams, output_format>::setCommand(touchgfx::VideoController::Handle, touchgfx::VideoController::Command, uint32_t) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	16	static
+DirectFrameBufferVideoController.hpp:232:18:void DirectFrameBufferVideoController<no_streams, output_format>::draw(touchgfx::VideoController::Handle, const touchgfx::Rect&, const touchgfx::VideoWidget&) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	32	static
+DirectFrameBufferVideoController.hpp:44:20:touchgfx::VideoController::Handle DirectFrameBufferVideoController<no_streams, output_format>::registerVideoWidget(touchgfx::VideoWidget&) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	8	static
+DirectFrameBufferVideoController.hpp:168:18:bool DirectFrameBufferVideoController<no_streams, output_format>::updateFrame(touchgfx::VideoController::Handle, touchgfx::VideoWidget&) [with long unsigned int no_streams = 1; touchgfx::Bitmap::BitmapFormat output_format = (touchgfx::Bitmap::BitmapFormat)0]	24	static
+TouchGFXGeneratedHAL.cpp:90:6:virtual void TouchGFXGeneratedHAL::enableInterrupts()	0	static
+TouchGFXGeneratedHAL.cpp:96:6:virtual void TouchGFXGeneratedHAL::disableInterrupts()	0	static
+AbstractPainterRGB565.hpp:41:5:touchgfx::AbstractPainterRGB565::AbstractPainterRGB565()	16	static
+TouchGFXGeneratedHAL.cpp:38:18:static touchgfx::VideoController& touchgfx::VideoController::getInstance()	0	static
+TouchGFXGeneratedHAL.cpp:45:17:static touchgfx::VectorRenderer* touchgfx::VectorRenderer::getInstance()	16	static
+TouchGFXGeneratedHAL.cpp:174:10:void HAL_LTDC_LineEventCallback(LTDC_HandleTypeDef*)	16	static
+HardwareMJPEGDecoder.hpp:45:7:virtual HardwareMJPEGDecoder::~HardwareMJPEGDecoder()	8	static
+TouchGFXGeneratedHAL.cpp:204:1:cpp)	16	static

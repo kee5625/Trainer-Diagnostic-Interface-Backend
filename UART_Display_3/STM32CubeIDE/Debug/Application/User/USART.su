@@ -1,0 +1,16 @@
+../Application/User/USART.c:87:20:UART_Reset	8	static
+../Application/User/USART.c:102:6:init_error_check	16	static
+../Application/User/USART.c:108:20:ptrFree	16	static
+../Application/User/USART.c:117:7:freertos_realloc	32	static
+../Application/User/USART.c:134:13:DTC_Decode	24	static
+../Application/User/USART.c:214:13:Read_Codes	32	static
+../Application/User/USART.c:304:13:Get_PID_BitMask	24	static
+../Application/User/USART.c:399:13:get_PID_Value	32	static
+../Application/User/USART.c:483:6:HAL_UART_TxCpltCallback	16	static
+../Application/User/USART.c:489:6:HAL_UART_RxCpltCallback	16	static
+../Application/User/USART.c:497:6:HAL_UART_ErrorCallback	24	static
+../Application/User/USART.c:525:6:UART_Set_Service	24	static
+../Application/User/USART.c:542:13:UART_CONTROl	24	static
+../Application/User/USART.c:623:13:UART_TX	24	static
+../Application/User/USART.c:688:13:UART_RX	24	static
+../Application/User/USART.c:763:6:UART_INIT	8	static

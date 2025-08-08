@@ -1,0 +1,31 @@
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/DMA.hpp:234:21:virtual touchgfx::DMAType touchgfx::DMA_Interface::getDMAType()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:129:18:virtual void touchgfx::HAL::setDisplayOrientation(touchgfx::DisplayOrientation)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:240:18:virtual void touchgfx::HAL::submitGPU2D()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:715:18:virtual bool touchgfx::HAL::sampleKey(uint8_t&)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:782:18:virtual void touchgfx::HAL::setAnimationStorage(void*)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:820:18:virtual void touchgfx::HAL::waitForLTDCLines(uint16_t)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:943:30:virtual touchgfx::FlashDataReader* touchgfx::HAL::getFlashDataReader() const	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1105:18:virtual void touchgfx::HAL::taskDelay(uint16_t)	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1132:22:virtual uint16_t touchgfx::HAL::getTFTCurrentLine()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1290:18:virtual void touchgfx::HAL::partialLTDCDeadlineMissed()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1388:18:virtual void touchgfx::HAL::InvalidateTextureCache()	0	static
+../../TouchGFX/target/TouchGFXHAL.hpp:35:7:TouchGFXHAL::~TouchGFXHAL()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:683:18:virtual void touchgfx::HAL::backPorchExited()	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:86:11:virtual uint16_t* TouchGFXHAL::getTFTFrameBuffer() const	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:101:6:virtual void TouchGFXHAL::setTFTFrameBuffer(uint16_t*)	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:118:6:virtual void TouchGFXHAL::flushFrameBuffer(const touchgfx::Rect&)	8	static,ignoring_inline_asm
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:140:6:virtual void TouchGFXHAL::configureInterrupts()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:153:6:virtual void TouchGFXHAL::enableInterrupts()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:166:6:virtual void TouchGFXHAL::disableInterrupts()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:180:6:virtual void TouchGFXHAL::enableLCDControllerInterrupt()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:161:18:virtual void touchgfx::HAL::setFrameBufferSize(uint16_t, uint16_t)	8	static
+../../TouchGFX/target/generated/TouchGFXGeneratedHAL.hpp:119:18:virtual void TouchGFXGeneratedHAL::unlockFrameBuffer()	0	static
+../../TouchGFX/target/TouchGFXHAL.hpp:113:18:virtual void TouchGFXHAL::flushFrameBuffer()	0	static
+../../TouchGFX/target/TouchGFXHAL.hpp:35:7:virtual TouchGFXHAL::~TouchGFXHAL()	8	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1341:18:virtual void touchgfx::HAL::performDisplayOrientationChange()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:356:28:virtual touchgfx::BlitOperations touchgfx::HAL::getBlitCaps()	0	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:1143:21:virtual touchgfx::DMAType touchgfx::HAL::getDMAType()	0	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:38:6:virtual void TouchGFXHAL::initialize()	16	static
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/HAL.hpp:765:18:virtual void touchgfx::HAL::setFrameBufferStartAddresses(void*, void*, void*)	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:53:6:virtual void TouchGFXHAL::taskEntry()	8	static
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/target/TouchGFXHAL.cpp:192:19:long int IdleTaskHook(void*)	8	static

@@ -1,0 +1,1110 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Name": "Home_Screen",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "white_background",
+            "Width": 480,
+            "Height": 272,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "Box",
+            "Name": "red_box",
+            "Y": 216,
+            "Width": 480,
+            "Height": 19,
+            "Color": {
+              "Red": 194
+            }
+          },
+          {
+            "Type": "Box",
+            "Name": "blue_box",
+            "Y": 222,
+            "Width": 480,
+            "Height": 50,
+            "Color": {
+              "Red": 26,
+              "Green": 33,
+              "Blue": 71
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Read_live_data_Start_button",
+            "X": 63,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 24,
+                "Y": -3,
+                "IconReleased": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_VXGB",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "freeze_data_button",
+            "X": 192,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 24,
+                "IconReleased": "__generated\\icon_theme_images_editor_insert_drive_file_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_editor_insert_drive_file_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_WYQT",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Read_TC_Start_button",
+            "X": 322,
+            "Y": 136,
+            "Width": 97,
+            "Height": 64,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 23,
+                "Y": -2,
+                "IconReleased": "__generated\\icon_theme_images_maps_car_repair_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_car_repair_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "TextButtonStyle",
+                "Y": 43,
+                "TextId": "__SingleUse_0MCX",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 97,
+                "Height": 64,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Trainer_Name",
+            "X": 10,
+            "Y": 235,
+            "Width": 327,
+            "Height": 24,
+            "TextId": "__SingleUse_DOM7",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "QRCode",
+            "Name": "qrCode1",
+            "Width": 111,
+            "Height": 111,
+            "QRVersion": 5,
+            "Scale": 3,
+            "Text": "https://www.atechtraining.com/products/automobile",
+            "BackgroundColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "TC_Read_Screen_Switch",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Read_TC_Start_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "TC_Screen"
+            }
+          },
+          {
+            "InteractionName": "RLD_Screen_Switch",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Read_live_data_Start_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Read_Live_Data_Screen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "TC_Screen",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "white_background",
+            "Width": 480,
+            "Height": 272,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "ScrollList",
+            "Name": "DTCS_",
+            "X": 16,
+            "Y": 59,
+            "Width": 448,
+            "Height": 213,
+            "Visible": false,
+            "ItemTemplateName": "rowItem_dtcs",
+            "NumberofItems": 3,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Pending_dtcs_button",
+            "X": 169,
+            "Y": 93,
+            "Width": 152,
+            "Height": 50,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 12,
+                "TextId": "__SingleUse_DYU8",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Stored_dtcs_button",
+            "X": 17,
+            "Y": 93,
+            "Width": 152,
+            "Height": 50,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 12,
+                "TextId": "__SingleUse_81ML",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Perm_dtcs_button",
+            "X": 320,
+            "Y": 93,
+            "Width": 152,
+            "Height": 50,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 11,
+                "TextId": "__SingleUse_LHAN",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 152,
+                "Height": 50,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Red": 12,
+                  "Green": 27,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                },
+                "ColorBorderPressed": {
+                  "Red": 157,
+                  "Green": 161,
+                  "Blue": 162
+                }
+              }
+            ],
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Clear_DTCS_button",
+            "X": 245,
+            "Width": 114,
+            "Height": 59,
+            "Visible": false,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "Y": 15,
+                "TextId": "__SingleUse_VJLJ",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 114,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Green": 51,
+                  "Blue": 102
+                }
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "back_button",
+            "Width": 58,
+            "Height": 59,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 2,
+                "Y": 2,
+                "IconReleased": "__generated\\icon_theme_images_navigation_arrow_back_55_55_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_navigation_arrow_back_55_55_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 58,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "status_TB",
+            "X": 182,
+            "Y": 136,
+            "Width": 126,
+            "Height": 24,
+            "Visible": false,
+            "TextId": "__SingleUse_W4O2",
+            "TextRotation": "0",
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_S0ZG",
+              "UseBuffer": true,
+              "BufferSize": 25
+            },
+            "Fadeable": true
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "LD_Button",
+            "X": 58,
+            "Width": 58,
+            "Height": 59,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 5,
+                "Y": 4,
+                "IconReleased": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_maps_directions_car_50_50_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 58,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 69,
+                  "Blue": 124
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Erase_Change_Screen",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Clear_DTCS_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          },
+          {
+            "InteractionName": "Show_DTCs_list",
+            "HasCompletedTrigger": true,
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "Stored_dtcs_button"
+            },
+            "Action": {
+              "Type": "ActionShow",
+              "ActionComponent": "DTCS_"
+            }
+          },
+          {
+            "InteractionName": "hide_stored_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Stored_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "hide_pending_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Pending_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "hide_perm_button",
+            "Trigger": {
+              "Type": "TriggerInteractionCompleted",
+              "InteractionToTriggerOn": "Show_DTCs_list"
+            },
+            "Action": {
+              "Type": "ActionHide",
+              "ActionComponent": "Perm_dtcs_button"
+            }
+          },
+          {
+            "InteractionName": "LD_change_screen",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "LD_Button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Read_Live_Data_Screen"
+            }
+          },
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "back_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Read_Live_Data_Screen",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "blue_background",
+            "Width": 480,
+            "Height": 272,
+            "LockPosition": true,
+            "Color": {
+              "Red": 8,
+              "Green": 14,
+              "Blue": 87
+            }
+          },
+          {
+            "Type": "ScalableImage",
+            "Name": "ATech_Logo",
+            "X": 359,
+            "Width": 121,
+            "Height": 59,
+            "LockPosition": true,
+            "Filename": "images.png",
+            "ScalingAlgorithm": "Nearest-neighbor"
+          },
+          {
+            "Type": "ScrollList",
+            "Name": "data",
+            "Y": 59,
+            "Width": 480,
+            "Height": 213,
+            "Visible": false,
+            "LockPosition": true,
+            "ItemTemplateName": "rowItem_Data",
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0,
+            "OverShootPercentage": 75
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "home_button",
+            "Width": 62,
+            "Height": 59,
+            "LockPosition": true,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 2,
+                "IconReleased": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_home_filled_60_60_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 62,
+                "Height": 59,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Failed_loading_tb",
+            "X": 142,
+            "Y": 124,
+            "Width": 197,
+            "Height": 24,
+            "Visible": false,
+            "TextId": "__SingleUse_HWNY",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "home_Button_int",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "home_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Home_Screen"
+            }
+          }
+        ]
+      }
+    ],
+    "CustomContainerDefinitions": [
+      {
+        "Name": "rowItem_Data",
+        "Width": 480,
+        "Height": 72,
+        "Components": [
+          {
+            "Type": "TextArea",
+            "Name": "Value_TB",
+            "X": 417,
+            "Width": 56,
+            "Height": 36,
+            "TextId": "__SingleUse_LRP1",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_R4U0",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "UNIT_TB",
+            "X": 417,
+            "Y": 36,
+            "Width": 56,
+            "Height": 36,
+            "TextId": "__SingleUse_VWQ5",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_YLMX",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "count_TB",
+            "X": 51,
+            "Width": 33,
+            "Height": 36,
+            "TextId": "__SingleUse_LYG4",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_T5Z7",
+              "UseBuffer": true,
+              "BufferSize": 6
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Title_TB",
+            "X": 84,
+            "Width": 322,
+            "Height": 72,
+            "TextId": "__SingleUse_V6KV",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_TECY",
+              "UseBuffer": true,
+              "BufferSize": 75
+            }
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "Graph_Button",
+            "Width": 51,
+            "Height": 36,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "IconButtonStyle",
+                "X": 6,
+                "Y": -1,
+                "IconReleased": "__generated\\icon_theme_images_action_assessment_40_40_E8F6FB.svg.png",
+                "IconPressed": "__generated\\icon_theme_images_action_assessment_40_40_E8F6FB.svg.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "Width": 50,
+                "Height": 50,
+                "BorderSize": 2,
+                "ColorReleased": {
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ]
+          }
+        ],
+        "Interactions": []
+      },
+      {
+        "Name": "rowItem_dtcs",
+        "X": 16,
+        "Width": 448,
+        "Height": 136,
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "box1",
+            "Y": 50,
+            "Width": 480,
+            "Height": 86,
+            "Color": {
+              "Green": 14,
+              "Blue": 122
+            }
+          },
+          {
+            "Type": "Box",
+            "Name": "box1_1",
+            "Width": 480,
+            "Height": 50
+          },
+          {
+            "Type": "TextArea",
+            "Name": "dtcs_TB",
+            "X": 13,
+            "Width": 183,
+            "Height": 50,
+            "TextId": "__SingleUse_FNEY",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_40UU",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "dtcs_Desc_TB",
+            "X": 13,
+            "Y": 50,
+            "Width": 422,
+            "Height": 86,
+            "TextId": "__SingleUse_WCDW",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Wildcard1": {
+              "TextId": "__SingleUse_LYMN",
+              "UseBuffer": true,
+              "BufferSize": 128
+            }
+          }
+        ],
+        "Interactions": []
+      }
+    ],
+    "Name": "UART_Display_3",
+    "Resolution": {
+      "Width": 480,
+      "Height": 272
+    },
+    "SelectedColorDepth": 16,
+    "StartupScreenName": "Home_Screen",
+    "SelectedStartupLanguage": "GB",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "UIPath": ".",
+    "AvailableColorDepths": [
+      16
+    ],
+    "AvailableLCDs": {
+      "16": "LCD16bpp"
+    },
+    "AvailableSections": [
+      "ExtFlashSection",
+      "IntFlashSection"
+    ],
+    "AvailableResolutions": [
+      {
+        "Width": 480,
+        "Height": 272
+      }
+    ],
+    "PhysicalButtons": [],
+    "FrameworkFeatures": {
+      "LCD16bpp": {
+        "Id": "LCD16bpp",
+        "IsEnabled": true
+      }
+    },
+    "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+    "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+    "PostGenerateTargetCommand": "touchgfx update_project",
+    "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+    "RunSimulatorCommand": "build\\bin\\simulator.exe",
+    "CompileTargetCommandOverride": "make -f ../gcc/Makefile -j8",
+    "FlashTargetCommandOverride": "make -f ../gcc/Makefile flash",
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Landscape",
+    "Family": "STM32H7",
+    "SubFamily": "STM32H750 Value line",
+    "Toolchain": "STM32CubeIDE",
+    "Platform": "m7",
+    "ProjectFile": "../STM32H750B-DK.ioc",
+    "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
+    "OptionalComponents": [],
+    "AdditionalFeatures": [
+      "CWRVector",
+      "VectorFonts",
+      "Video"
+    ]
+  },
+  "Version": "4.25.0",
+  "CreatedBy": "4.25.0"
+}
