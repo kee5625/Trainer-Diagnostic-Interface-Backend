@@ -3,7 +3,7 @@ This project aims to create a diagnostic interface for all future trainers. To d
 The gateway will communicate with the trainer through CAN (see diagram in repo for layout). The functionality of this interface will allow it to display trouble codes, 
 reset trouble codes, and display live data to user.
 
-# ------------------------------------------------------------Gateway test setup---------------------------------------------------------------------------
+# -------------------------------------------------Gateway test setup------------------------------------------------------
 # Getting Started
 To properly setup the development in your system, follow these steps:
 1. If using VS Code, install the "ESP-IDF" Extension.
@@ -23,7 +23,7 @@ Use two esp32 or one esp32 or using an esp32, trainer, and app/display for testi
 Note: If using external display and trainer then step 4 will not apply. With trainer, connect trainer to CAN bus. With a dispaly connect it to the gateway through uart. 
 If using bt connect dispaly/app through bt.
 
-# ------------------------------------------------------------Display Setup---------------------------------------------------------------------------
+#--------------------------------Display Setup---------------------------------------
 1. Have STMCUBE IDE installed and open it(also have touchgfx installed)
 2. Once in touchgfx go to file->Open Projects From Files Systems
 3. Once in the Import Projects from File Systems or Archive window press the Directory button.
@@ -240,4 +240,5 @@ flow_ctrl: disabled
 
 #Sources
 1. https://en.wikipedia.org/wiki/OBD-II_PIDs
+
 2. https://circuitlabs.net/automotive-diagnostics-with-can-obd-ii/?utm_source
