@@ -1,6 +1,6 @@
 menu "Example Configuration"
 
-    orsource "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
+    source "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
 
     config EXAMPLE_TX_GPIO_NUM
         int "TX GPIO number"
@@ -57,4 +57,14 @@ menu "Example Configuration"
         default 3072
         help
             Defines stack size for UART echo example. Insufficient stack size can cause crash.
+endmenu
+
+menu "Trainer-Gateway"
+
+config TRAINER_DEVICE_NAME
+    string "BLE GAP device name"
+    default "Trainer-01"
+    help
+        Advertised name shown in BLE scans (change per board or via NVS).
+
 endmenu

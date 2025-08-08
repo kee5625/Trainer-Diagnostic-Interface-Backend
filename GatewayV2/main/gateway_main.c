@@ -24,9 +24,9 @@
 #include "time.h"
 #include "sys/time.h"
 
-#include "BT_SPP_TC.h"
 #include "TWIA_TC.h"
 #include "UART_TC.h"
+#include "ble.h"
 #include "TC_ref.h"
 /* --------------------- Definitions and static variables ------------------ */
 #define IF_BIT_SET(byte,bit)  ((byte) & (1<< (bit)))
@@ -151,4 +151,5 @@ void app_main(void)
     TWAI_DONE_sem = xSemaphoreCreateBinary();
     TWAI_INIT();
     UART_INIT();
+    BLE_init();
 }

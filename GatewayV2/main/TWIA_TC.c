@@ -33,8 +33,8 @@
 #define RX_TASK_PRIO            8
 #define TX_TASK_PRIO            9
 #define TROUBLE_CODE_TSK_PRIO   5
-#define TX_GPIO_NUM             14
-#define RX_GPIO_NUM             15
+#define TX_GPIO_NUM             21
+#define RX_GPIO_NUM             22
 #define TAG                     "Gateway TWAI"
 
 /*
@@ -724,4 +724,5 @@ void TWAI_INIT(){
     xTaskCreatePinnedToCore(TWAI_Services, "trouble_code", 4096, NULL, TROUBLE_CODE_TSK_PRIO, NULL, tskNO_AFFINITY);
 
     vTaskDelay(pdMS_TO_TICKS(75));
+    memset(PIDs_Supported, 0, sizeof(PIDs_Supported)); //set bitmask to 0 initially
 }

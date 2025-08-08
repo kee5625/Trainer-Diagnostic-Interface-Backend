@@ -16,6 +16,7 @@ typedef enum {
     SERV_PIDS_LIVE      = 0, //PID bitmask live data
     SERV_PIDS_FREEZE    = 1, //PID bitmask freeze frame data
     SERV_DATA           = 2, //individual PID value
+    SERV_FREEZE_DATA    = 3, //freeze frame
     SERV_STORED_DTCS    = 4,
     SERV_CLEAR_DTCS     = 5,
     SERV_PENDING_DTCS   = 6,
@@ -39,6 +40,8 @@ uint8_t *get_dtcs();
 uint8_t get_dtcs_bytes();
 uint8_t get_Req_PID();
 uint8_t get_Cur_Serv();
+uint8_t* get_live_data_buffer(void);
+uint8_t  get_live_data_length(void);
 
 
 #endif
