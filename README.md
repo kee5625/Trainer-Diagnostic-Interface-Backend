@@ -3,7 +3,7 @@ This project aims to create a diagnostic interface for all future trainers. To d
 The gateway will communicate with the trainer through CAN (see diagram in repo for layout). The functionality of this interface will allow it to display trouble codes, 
 reset trouble codes, and display live data to user.
 
-# -------------------------------------------------Gateway test setup------------------------------------------------------
+## Gateway test setup
 # Getting Started
 To properly setup the development in your system, follow these steps:
 1. If using VS Code, install the "ESP-IDF" Extension.
@@ -242,3 +242,4 @@ flow_ctrl: disabled
 1. https://en.wikipedia.org/wiki/OBD-II_PIDs
 
 2. https://circuitlabs.net/automotive-diagnostics-with-can-obd-ii/?utm_source
+
