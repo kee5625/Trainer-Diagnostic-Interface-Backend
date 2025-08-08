@@ -1,8 +1,8 @@
 {
   "C_Cpp.intelliSenseEngine": "default",
-  "idf.espIdfPathWin": "c:\\ESP-IDF\\v5.4.1\\esp-idf",
-  "idf.toolsPathWin": "c:\\ESP-IDF\\ESP-IDF_tools",
-  "idf.pythonInstallPath": "c:\\ESP-IDF\\ESP-IDF_tools\\tools\\idf-python\\3.11.2\\python.exe",
+  "idf.espIdfPathWin": "C:\\Users\\krachamolla\\esp\\v5.4.1\\esp-idf",
+  "idf.toolsPathWin": "C:\\Users\\krachamolla\\.espressif",
+  "idf.pythonInstallPath": "C:\\Users\\krachamolla\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
   "idf.portWin": "COM6",
   "idf.flashType": "UART",
   "files.associations": {
