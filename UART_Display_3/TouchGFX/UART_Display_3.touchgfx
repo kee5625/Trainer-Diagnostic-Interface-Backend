@@ -818,6 +818,23 @@
                 }
               }
             ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Failed_loading_tb",
+            "X": 142,
+            "Y": 124,
+            "Width": 197,
+            "Height": 24,
+            "Visible": false,
+            "TextId": "__SingleUse_HWNY",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
           }
         ],
         "Interactions": [

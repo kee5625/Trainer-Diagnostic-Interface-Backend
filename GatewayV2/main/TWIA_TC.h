@@ -16,7 +16,7 @@
 
 //TWAI action type setup
 typedef enum {
-    TX_REQUEST_PIDS_Live                = 0,
+    TX_REQUEST_PIDS_Live                = 0, //could be change to use TWAI_OBD.h commands
     TX_REQUEST_PIDS_Freeze              = 1,
     TX_REQUEST_DATA                     = 2,
     TX_REQUEST_FFD                      = 3,

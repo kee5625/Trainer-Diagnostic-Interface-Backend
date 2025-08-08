@@ -4,6 +4,7 @@
 #include <gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp>
 #include <touchgfx/Color.hpp>
 #include <images/BitmapDatabase.hpp>
+#include <texts/TextKeysAndLanguages.hpp>
 
 Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase() :
     updateItemCallback(this, &Read_Live_Data_ScreenViewBase::updateItemCallbackHandler),
@@ -45,6 +46,13 @@ Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase() :
     home_button.setAction(flexButtonCallback);
     home_button.setPosition(0, 0, 62, 59);
     add(home_button);
+
+    Failed_loading_tb.setXY(142, 124);
+    Failed_loading_tb.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    Failed_loading_tb.setLinespacing(0);
+    Failed_loading_tb.setTypedText(touchgfx::TypedText(T___SINGLEUSE_HWNY));
+    Failed_loading_tb.setVisible(false);
+    add(Failed_loading_tb);
 }
 
 Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()

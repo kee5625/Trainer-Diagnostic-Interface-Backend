@@ -75,15 +75,6 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
  *   Byte N+1   : DTC N (second half DTC)
  *   Final Byte : END Command (e.g., 0xEE)
  *  
- * bit packing (commands):
- *   Bit 0     : Start Command 1
- *   Bit 1     : UART command see UART_TC.h
- *   Bit 2     : ^
- *   Bit 3     : ^
- *   Bit 4     : ^
- *   Bit 5     : 1 (uart_end_pad)
- *   Bit 6     : 1 (uart_end_pad)
- *   Bit 7     : 0 (uart_end_pad)
  * 
  * 
  * Encoded DTC: 00      00   0111 / 0000 0011
@@ -106,15 +97,6 @@ void UART_PID_VALUE(uint8_t *data,int num_bytes){
  * Byte 2+ Num_bytes    : DTC Received cmd
  * 
  * 
- * Bit packing (commands):
- *   Bit 0     : Start Command 1
- *   Bit 1     : UART command see UART_TC.h
- *   Bit 2     : ^
- *   Bit 3     : ^
- *   Bit 4     : ^
- *   Bit 5     : 1 (uart_end_pad)
- *   Bit 6     : 1 (uart_end_pad)
- *   Bit 7     : 0 (uart_end_pad)
  *  
  */
 static void Read_Codes(uint8_t data){
@@ -247,6 +229,7 @@ static void PIDs_GRAB_LIVE_DATA(service_request_t mode){
             uart_comms_t action;
             action = UART_Received_cmd; 
             xQueueSend(uart_send_queue,&action,portMAX_DELAY);
+            Reset_TWAI_QUEUE();
             break;
         }
 

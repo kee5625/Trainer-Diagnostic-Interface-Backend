@@ -13,7 +13,8 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:115:18:virtual void touchgfx::Screen::tearDownScreen()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:144:18:virtual void touchgfx::Screen::handleTickEvent()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Screen.hpp:154:18:virtual void touchgfx::Screen::handleKeyEvent(uint8_t)	1
-../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp:23:18:virtual void Read_Live_Data_ScreenViewBase::dataUpdateItem(rowItem_Data&, int16_t)	1
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:65:13:touchgfx::TypedText::~TypedText()	1
+../../TouchGFX/generated/gui_generated/include/gui_generated/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.hpp:24:18:virtual void Read_Live_Data_ScreenViewBase::dataUpdateItem(rowItem_Data&, int16_t)	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/BoxWithBorderButtonStyle.hpp:41:7:touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>::~BoxWithBorderButtonStyle()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/IconButtonStyle.hpp:44:7:touchgfx::IconButtonStyle<touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger> >::~IconButtonStyle()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:218:8:touchgfx::Callback<Read_Live_Data_ScreenViewBase, touchgfx::DrawableListItemsInterface*, short int, short int>::~Callback()	1
@@ -27,21 +28,22 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/IconButtonStyle.hpp:144:18:void touchgfx::IconButtonStyle<T>::handleAlphaUpdated() [with T = touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>]	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/BoxWithBorderButtonStyle.hpp:131:18:void touchgfx::BoxWithBorderButtonStyle<T>::handleAlphaUpdated() [with T = touchgfx::ClickButtonTrigger]	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/IconButtonStyle.hpp:137:18:void touchgfx::IconButtonStyle<T>::handlePressedUpdated() [with T = touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>]	3
+../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:65:13:virtual touchgfx::TypedText::~TypedText()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/BoxWithBorderButtonStyle.hpp:41:7:virtual touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>::~BoxWithBorderButtonStyle()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/IconButtonStyle.hpp:44:7:virtual touchgfx::IconButtonStyle<touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger> >::~IconButtonStyle()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:218:8:virtual touchgfx::Callback<Read_Live_Data_ScreenViewBase, touchgfx::DrawableListItemsInterface*, short int, short int>::~Callback()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Callback.hpp:357:8:virtual touchgfx::Callback<Read_Live_Data_ScreenViewBase, const touchgfx::AbstractButtonContainer&>::~Callback()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp:82:23:touchgfx::Drawable* touchgfx::DrawableListItems<TYPE, SIZE>::getDrawable(int16_t) [with TYPE = rowItem_Data; int SIZE = 4]	1
 ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:10:13:rowItem_Data::~rowItem_Data()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:55:6:virtual void Read_Live_Data_ScreenViewBase::setupScreen()	2
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:64:6:void Read_Live_Data_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer&)	2
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:75:6:void Read_Live_Data_ScreenViewBase::updateItemCallbackHandler(touchgfx::DrawableListItemsInterface*, int16_t, int16_t)	3
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:63:6:virtual void Read_Live_Data_ScreenViewBase::setupScreen()	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:72:6:void Read_Live_Data_ScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer&)	2
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:83:6:void Read_Live_Data_ScreenViewBase::updateItemCallbackHandler(touchgfx::DrawableListItemsInterface*, int16_t, int16_t)	3
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp:79:7:touchgfx::DrawableListItems<rowItem_Data, 4>::~DrawableListItems()	3
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:50:1:Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:58:1:Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()	4
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/scrollers/DrawableList.hpp:79:7:virtual touchgfx::DrawableListItems<rowItem_Data, 4>::~DrawableListItems()	3
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:50:1:virtual Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()	4
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:58:1:virtual Read_Live_Data_ScreenViewBase::~Read_Live_Data_ScreenViewBase()	4
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/IconButtonStyle.hpp:59:18:void touchgfx::IconButtonStyle<T>::setIconBitmaps(const touchgfx::Bitmap&, const touchgfx::Bitmap&) [with T = touchgfx::BoxWithBorderButtonStyle<touchgfx::ClickButtonTrigger>]	8
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/AbstractButtonContainer.hpp:99:18:virtual void touchgfx::AbstractButtonContainer::executeAction()	10
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/containers/buttons/ClickButtonTrigger.hpp:47:18:virtual void touchgfx::ClickButtonTrigger::handleClickEvent(const touchgfx::ClickEvent&)	14
 ../../TouchGFX/gui/include/gui/containers/rowItem_Data.hpp:10:13:virtual rowItem_Data::~rowItem_Data()	1
-C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:8:1:Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase()	11
+C:/ESP-IDF/Gateway_updates/UART_Display_3/TouchGFX/generated/gui_generated/src/read_live_data_screen_screen/Read_Live_Data_ScreenViewBase.cpp:9:1:Read_Live_Data_ScreenViewBase::Read_Live_Data_ScreenViewBase()	11

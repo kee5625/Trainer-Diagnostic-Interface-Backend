@@ -34,20 +34,25 @@ void Read_Live_Data_ScreenView::handleTickEvent(){
 
 
 	//updating values
-	if ((data.getNumberOfItems() != 0) && (ticks % 45 == 0)){
-
-		for (int i = containers[0]; i <= containers[NUM_VISIBLE_CONTAINERS - 2] ; i ++){                                                            	//6 items visible on scroll list at a time
-			presenter->set_Service(UART_DATA_PID, presenter->get_PIDCode(i));
+	if ((data.getNumberOfItems() != 0) && (ticks % 60 == 0)){
+		for (int i = 0; i < NUM_VISIBLE_CONTAINERS ; i ++){
+			presenter->set_Service(UART_DATA_PID, presenter->get_PIDCode(containers[i]));
 		}
 
 	}
 	ticks ++;
 }
 
+//*****************************Helper functions**************************************************
+
 int Read_Live_Data_ScreenView::find_container(int index){
+
 	for (int i = 0; i < NUM_VISIBLE_CONTAINERS; i ++){
+
 		if (index == containers[i]) return i;
+
 	}
+
 	return -1;
 }
 
@@ -56,7 +61,16 @@ int Read_Live_Data_ScreenView::find_container(int index){
 //deals with updating number of items and individual values
 void Read_Live_Data_ScreenView::set_List_Num_Items(int num_items){
 	if (num_items >= 0){
+
 		data.setNumberOfItems(num_items);
+
+		if (num_items == 0){
+
+			Failed_loading_tb.setVisible(true);
+			Failed_loading_tb.invalidate();
+
+		}
+
 		data.invalidate();
 		PendingListUpdate = true;
 	}
@@ -87,7 +101,9 @@ void Read_Live_Data_ScreenView::Button_Press_CB(const touchgfx::AbstractButtonCo
 void Read_Live_Data_ScreenView::Update_Item_CB(touchgfx::DrawableListItemsInterface* items, int16_t containerIndex, int16_t itemIndex)
 {
 	if (containerIndex < NUM_VISIBLE_CONTAINERS){
+
 		containers[containerIndex] = itemIndex;
+
 	}
 
     if (items == &dataListItems)

@@ -77,6 +77,10 @@ void Set_PID_Value(uint8_t *data,int num_bytes){
     UART_PID_VALUE(data,num_bytes);
 }
 
+void Reset_TWAI_QUEUE(){
+    xQueueReset(service_queue);
+}
+
 /**
  * *********************************************************************Get Functions*********************************************
  */
@@ -117,6 +121,8 @@ int Set_TWAI_Serv(service_request_t req){
         case SERV_PERM_DTCS:
 
             cur_serv = req;
+
+
 
             xQueueSend(service_queue, &req, portMAX_DELAY);
             ESP_LOGI("MAIN","Request was %i \nPID: %i", req, req_PID);

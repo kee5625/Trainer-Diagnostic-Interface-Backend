@@ -1,12 +1,6 @@
 #Introduction
-This code is made to be used on an ESP32 chip to act as a gateway between a CAN bus with ECUs/Trainers that follow public CAN standards ISO 11898-1/ ISO 11898-2 and an STM32H750B-DK kit with touch screen display (UART). The gateway follows all public CAN standard requirements while the UART uses byte packed commands from the UART_COMMS_t in UART headers (byte = 1dddd110 d for data/command). 
+This code is made to be used on an ESP32 chip to act as a gateway between a CAN bus with ECUs/Trainers that follow public CAN standards ISO 11898-1/ ISO 11898-2 and an STM32H750B-DK kit with touch screen display (UART). The gateway follows all public CAN standard requirements while the UART uses byte packed commands from the UART_COMMS_t in UART headers (byte = 1dddd110 d for data/command). See general README.md for more information.
 
-#UART - TWAI interaction
-UART will listen until it receives a command which it will then go and queue up in the corresponding service via Set_TWAI_Serv() for the TWAI/CAN to complete. The rx thread will be blocked by a semaphore until the TWAI is finished. After TWAI is done a function which will carry out the mode/service until an exit condition is met (different per mode/service) will be called. After which the rx thread will return to listening for the next command. TX thread unblocked but controlled by RX thread.
-
-
-#TWAI - CAN interaction
-The TWAI/CAN on the Gateway will be controlled by a service thread which is given commands by UART. The service thread queues up actions for the transmit function which will request data from ECUs/ECMs. The rx thread is always listening and filtering out IDs that are not ECUs. This means that it is constantly running which could be changed to have it only run after a service has been set, that way external tools wounldn't cause accidental code to execute on the gateway. (See main read me for CAN break down).
 
 
 #UART SPECS
@@ -21,4 +15,16 @@ Speed  : 500k
 Filter : Accept all
 CAN MSG-----------
 *always 8 data bytes per frame as required by standards (0x00 used as padding)
-*ID = 0x7E8 to request 
+*ID = 0x7E8 to request to all ECUs and 
+
+# Improvements
+1. Change to byte packing for increased error checking and the ability to deal with incorrect commands or UART code being stuck in the wrong function/work flow.
+2. Once display's PIDs_Library file is compelete change MAX_BITMASK_NUM in TWAI_TC.h to 0xC8 to request full list of available PIDs.
+    *Might be because the Service queue has a 5 second timeout before main will reset it and it keep trying until it is reset but the UART 0x20 was already received and the TWAI service is hogging the CPU causing the UART to wait on the TWAI to receive the exit condition.
+        *limiting the number of retrys in TWAI could fix this
+
+# Bugs
+1. Reset chain that force quits tasks needs worked on because if done too fast or at the right time as far as requesting the TWAI or UART can get stuck in the wrong mode and request till it hits timeout and resets
+    *This one could fix other problems but most likely won't, this is also the most difficult to fix as every function in the Gateway has it's own force quit action taken based on if the reset flag is set to true
+    *In some instances the Gateway will get stuck resetting a set number of time until it will reset completely. During this about 5s the Gateway will not be able to interact with UART
+2. Code will get stuck requesting the same PIDs over and over again and won't exit when home button pressed on display and exit condition sent. This happens after the live data has been going for a while. It seems to queue up a bunch of actions and then eventually will stop after going through all of them.

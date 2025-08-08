@@ -12,6 +12,7 @@
 #include <touchgfx/containers/scrollers/ScrollList.hpp>
 #include <gui/containers/rowItem_Data.hpp>
 #include <touchgfx/containers/buttons/Buttons.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 
 class Read_Live_Data_ScreenViewBase : public touchgfx::View<Read_Live_Data_ScreenPresenter>
 {
@@ -39,6 +40,7 @@ protected:
     touchgfx::ScrollList data;
     touchgfx::DrawableListItems<rowItem_Data, 4> dataListItems;
     touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger >  >  home_button;
+    touchgfx::TextArea Failed_loading_tb;
 
 private:
 

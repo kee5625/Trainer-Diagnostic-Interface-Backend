@@ -175,7 +175,7 @@ static int DTC_Frame_Reading(twai_message_t data, int num_bytes, int next_dtc){
 
     if (data.data[0] <= SINGLE_FRAME){ //single frame 
 
-        
+
         //grab num_bytes
         num_bytes = data.data[0] - 2;
         curr_BYTES = num_bytes;
@@ -275,11 +275,10 @@ static int Live_Data_Get(twai_message_t data){
                     PIDs_Supported[num_bitmask][i] = data.data[i + 3]; 
                 }
                 
-                ESP_LOGI(TAG,"BITmask return");
+            
                 return 1;//bitmask return
 
             }else{//PID data
-                ESP_LOGI(TAG,"GOT here");
                 PID_VALUE_BYTES = data.data[0] - 2;
 
                 if (PID_VALUE != NULL){
@@ -296,7 +295,7 @@ static int Live_Data_Get(twai_message_t data){
 
             }
 
-            ESP_LOGI(TAG,"SF data return");
+          
             return 0; //return for pid data 
 
         }else if (data.data[0] == MULT_FRAME_FIRST && (data.data[2] == SHOW_LIVE_DATA_RESP || data.data[2] == SHOW_FREEZE_FRAME_RESP) && get_Req_PID() == data.data[3]){ //below this is data responses 
@@ -320,7 +319,7 @@ static int Live_Data_Get(twai_message_t data){
             }
 
             if (byte_count == PID_VALUE_BYTES){
-                ESP_LOGI(TAG,"MULT frame data return");
+               
                 return 0; //return for pid data
             }
 
@@ -408,7 +407,7 @@ static void twai_receive_task()
                     dataType = Live_Data_Get(RX_Data);
 
                     if (dataType == 1){ //grabbing bitmask
-                        ESP_LOGI(TAG,"Bitmask semaphore");
+                      
                         xSemaphoreGive(BIT_MASK_ROW_GRABED);
                    
                     }else if (dataType == 0){ //grabbing PID data
@@ -451,7 +450,7 @@ static void twai_transmit_task()
 
     while (1) {
         xQueueReceive(tx_task_queue, &action, portMAX_DELAY);
-        ESP_LOGI(TAG,"Action = %i", action);
+      
         switch(action){
 
         case TX_REQUEST_PIDS_Live:                                              //grabs full bit-mask for live data
@@ -569,7 +568,7 @@ static void TWAI_Services()
 
         twai_get_status_info(&status);
         if (status.state == TWAI_STATE_STOPPED){
-            ESP_LOGI(TAG,"TWAI started");
+            // ESP_LOGI(TAG,"TWAI started");
             twai_start();
         }
 
@@ -687,7 +686,7 @@ static void TWAI_Services()
         twai_get_status_info(&status);
         if (status.state == TWAI_STATE_RUNNING){
             twai_stop();
-            ESP_LOGI(TAG,"TWAI stopped");
+            // ESP_LOGI(TAG,"TWAI stopped");
         }
 
         xSemaphoreGive(TWAI_DONE_sem); //tells uart TWAI is done

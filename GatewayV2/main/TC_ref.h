@@ -31,6 +31,7 @@ void Set_Req_PID(int PID);
 void Set_DTCs(uint8_t *codes, int num_codes);
 void Set_PID_Bitmask(uint8_t bitmask[7][4]);
 void Set_PID_Value(uint8_t *data,int num_bytes);
+void Reset_TWAI_QUEUE();
 int Set_TWAI_Serv(service_request_t req);                   //returns -1 if error
 
 uint8_t *get_bitmask_row(int row);
